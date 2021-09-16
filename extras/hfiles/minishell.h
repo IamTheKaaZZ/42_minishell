@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/15 15:10:44 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/16 09:42:38 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,5 @@ int		ft_error_handler(const char *errmessage, int err_code);
 
 /* DOLLAR */
 
-int		ft_dollar_sign(t_minishell *mini);
+int		ft_dollar_sign(t_minishell *mini, int i);
 #endif

@@ -29,8 +29,8 @@ printenv PKG_CONFIG_PATH
 if [[ $? != 0 ]] ; then
     echo "Please set the environment variable"
 	RL_PATH=$(brew ls readline | grep readline.pc | sed 's|/readline.pc||g')
-	echo "Run: export PKG_CONFIG_PATH=$RL_PATH"
-	exit
+	export PKG_CONFIG_PATH=$RL_PATH
+    echo "Environment variable SET"
 else
     echo "Environment variable OK"
 fi

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/15 15:17:20 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/16 09:56:28 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,9 @@ void	ft_handler(int sig)
 	}
 	if (sig == SIGQUIT)
 	{
-		printf("minishell42: ");
+		write(1, "minishell42: ", 14);
 		rl_redisplay();
 	}
-	// if (sig == SIGUSR1)
-	// 	kill(0, SIGKILL);
 	return ;
 }
 
@@ -151,13 +149,11 @@ char	*rl_gnl(t_minishell *mini)
 {
 	static char	*line;
 
-	if (line) // what is this for Ben??  => read the comment above the function//
+	if (line)
 		ft_strdel(&line);
 	line = readline(mini->prompt);
 	if (!line)
 		exit(ft_clear_data(mini, B));
-	// if (!*line)
-	// 	exit(ft_clear_data(mini, B));
 	if (line != NULL && line[0] != 0)
 		add_history(line);
 	return (line);
