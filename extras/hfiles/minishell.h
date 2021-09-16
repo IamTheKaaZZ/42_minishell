@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/16 17:11:34 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/16 17:18:30 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <termios.h>
 # include <curses.h>
 # include <term.h>
+# include <string.h>
 
 # define A	0b00000001
 # define B	0b00000010

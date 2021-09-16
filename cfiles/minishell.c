@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/16 16:59:33 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/16 17:16:39 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_handler(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 		g_mini.exit_code = 130;
-		printf("\n%hhu\n", g_mini.exit_code);
+		// printf("\n%hhu\n", g_mini.exit_code);
 	}
 	if (sig == SIGQUIT)
 	{
@@ -123,8 +123,6 @@ void	ft_init(char **argv, char **env)
 	if (!g_mini.prompt)
 		ft_error_exit(&g_mini, "Error creating prompt string");
 	ft_strdel(&temp_prompt);
-	// mini->input = NULL;
-	// mini->argv = NULL;
 	g_mini.env = ft_env_list(env, &g_mini);
 	if (!g_mini.env)
 		ft_error_exit(&g_mini, "Malloc error while creating env list");
@@ -163,7 +161,6 @@ char	*rl_gnl(t_minishell *mini)
 
 int	main(int argc, char **argv, char **env)
 {
-
 	ft_init(argv, env);
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, ft_handler);

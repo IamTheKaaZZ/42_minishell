@@ -44,6 +44,8 @@ void	ft_error_exit(t_minishell *mini, const char *errmessage)
 
 int	ft_error_handler(const char *errmessage, int err_code)
 {
+	if(errno == ENOENT)
+		//check for the error and update exit-code accordingly
 	perror(errmessage);
 	return (err_code);
 }
