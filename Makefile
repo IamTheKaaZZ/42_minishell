@@ -27,7 +27,7 @@ LINKS	=	-L./$(LIBFT) -lft `pkg-config readline --libs`
 
 all:	$(NAME)
 
-$(NAME): libft $(DIR_O) $(OBJS)
+$(NAME): libcheck libft $(DIR_O) $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(wildcard cfiles/*.c) $(wildcard extras/libft/*c) -o $(NAME) $(LINKS)
 	@echo "\n$(GREEN)\n"
 	@cat ./fonts/minishell_created.txt
@@ -41,6 +41,9 @@ $(OBJS):	| $(DIR_O)
 
 $(DIR_O):
 	@mkdir -p $(DIR_O)
+
+libcheck:
+	@bash scripts/lib_setup.sh
 
 libft:
 	@echo "$(WHITE) [ .. ] Creating LIBFT [ .. ]$(RESET)"

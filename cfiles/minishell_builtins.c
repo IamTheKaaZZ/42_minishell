@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/15 15:10:33 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/16 17:00:16 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,15 +88,15 @@ void	ft_pwd(t_minishell *mini)
 	}
 }
 
-void	ft_echo(t_minishell *mini)
+void	ft_echo()
 {
 	int i;
 
 	i = 0;
-	while (mini->argv[++i])
+	while (g_mini.argv[++i])
 	{
-		printf("%s", mini->argv[i]);
-		if (mini->argv[i + 1])
+		printf("%s", g_mini.argv[i]);
+		if (g_mini.argv[i + 1])
 			printf(" ");
 	}
 	printf("\n");

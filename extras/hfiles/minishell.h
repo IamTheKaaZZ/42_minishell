@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/16 09:42:38 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/16 17:11:34 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,10 @@ typedef struct s_minishell
 	struct termios	term;
 	char			*prompt;
 	char			*cwd;
+	unsigned char	exit_code;
 }				t_minishell;
 
-//suggestion for updated linked list
-/*typedef struct s_env
-{
-	char				*keyword;
-	char				*content;
-	struct s_envvars	*next;
-}				t_env;*/
+t_minishell	g_mini;
 
 void	ft_echon(t_minishell *mini);
 void	ft_echo(t_minishell *mini);
