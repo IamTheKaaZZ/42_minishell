@@ -14,7 +14,7 @@ if [[ $? != 0 ]] ; then
 	if [[ $? != 0 ]] ; then
 		exit
 	else
-		ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+		curl -fsSL https://rawgit.com/kube/42homebrew/master/install.sh | zsh
 	fi
 else
 	echo "Updating brew..."
@@ -68,7 +68,12 @@ printenv PKG_CONFIG_PATH
 if [[ $? != 0 ]] ; then
     echo "Environment variable is not set correctly..."
 	RL_PATH=$(brew ls readline | grep readline.pc | sed 's|/readline.pc||g')
-	echo "Please run: export PKG_CONFIG_PATH=$RL_PATH"
+	cat << EOF >> ~/.zshrc
+# Add Path to Readline library in Brew
+export PKG_CONFIG_PATH=$RL_PATH 
+EOF
+	source ~/.zshrc
+	echo "Environment variable added to .zshrc!"
 else
     echo "Environment variable OK"
 fi

@@ -28,14 +28,14 @@ LINKS	=	-L./$(LIBFT) -lft `pkg-config readline --libs`
 all:	$(NAME)
 
 $(NAME): libcheck libft $(DIR_O) $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(wildcard cfiles/*.c) $(wildcard extras/libft/*c) -o $(NAME) $(LINKS)
+	@$(CC) $(CFLAGS) $(LDFLAGS) $(wildcard cfiles/*.c) $(wildcard extras/libft/*c) -o $(NAME) $(LINKS)
 	@echo "\n$(GREEN)\n"
 	@cat ./fonts/minishell_created.txt
-	@echo "\n$(RESET)\n"
+	@echo "\n$(QUIT)\n"
 
 $(DIR_O)%.o: cfiles/%.c
 	@$(CC) -c $(CFLAGS) $(INCLUDE) $< -o $@
-	@echo "$(GREEN)#$(RESET)\c"
+	@echo "$(GREEN)#$(QUIT)\c"
 
 $(OBJS):	| $(DIR_O)
 
@@ -46,26 +46,26 @@ libcheck:
 	@bash scripts/lib_setup.sh
 
 libft:
-	@echo "$(WHITE) [ .. ] Creating LIBFT [ .. ]$(RESET)"
+	@echo "$(WHITE) [ .. ] Creating LIBFT [ .. ]$(QUIT)"
 	@make -C $(LIBFT)
 	@echo "\n$(GREEN)\n"
 	@cat ./fonts/libft_created.txt
-	@echo "$(WHITE) \n\n\n[ .. ] Creating '$(NAME)' [ .. ]$(RESET)"
+	@echo "$(WHITE) \n\n\n[ .. ] Creating '$(NAME)' [ .. ]$(QUIT)"
 
 clean:
 	@echo "$(RED) [ .. ] Deleting LIBFT [ .. ]"
 	@echo "$(RED)"
 	@make -C $(LIBFT) fclean
 	@cat ./fonts/libft_deleted.txt
-	@echo "$(RESET)"
-	@echo "$(RED) [ .. ] Deleting .o files [ .. ]$(RESET)"
+	@echo "$(QUIT)"
+	@echo "$(RED) [ .. ] Deleting .o files [ .. ]$(QUIT)"
 	@rm -fr $(DIR_O)
 
 fclean:	clean
-	@echo "$(RED) [ .. ] Deleting '$(NAME)' executable  [ .. ]$(RESET)"
+	@echo "$(RED) [ .. ] Deleting '$(NAME)' executable  [ .. ]"
 	@rm -fr $(NAME)
 	@cat	./fonts/minishell_deleted.txt
-	@echo "$(RESET)"
+	@echo "$(QUIT)"
 
 re:		fclean all
 
