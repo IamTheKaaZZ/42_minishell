@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/17 15:00:09 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/17 15:58:36 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,8 @@ void	ft_path(void)
 		while (g_mini.path[++i])
 		{
 			cmd_path = ft_strjoin(g_mini.path[i], g_mini.argv[0]);
-			if (execve(strjoin2, &mini->argv[0], NULL))
+			// the char **env HAS to be passed to execve!
+			if (execve(cmd_path, &g_mini.argv[0], NULL))
 				;
 			ft_strdel(&cmd_path);
 		}
