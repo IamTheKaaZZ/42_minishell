@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/17 12:23:55 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/17 14:57:28 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_handler(int sig)
 	if (sig == SIGQUIT)
 	{
 		//update prompt with cwd
-		write(1, "minishell42: ", 14);
+		write(1, g_mini.prompt, ft_strlen(g_mini.prompt));
 		rl_redisplay();
 	}
 	return ;
@@ -48,7 +48,7 @@ void	functions()
 	if (!(ft_strncmp(g_mini.input, "echo -n", 7)))
 		ft_echon(&g_mini);
 	else if (!(ft_strncmp(g_mini.input, "echo", 4)))
-		ft_echo(&g_mini);
+		ft_echo();
 	// else if (!(ft_strncmp(mini->input, "cd", 2)))
 	// 	ft_cd(mini);
 	// else if (!(ft_strncmp(mini->input, "pwd", 3)))
@@ -112,15 +112,17 @@ t_list	*ft_env_list(char **env, t_minishell *mini)
 /*
 *	Initialize the struct
 	-> ft_memset => sets all the variables of the struct to 0
+	-> Automatically add the missing / to the path variables
 */
 
 void	ft_init(char **argv, char **env)
 {
 	char	*temp_prompt;
+	int		i;
 
 	ft_memset(&g_mini, 0, sizeof(t_minishell));
 	temp_prompt = ft_strtrim(argv[0], "./");
-	g_mini.prompt = ft_strjoin(temp_prompt, "42: ");
+	g_mini.prompt = ft_strjoin(temp_prompt, "\033[0;32;1m42\033[0m: ");
 	if (!g_mini.prompt)
 		ft_error_exit(&g_mini, "Error creating prompt string");
 	ft_strdel(&temp_prompt);
@@ -130,6 +132,9 @@ void	ft_init(char **argv, char **env)
 	g_mini.path = ft_get_path(&g_mini);
 	if (!g_mini.path)
 		ft_error_exit(&g_mini, "No PATH variable found");
+	i = -1;
+	while (g_mini.path[++i])
+		g_mini.path[i] = ft_strjoin_char(g_mini.path[i], '/');
 	if (tcgetattr(STDIN_FILENO, &g_mini.term) != 0)
 		ft_error_exit(&g_mini, "Error getting terminal settings");
 	g_mini.term.c_lflag &= ~ECHOCTL;
@@ -171,5 +176,6 @@ int	main(int argc, char **argv, char **env)
 		g_mini.argv = ft_split(g_mini.input, ' ');
 		//the escape chars + single/double quotes need to be handled
 		functions();
+		ft_clean_input_argv();
 	}
 }

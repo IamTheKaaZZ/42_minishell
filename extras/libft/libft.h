@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/17 21:05:58 by psleziak          #+#    #+#             */
-/*   Updated: 2021/09/15 11:24:28 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/17 14:52:20 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 void	ft_memdel(void **mem);
 void	ft_strdel(char **str);
+void	ft_str_array_del(char ***str_array);
+char	*ft_strjoin_char(const char *s1, char c);
 
 #endif

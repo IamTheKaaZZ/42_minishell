@@ -6,11 +6,15 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/16 17:00:16 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/17 15:00:09 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/hfiles/minishell.h"
+
+/*
+ * All builtins set the exit_code to 2 on failure
+*/
 
 void	ft_export(t_minishell *mini) // blad
 {
@@ -88,7 +92,7 @@ void	ft_pwd(t_minishell *mini)
 	}
 }
 
-void	ft_echo()
+void	ft_echo(void)
 {
 	int i;
 
@@ -116,12 +120,11 @@ void	ft_echon(t_minishell *mini)
 	printf("%%\n");
 }
 
-void	ft_path(t_minishell *mini)
+void	ft_path(void)
 {
 	int		i;
 	int		child_id;
-	char	*strjoin;
-	char	*strjoin2;
+	char	*cmd_path;
 
 	i = -1;
 	child_id = fork();
@@ -129,14 +132,12 @@ void	ft_path(t_minishell *mini)
 		printf("Error FORK\n");
 	else if (child_id == 0)
 	{
-		while (mini->path[++i])
+		while (g_mini.path[++i])
 		{
-			strjoin = ft_strjoin(mini->path[i], "/");
-			strjoin2 = ft_strjoin(strjoin, mini->argv[0]);
+			cmd_path = ft_strjoin(g_mini.path[i], g_mini.argv[0]);
 			if (execve(strjoin2, &mini->argv[0], NULL))
 				;
-			free(strjoin);
-			free(strjoin2);
+			ft_strdel(&cmd_path);
 		}
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/17 12:23:14 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/17 14:05:50 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_minishell	g_mini;
 */
 
 void	ft_echon(t_minishell *mini);
-void	ft_echo(t_minishell *mini);
+void	ft_echo(void);
 void	ft_cd(t_minishell *mini);
 void	ft_pwd(t_minishell *mini);
 void	ft_export(t_minishell *mini);
@@ -70,6 +70,7 @@ void	ft_handler(int signal);
 /* ERROS AND CLEAN */
 
 int		ft_clear_data(t_minishell *mini, char c);
+void	ft_clean_input_argv(void);
 void	ft_error_exit(t_minishell *mini, const char *errmessage);
 int		ft_error_handler(const char *errmessage, int err_code);
 
