@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/16 17:18:30 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/17 12:23:14 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,15 @@ typedef struct s_minishell
 	unsigned char	exit_code;
 }				t_minishell;
 
+/*
+*	GLOBAL VAR
+*/
+
 t_minishell	g_mini;
+
+/*
+*	FUNCTION PROTOTYPES
+*/
 
 void	ft_echon(t_minishell *mini);
 void	ft_echo(t_minishell *mini);

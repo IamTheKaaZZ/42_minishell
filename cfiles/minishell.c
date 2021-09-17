@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/16 17:16:39 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/17 12:23:55 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	ft_handler(int sig)
 	}
 	if (sig == SIGQUIT)
 	{
+		//update prompt with cwd
 		write(1, "minishell42: ", 14);
 		rl_redisplay();
 	}
