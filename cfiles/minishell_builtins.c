@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/20 16:57:04 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/20 16:58:58 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,8 @@ void	ft_path(void)
 	{
 		while (g_mini.path[++i])
 		{
+			//check with stat if the binary exists?
+			//
 			//These have to be part of a struct that gets free'd on error and at the end
 			cmd_path = ft_strjoin(g_mini.path[i], g_mini.argv[0]);
 			curr_envp = get_current_envp(g_mini.env);
