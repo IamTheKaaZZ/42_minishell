@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/17 15:21:24 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/20 16:48:30 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	ft_exit(t_minishell *mini);
 void	ft_path(void);
 
 void	ft_handler(int signal);
+char	**get_current_envp(t_list *head);
 
 /* ERROS AND CLEAN */
 

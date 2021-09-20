@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/17 15:58:36 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/20 16:57:04 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void	ft_path(void)
 	int		i;
 	int		child_id;
 	char	*cmd_path;
+	char	**curr_envp;
 
 	i = -1;
 	child_id = fork();
@@ -134,11 +135,18 @@ void	ft_path(void)
 	{
 		while (g_mini.path[++i])
 		{
+			//These have to be part of a struct that gets free'd on error and at the end
 			cmd_path = ft_strjoin(g_mini.path[i], g_mini.argv[0]);
-			// the char **env HAS to be passed to execve!
-			if (execve(cmd_path, &g_mini.argv[0], NULL))
-				;
+			curr_envp = get_current_envp(g_mini.env);
+			if (execve(cmd_path, &g_mini.argv[0], curr_envp) == -1)
+			{
+				ft_strdel(&cmd_path);
+				ft_str_array_del(&curr_envp);
+				//throw error + set exit code
+			}
+			//this part of the code dissapears when executing
 			ft_strdel(&cmd_path);
+			ft_str_array_del(&curr_envp);
 		}
 	}
 	else
