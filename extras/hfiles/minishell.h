@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 12:21:33 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 13:04:22 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 # include <term.h>
 # include <string.h>
 
-# define A	0b00000001
-# define B	0b00000010
+# define SINGLEQ '\''
+# define DOUBLEQ '\"'
 
 typedef struct s_minishell
 {
@@ -51,6 +51,8 @@ typedef struct s_pipes
 	char	*cmd_path;
 	char	**curr_envp;
 	int		pipe[2];
+	int		prev_fd;
+	int		wstatus;
 }	t_pipes;
 
 typedef struct s_file
@@ -85,7 +87,7 @@ void	ft_export(t_minishell *mini);
 void	ft_unset(t_minishell *mini);
 void	ft_env(t_minishell *mini);
 void	ft_exit(t_minishell *mini);
-void	ft_path(void);
+void	ft_interpret_input(void);
 
 void	ft_handler(int signal);
 char	**get_current_envp(t_list *head);
