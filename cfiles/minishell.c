@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/17 14:57:28 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 11:53:12 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,18 @@ void	functions()
 }
 
 //OBSOLETE function since getenv("PATH") does the trick
+/*
+ * If the path was already set, reset it
+*/
 
-char	**ft_get_path(t_minishell *mini)
+
+char	**ft_get_path(void)
 {
 	t_list	*temp;
 
-	temp = mini->env;
+	if (g_mini.path_var)
+		ft_str_array_del(&g_mini.path_var);
+	temp = g_mini.env;
 	while (temp)
 	{
 		if (!ft_strncmp(temp->keyword, "PATH", 4))
@@ -129,9 +135,9 @@ void	ft_init(char **argv, char **env)
 	g_mini.env = ft_env_list(env, &g_mini);
 	if (!g_mini.env)
 		ft_error_exit(&g_mini, "Malloc error while creating env list");
-	g_mini.path = ft_get_path(&g_mini);
-	if (!g_mini.path)
-		ft_error_exit(&g_mini, "No PATH variable found");
+	// g_mini.path = ft_get_path(&g_mini);
+	// if (!g_mini.path)
+	// 	ft_error_exit(&g_mini, "No PATH variable found");
 	i = -1;
 	while (g_mini.path[++i])
 		g_mini.path[i] = ft_strjoin_char(g_mini.path[i], '/');

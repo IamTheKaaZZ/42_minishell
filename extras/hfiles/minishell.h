@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 10:49:21 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 12:10:59 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_minishell
 {
 	char			*input;
 	t_list			*env;
-	char			**path;
+	char			**path_var;
 	char			**argv;
 	struct termios	term;
 	char			*prompt;
@@ -47,6 +47,7 @@ typedef struct s_minishell
 
 typedef struct s_pipes
 {
+	pid_t	pid;
 	char	*cmd_path;
 	char	**curr_envp;
 	int		pipe[2];
@@ -58,6 +59,13 @@ typedef struct s_file
 	char		*file_path;
 	struct stat	file_stat;
 }	t_file;
+
+typedef struct s_command
+{
+	char	*name;
+	char	*full_path;
+	char	**args;
+}	t_command;
 
 /*
 *	GLOBAL VAR
@@ -81,6 +89,8 @@ void	ft_path(void);
 
 void	ft_handler(int signal);
 char	**get_current_envp(t_list *head);
+char	**ft_get_path(void);
+char	*get_full_cmd_path(char *command);
 
 /* ERROS AND CLEAN */
 
