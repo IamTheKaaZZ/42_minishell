@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 13:04:22 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 15:06:32 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <curses.h>
 # include <term.h>
 # include <string.h>
+# include <fcntl.h>
 
 # define SINGLEQ '\''
 # define DOUBLEQ '\"'
@@ -45,21 +46,11 @@ typedef struct s_minishell
 	unsigned char	exit_code;
 }				t_minishell;
 
-typedef struct s_pipes
-{
-	pid_t	pid;
-	char	*cmd_path;
-	char	**curr_envp;
-	int		pipe[2];
-	int		prev_fd;
-	int		wstatus;
-}	t_pipes;
-
 typedef struct s_file
 {
 	int			fd;
 	char		*file_path;
-	struct stat	file_stat;
+	struct stat	stats;
 }	t_file;
 
 typedef struct s_command
@@ -68,6 +59,18 @@ typedef struct s_command
 	char	*full_path;
 	char	**args;
 }	t_command;
+
+typedef struct s_exec
+{
+	pid_t		pid;
+	char		**curr_envp;
+	int			pipe[2];
+	int			prev_fd;
+	int			wstatus;
+	t_file		in;
+	t_file		out;
+	t_command	*cmds;
+}	t_exec;
 
 /*
 *	GLOBAL VAR
@@ -98,7 +101,7 @@ char	*get_full_cmd_path(char *command);
 
 int		ft_clear_data(void);
 void	ft_clean_input_argv(void);
-void	ft_error_exit(t_minishell *mini, const char *errmessage);
+void	ft_error_exit(const char *errmessage);
 int		ft_error_handler(const char *errmessage);
 
 /* DOLLAR */

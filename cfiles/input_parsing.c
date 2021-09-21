@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 13:22:01 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 15:37:14 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	check_for_quotes(void)
 	bool	doubleq;
 
 	singleq = false;
-	doubleq	= false;
+	doubleq = false;
 	if (ft_ischrinset(g_mini.input, SINGLEQ))
 		singleq = true;
 	if (ft_ischrinset(g_mini.input, DOUBLEQ))

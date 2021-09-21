@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 12:14:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 12:22:19 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 14:49:11 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ char	**get_current_envp(t_list *head)
 
 static int	is_found_and_or_exec(t_file *f)
 {
-	if (stat(f->file_path, &f->file_stat) != -1)
+	if (stat(f->file_path, &f->stats) != -1)
 	{
-		if (f->file_stat.st_mode & S_IXUSR)
+		if (f->stats.st_mode & S_IXUSR)
 			return (2);
 		else
 		{
@@ -105,6 +105,7 @@ char	*get_full_cmd_path(char *command)
 			return (cmd.file_path);
 		else if (check == 1)
 		{
+			g_mini.exit_code = 126;
 			ft_error_handler(command);
 			break ;
 		}

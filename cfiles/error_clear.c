@@ -51,8 +51,11 @@ void	ft_error_exit(const char *errmessage)
 
 int	ft_error_handler(const char *errmessage)
 {
-	if(errno == ENOENT)
-		//check for the error and update exit-code accordingly
+	if (errno == ENOENT || errno == ENOTDIR || errno == EBADF
+		|| errno == EACCES || errno == EFAULT)
+		g_mini.exit_code = 127;
+	else if (g_mini.exit_code == 0)
+		g_mini.exit_code = 1;
 	perror(errmessage);
 	return (errno);
 }

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 12:53:42 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 14:51:00 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,16 +129,16 @@ void	ft_init(char **argv, char **env)
 	temp_prompt = ft_strtrim(argv[0], "./");
 	g_mini.prompt = ft_strjoin(temp_prompt, "\033[0;32;1m42\033[0m: ");
 	if (!g_mini.prompt)
-		ft_error_exit(&g_mini, "Error creating prompt string");
+		ft_error_exit("malloc");
 	ft_strdel(&temp_prompt);
 	g_mini.env = ft_env_list(env, &g_mini);
 	if (!g_mini.env)
-		ft_error_exit(&g_mini, "Malloc error while creating env list");
+		ft_error_exit("malloc");
 	if (tcgetattr(STDIN_FILENO, &g_mini.term) != 0)
-		ft_error_exit(&g_mini, "Error getting terminal settings");
+		ft_error_exit("tcgetattr");
 	g_mini.term.c_lflag &= ~ECHOCTL;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &g_mini.term) != 0)
-		ft_error_exit(&g_mini, "Error setting terminal settings");
+		ft_error_exit("tcsetattr");
 }
 
 /*
