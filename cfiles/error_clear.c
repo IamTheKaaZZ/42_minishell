@@ -8,39 +8,30 @@
 	4.	Free && NULL the prompt string since it has allocated memory from init
 */
 
-int	ft_clear_data(t_minishell *mini, char c)
+int	ft_clear_data(void)
 {
 	int	i;
 
-	ft_lstclear(&mini->env, free);
+	ft_lstclear(&g_mini.env, free);
 	i = -1;
-	if (mini->path && c | B)
-	{
-		ft_str_array_del(&g_mini.path);
-		// while (mini->path[++i])
-		// 	ft_strdel(&mini->path[i]);
-		// free(mini->path);
-	}
+	if (g_mini.path_var)
+		ft_str_array_del(&g_mini.path_var);
 	i = -1;
-	if (mini->argv && (c | A || c | B))
-	{
+	if (g_mini.argv)
 		ft_str_array_del(&g_mini.argv);
-		// while (mini->argv[++i])
-		// 	ft_strdel(&mini->argv[i]);
-		// free(mini->argv);
-	}
-	ft_strdel(&mini->prompt);
+	ft_strdel(&g_mini.prompt);
+	ft_strdel(g_mini.cwd);
 	rl_clear_history();
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 /*
  * Error codes still need to be figured out
 */
 
-void	ft_error_exit(t_minishell *mini, const char *errmessage)
+void	ft_error_exit(const char *errmessage)
 {
-	ft_clear_data(mini, B);
+	ft_clear_data();
 	perror(errmessage);
 	exit(EXIT_FAILURE);
 }
@@ -58,12 +49,12 @@ void	ft_error_exit(t_minishell *mini, const char *errmessage)
     255\* - Exit status out of range
 */
 
-int	ft_error_handler(const char *errmessage, int err_code)
+int	ft_error_handler(const char *errmessage)
 {
 	if(errno == ENOENT)
 		//check for the error and update exit-code accordingly
 	perror(errmessage);
-	return (err_code);
+	return (errno);
 }
 
 /*

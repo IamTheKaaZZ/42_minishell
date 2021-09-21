@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 12:10:59 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 12:21:33 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,10 @@ char	*get_full_cmd_path(char *command);
 
 /* ERROS AND CLEAN */
 
-int		ft_clear_data(t_minishell *mini, char c);
+int		ft_clear_data(void);
 void	ft_clean_input_argv(void);
 void	ft_error_exit(t_minishell *mini, const char *errmessage);
-int		ft_error_handler(const char *errmessage, int err_code);
+int		ft_error_handler(const char *errmessage);
 
 /* DOLLAR */
 

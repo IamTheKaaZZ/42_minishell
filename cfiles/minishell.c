@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 11:53:12 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 12:23:00 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,6 @@ void	ft_init(char **argv, char **env)
 	g_mini.env = ft_env_list(env, &g_mini);
 	if (!g_mini.env)
 		ft_error_exit(&g_mini, "Malloc error while creating env list");
-	// g_mini.path = ft_get_path(&g_mini);
-	// if (!g_mini.path)
-	// 	ft_error_exit(&g_mini, "No PATH variable found");
-	i = -1;
-	while (g_mini.path[++i])
-		g_mini.path[i] = ft_strjoin_char(g_mini.path[i], '/');
 	if (tcgetattr(STDIN_FILENO, &g_mini.term) != 0)
 		ft_error_exit(&g_mini, "Error getting terminal settings");
 	g_mini.term.c_lflag &= ~ECHOCTL;

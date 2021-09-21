@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipeline.c                                         :+:      :+:    :+:   */
+/*   get_paths.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/17 14:07:41 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 12:05:50 by bcosters         ###   ########.fr       */
+/*   Created: 2021/09/21 12:14:37 by bcosters          #+#    #+#             */
+/*   Updated: 2021/09/21 12:22:19 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,13 +105,13 @@ char	*get_full_cmd_path(char *command)
 			return (cmd.file_path);
 		else if (check == 1)
 		{
-			ft_error_handler(command, errno);
+			ft_error_handler(command);
 			break ;
 		}
 		ft_strdel(&cmd.file_path);
 	}
 	if (g_mini.path_var[i] == NULL)
-		ft_error_handler(command, errno);
+		ft_error_handler(command);
 	ft_strdel(&cmd.file_path);
 	return (NULL);
 }
