@@ -20,7 +20,7 @@ int	ft_clear_data(void)
 	if (g_mini.argv)
 		ft_str_array_del(&g_mini.argv);
 	ft_strdel(&g_mini.prompt);
-	ft_strdel(g_mini.cwd);
+	ft_strdel(&g_mini.cwd);
 	rl_clear_history();
 	return (EXIT_SUCCESS);
 }

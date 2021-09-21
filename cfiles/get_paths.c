@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 12:14:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 14:49:11 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 16:41:38 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	is_found_and_or_exec(t_file *f)
 			return (2);
 		else
 		{
-			ft_strdel(f->file_path);
+			ft_strdel(&f->file_path);
 			return (1);
 		}
 	}

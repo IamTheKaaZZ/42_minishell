@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 15:06:32 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 16:40:07 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	ft_handler(int signal);
 char	**get_current_envp(t_list *head);
 char	**ft_get_path(void);
 char	*get_full_cmd_path(char *command);
+void	check_for_quotes(void);
 
 /* ERROS AND CLEAN */
 

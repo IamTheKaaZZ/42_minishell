@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 12:45:25 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 16:45:34 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ void	ft_env(t_minishell *mini)
 
 void	ft_exit(t_minishell *mini)
 {
-	ft_clear_data(mini, B);
+	(void)mini;
+	ft_clear_data();
 	exit(EXIT_SUCCESS);
 }
 
@@ -72,7 +73,7 @@ void	ft_cd(t_minishell *mini)
 {
 	if (chdir(mini->argv[1]) == -1)
 	{
-		ft_error_handler("Builtin CD", ENOENT);
+		ft_error_handler("Builtin CD");
 	}
 }
 
