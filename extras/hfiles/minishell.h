@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/20 16:48:30 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 10:49:21 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,20 @@ typedef struct s_minishell
 	char			*cwd;
 	unsigned char	exit_code;
 }				t_minishell;
+
+typedef struct s_pipes
+{
+	char	*cmd_path;
+	char	**curr_envp;
+	int		pipe[2];
+}	t_pipes;
+
+typedef struct s_file
+{
+	int			fd;
+	char		*file_path;
+	struct stat	file_stat;
+}	t_file;
 
 /*
 *	GLOBAL VAR

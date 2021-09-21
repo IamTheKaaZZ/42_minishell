@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 14:07:41 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/20 16:48:05 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 11:14:59 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,22 @@ char	**get_current_envp(t_list *head)
 		if (!curr_envp[i])
 			ft_str_array_del(&curr_envp);
 		temp = temp->next;
+	}
+	return (curr_envp);
+}
+
+char	*get_full_cmd_path(char *command)
+{
+	t_file	cmd;
+	int		i;
+
+	i = -1;
+	while (g_mini.path[++i])
+	{
+		cmd.file_path = ft_strjoin(g_mini.path[i], command);
+		if (stat(cmd.file_path, &cmd.file_stat) != -1)
+		{
+			
+		}
 	}
 }
