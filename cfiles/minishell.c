@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 12:23:00 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 12:53:42 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	ft_handler(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 		g_mini.exit_code = 130;
-		// printf("\n%hhu\n", g_mini.exit_code);
 	}
 	if (sig == SIGQUIT)
 	{
@@ -159,7 +158,7 @@ char	*rl_gnl(t_minishell *mini)
 		ft_strdel(&line);
 	line = readline(mini->prompt);
 	if (!line)
-		exit(ft_clear_data(mini, B));
+		exit(ft_clear_data());
 	if (line != NULL && line[0] != 0)
 		add_history(line);
 	return (line);

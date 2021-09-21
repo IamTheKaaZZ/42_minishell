@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/20 16:58:58 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 12:45:25 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,37 +120,7 @@ void	ft_echon(t_minishell *mini)
 	printf("%%\n");
 }
 
-void	ft_path(void)
+void	ft_interpret_input(void)
 {
-	int		i;
-	int		child_id;
-	char	*cmd_path;
-	char	**curr_envp;
-
-	i = -1;
-	child_id = fork();
-	if (child_id == -1)
-		printf("Error FORK\n");
-	else if (child_id == 0)
-	{
-		while (g_mini.path[++i])
-		{
-			//check with stat if the binary exists?
-			//
-			//These have to be part of a struct that gets free'd on error and at the end
-			cmd_path = ft_strjoin(g_mini.path[i], g_mini.argv[0]);
-			curr_envp = get_current_envp(g_mini.env);
-			if (execve(cmd_path, &g_mini.argv[0], curr_envp) == -1)
-			{
-				ft_strdel(&cmd_path);
-				ft_str_array_del(&curr_envp);
-				//throw error + set exit code
-			}
-			//this part of the code dissapears when executing
-			ft_strdel(&cmd_path);
-			ft_str_array_del(&curr_envp);
-		}
-	}
-	else
-		wait(NULL);
+	//scan through argv and act according to chars found
 }

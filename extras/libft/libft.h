@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/17 21:05:58 by psleziak          #+#    #+#             */
-/*   Updated: 2021/09/21 10:39:20 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/21 12:55:57 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,6 @@ void	ft_str_array_del(char ***str_array);
 char	*ft_strjoin_char(const char *s1, char c);
 bool	ft_strequal(char *s1, char *s2);
 int		ft_strcmp(const char *s1, const char *s2);
+int		ft_ischrinset(char const *set, int c);
 
 #endif
