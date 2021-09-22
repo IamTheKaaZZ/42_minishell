@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 14:19:07 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/22 12:18:00 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/22 12:51:45 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ static bool	syntax_error_check(char **argv, char *err, int i)
 			{
 				if (argv[i + 1] == NULL)
 					return (err_handler(concat_err(err, 1, "newline")));
-				k = 6;
-				while (--k)
+				k = -1;
+				while (++k < 6)
 					if (ft_strequal(argv[i + 1], sp_chars[k]))
 						return (err_handler(concat_err(err, 1, sp_chars[k])));
 			}
@@ -53,6 +53,16 @@ static bool	syntax_error_check(char **argv, char *err, int i)
 				return (err_handler(concat_err(err, UNSPEC, sp_chars[j])));
 	}
 	return (true);
+}
+
+static void	init_exec(t_exec *ex)
+{
+	ft_memset(ex, 0, sizeof(t_exec));
+	ex->pipe[READ_END] = -1;
+	ex->pipe[WRITE_END] = -1;
+	ex->prev_fd = -1;
+	ex->in.fd = -1;
+	ex->out.fd = -1;
 }
 
 /**
@@ -69,15 +79,14 @@ int	executor(char **argv)
 {
 	int			i;
 	t_exec		ex;
-	char		err[100];
 
-	ft_bzero(err, 100);
+	init_exec(&ex);
 	i = -1;
 	while (argv[++i])
 	{
 		if (ft_strequal(argv[0], "|"))
-			return (err_handler(concat_err(err, SYNTAX, "|")));
-		if (!syntax_error_check(argv, err, i))
+			return (err_handler(concat_err(ex.err, SYNTAX, "|")));
+		if (!syntax_error_check(argv, ex.err, i))
 			break ;
 		if (ft_strequal(argv[i], "<"))
 		{
