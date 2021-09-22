@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 14:19:07 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/22 12:51:45 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/22 13:01:50 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,9 @@ static void	init_exec(t_exec *ex)
  *  	-> STILL OPENS AN INPUTSTREAM BEFORE DOING NOTHING
  * -> "> file": creates an empty file
  * -> "< file": opens and closes the file succesfully (exit_code 0)
+ * -> CASE:"wc < file" == "< file wc": redirects input from file to wc
+ * -> CASE:"<< EOF wc" == "wc << EOF": Opens inputstream and sends it to wc
+ * -> IMPORTANT: Split in jobs => everything before | or end is a job
 */
 
 int	executor(char **argv)
