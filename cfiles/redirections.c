@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 14:19:07 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/22 13:01:50 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/22 15:58:27 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,24 @@ static void	init_exec(t_exec *ex)
 	ex->out.fd = -1;
 }
 
+void	close_pipe(int *pipe)
+{
+	close(pipe[READ_END]);
+	close(pipe[WRITE_END]);
+	pipe[READ_END] = -1;
+	pipe[WRITE_END] = -1;
+}
+
+static void	reset_exec(t_exec *ex)
+{
+	ex->pid = 0;
+	if (ex->curr_envp)
+		ft_str_array_del(&ex->curr_envp);
+	close_pipe(ex->pipe);
+	close(ex->prev_fd);
+	ex->wstatus = 0;
+}
+
 /**
  * 	AS IF ARGV = command, flags/arguments, etc, |<>
  * ->	| as argv[0] is a syntax error
@@ -75,6 +93,7 @@ static void	init_exec(t_exec *ex)
  * -> "< file": opens and closes the file succesfully (exit_code 0)
  * -> CASE:"wc < file" == "< file wc": redirects input from file to wc
  * -> CASE:"<< EOF wc" == "wc << EOF": Opens inputstream and sends it to wc
+ * -> CASE: "cat << EOF" => EXPANDS ALL VARIABLES (ignoring quotes)
  * -> IMPORTANT: Split in jobs => everything before | or end is a job
 */
 
