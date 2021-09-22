@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 16:40:07 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/22 11:26:13 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 
 # define SINGLEQ '\''
 # define DOUBLEQ '\"'
+# define SYNTAX 1
+# define UNSPEC 2
 
 typedef struct s_minishell
 {
@@ -69,6 +71,7 @@ typedef struct s_exec
 	int			wstatus;
 	t_file		in;
 	t_file		out;
+	char		*limiter;
 	t_command	*cmds;
 }	t_exec;
 

@@ -56,8 +56,9 @@ int	ft_error_handler(const char *errmessage)
 		g_mini.exit_code = 127;
 	else if (g_mini.exit_code == 0)
 		g_mini.exit_code = 1;
+	write(2, "minishell: ", 12);
 	perror(errmessage);
-	return (errno);
+	return (false);
 }
 
 /*
