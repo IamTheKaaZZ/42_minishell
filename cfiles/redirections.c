@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 14:19:07 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/22 15:58:27 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/22 16:33:43 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,25 @@ void	close_pipe(int *pipe)
 	pipe[WRITE_END] = -1;
 }
 
-static void	reset_exec(t_exec *ex)
-{
-	ex->pid = 0;
-	if (ex->curr_envp)
-		ft_str_array_del(&ex->curr_envp);
-	close_pipe(ex->pipe);
-	close(ex->prev_fd);
-	ex->wstatus = 0;
-}
+// static void	reset_exec(t_exec *ex)
+// {
+// 	ex->pid = 0;
+// 	if (ex->curr_envp)
+// 		ft_str_array_del(&ex->curr_envp);
+// 	close_pipe(ex->pipe);
+// 	close(ex->prev_fd);
+// 	ex->wstatus = 0;
+// 	close(ex->in.fd);
+// 	if (ex->in.file_path)
+// 		ft_strdel(&ex->in.file_path);
+// 	close(ex->out.fd);
+// 	if (ex->out.file_path)
+// 		ft_strdel(&ex->out.file_path);
+// 	if (ex->limiter)
+// 		ft_strdel(&ex->limiter);
+// 	//commands i dont know yet
+// 	ft_bzero(ex->err, 100);
+// }
 
 /**
  * 	AS IF ARGV = command, flags/arguments, etc, |<>
