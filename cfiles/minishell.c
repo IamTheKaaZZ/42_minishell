@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 16:43:46 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/22 11:53:28 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void	functions()
 	// 	ft_env(mini);
 	// else if (!(ft_strncmp(mini->input, "exit", 4)))
 	// 	ft_exit(mini);
-	// else
-	// 	ft_path(mini);
+	else
+		executor(g_mini.argv);
 }
 
 //OBSOLETE function since getenv("PATH") does the trick
@@ -123,7 +123,6 @@ t_list	*ft_env_list(char **env, t_minishell *mini)
 void	ft_init(char **argv, char **env)
 {
 	char	*temp_prompt;
-	// int		i;
 
 	ft_memset(&g_mini, 0, sizeof(t_minishell));
 	temp_prompt = ft_strtrim(argv[0], "./");
@@ -173,8 +172,6 @@ int	main(int argc, char **argv, char **env)
 	{
 		g_mini.input = rl_gnl(&g_mini);
 		check_for_quotes();
-		// g_mini.argv = ft_split(g_mini.input, ' ');
-		//the escape chars + single/double quotes need to be handled
 		functions();
 		ft_clean_input_argv();
 	}

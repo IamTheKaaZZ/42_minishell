@@ -49,7 +49,7 @@ void	ft_error_exit(const char *errmessage)
     255\* - Exit status out of range
 */
 
-int	ft_error_handler(const char *errmessage)
+int	err_handler(const char *errmessage)
 {
 	if (errno == ENOENT || errno == ENOTDIR || errno == EBADF
 		|| errno == EACCES || errno == EFAULT)
@@ -57,7 +57,10 @@ int	ft_error_handler(const char *errmessage)
 	else if (g_mini.exit_code == 0)
 		g_mini.exit_code = 1;
 	write(2, "minishell: ", 12);
-	perror(errmessage);
+	if (errno == 0 || errno == EFAULT)
+		ft_putendl_fd((char *)errmessage, 2);
+	else
+		perror(errmessage);
 	return (false);
 }
 

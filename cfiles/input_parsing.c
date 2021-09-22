@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/21 17:08:43 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/22 11:56:44 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ bool	count_quotes(const char *str)
 	if (dquotes % 2 != 0 && sqoutes % 2 != 0)
 	{
 		errno = EPERM;
-		ft_error_handler("Unclosed quotes");
+		err_handler("Unclosed quotes");
 		return (0);
 	}
 	if (dquotes % 2 != 0)

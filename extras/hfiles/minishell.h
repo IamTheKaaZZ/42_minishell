@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/22 11:26:13 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/22 12:02:54 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	ft_export(t_minishell *mini);
 void	ft_unset(t_minishell *mini);
 void	ft_env(t_minishell *mini);
 void	ft_exit(t_minishell *mini);
-void	ft_interpret_input(void);
+int		executor(char **argv);
 
 void	ft_handler(int signal);
 char	**get_current_envp(t_list *head);
@@ -106,7 +106,7 @@ void	check_for_quotes(void);
 int		ft_clear_data(void);
 void	ft_clean_input_argv(void);
 void	ft_error_exit(const char *errmessage);
-int		ft_error_handler(const char *errmessage);
+int		err_handler(const char *errmessage);
 
 /* DOLLAR */
 
