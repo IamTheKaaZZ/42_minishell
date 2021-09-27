@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 15:25:14 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 17:03:02 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	functions(void)
 {
 	// if (mini->argv[0][0] == '$')
 	// 	ft_dollar_sign(mini, 0); // working for argv[1];
-	if (!(ft_strncmp(g_mini.input, "echo -n", 7)))
-		ft_echon(&g_mini);
-	else if (!(ft_strncmp(g_mini.input, "echo", 4)))
-		ft_echo();
+	// if (!(ft_strncmp(g_mini.input, "echo -n", 7)))
+	// 	ft_echon(&g_mini);
+	// else if (!(ft_strncmp(g_mini.input, "echo", 4)))
+	// 	ft_echo();
 	// else if (!(ft_strncmp(mini->input, "cd", 2)))
 	// 	ft_cd(mini);
 	// else if (!(ft_strncmp(mini->input, "pwd", 3)))
@@ -60,7 +60,7 @@ void	functions(void)
 	// 	ft_env(mini);
 	// else if (!(ft_strncmp(mini->input, "exit", 4)))
 	// 	ft_exit(mini);
-	else
+	// else
 		executor(g_mini.argv);
 }
 

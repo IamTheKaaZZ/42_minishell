@@ -28,7 +28,7 @@ LINKS	=	-L./$(LIBFT) -lft `pkg-config readline --libs`
 all:	$(NAME)
 
 $(NAME): libcheck libft $(DIR_O) $(OBJS)
-	@$(CC) $(CFLAGS) $(LDFLAGS) $(wildcard cfiles/*.c) $(wildcard extras/libft/*c) -o $(NAME) $(LINKS)
+	@$(CC) $(CFLAGS) $(LDFLAGS) $(wildcard cfiles/*.c) $(wildcard extras/libft/src/*c) -o $(NAME) $(LINKS)
 	@echo "\n$(GREEN)\n"
 	@echo "$(NAME) executable CREATED"
 	@echo "\n$(QUIT)\n"
