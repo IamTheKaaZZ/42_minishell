@@ -47,4 +47,5 @@ int	ft_expand_var(t_minishell *mini)
 	{
 		ft_dollar_sign(mini, i);
 	}
+	return (0);
 }

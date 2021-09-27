@@ -6,11 +6,15 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/15 15:10:33 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/22 11:57:17 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/hfiles/minishell.h"
+
+/*
+ * All builtins set the exit_code to 2 on failure
+*/
 
 void	ft_export(t_minishell *mini) // blad
 {
@@ -60,7 +64,8 @@ void	ft_env(t_minishell *mini)
 
 void	ft_exit(t_minishell *mini)
 {
-	ft_clear_data(mini, B);
+	(void)mini;
+	ft_clear_data();
 	exit(EXIT_SUCCESS);
 }
 
@@ -68,7 +73,7 @@ void	ft_cd(t_minishell *mini)
 {
 	if (chdir(mini->argv[1]) == -1)
 	{
-		ft_error_handler("Builtin CD", ENOENT);
+		err_handler("Builtin CD");
 	}
 }
 
@@ -88,15 +93,15 @@ void	ft_pwd(t_minishell *mini)
 	}
 }
 
-void	ft_echo(t_minishell *mini)
+void	ft_echo(void)
 {
 	int i;
 
 	i = 0;
-	while (mini->argv[++i])
+	while (g_mini.argv[++i])
 	{
-		printf("%s", mini->argv[i]);
-		if (mini->argv[i + 1])
+		printf("%s", g_mini.argv[i]);
+		if (g_mini.argv[i + 1])
 			printf(" ");
 	}
 	printf("\n");
@@ -116,29 +121,7 @@ void	ft_echon(t_minishell *mini)
 	printf("%%\n");
 }
 
-void	ft_path(t_minishell *mini)
+void	ft_interpret_input(void)
 {
-	int		i;
-	int		child_id;
-	char	*strjoin;
-	char	*strjoin2;
-
-	i = -1;
-	child_id = fork();
-	if (child_id == -1)
-		printf("Error FORK\n");
-	else if (child_id == 0)
-	{
-		while (mini->path[++i])
-		{
-			strjoin = ft_strjoin(mini->path[i], "/");
-			strjoin2 = ft_strjoin(strjoin, mini->argv[0]);
-			if (execve(strjoin2, &mini->argv[0], NULL))
-				;
-			free(strjoin);
-			free(strjoin2);
-		}
-	}
-	else
-		wait(NULL);
+	//scan through argv and act according to chars found
 }

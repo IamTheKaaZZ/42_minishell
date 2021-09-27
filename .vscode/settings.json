@@ -1,5 +1,9 @@
 {
 	"files.associations": {
-		"readline.h": "c"
+		"readline.h": "c",
+		"bitset": "c",
+		"functional": "c",
+		"iterator": "c",
+		"memory": "c"
 	}
 }
