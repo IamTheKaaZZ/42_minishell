@@ -1,5 +1,56 @@
 #include "../extras/hfiles/minishell.h"
 
+/**
+ * Remove any parameter from the environment searching by keyword
+ * -> Keep track of the previous one to reconnect the list at the end
+ * -> If the parameter is not found, do nothing
+ * -> IF IT IS FOUND: Connect the previous one and the next one
+ * 		->	Delete and free the disconnected parameter
+*/
+
+void	remove_param(t_env **env, char	*keyword)
+{
+	t_env	*temp;
+	t_env	*prev;
+
+	temp = *env;
+	if (temp != NULL && ft_strequal(temp->keyword, keyword))
+		return (temp);
+	while (temp != NULL && !ft_strequal(temp->keyword, keyword))
+	{
+		prev = temp;
+		temp = temp->next;
+	}
+	if (temp == NULL)
+		return ;
+	prev->next = temp->next;
+	ft_strdel(&temp->keyword);
+	ft_strdel(&temp->content);
+	free(temp);
+	temp = NULL;
+}
+
+/**
+ * Modified lst_clear for the project
+*/
+
+void	clear_env_list(t_env **env)
+{
+	t_env	*temp;
+
+	if (!env)
+		return ;
+	temp = *env;
+	while (*env != NULL)
+	{
+		ft_strdel(&temp->keyword);
+		ft_strdel(&temp->content);
+		free(temp);
+		temp = NULL;
+		*env = (*env)->next;
+		temp = *env;
+	}
+}
 /*
  * Clear all data from the struct
 	1.	Clear the env list
@@ -62,13 +113,4 @@ int	err_handler(const char *errmessage)
 	else
 		perror(errmessage);
 	return (false);
-}
-
-/*
- * Clean the input argv after use
-*/
-
-void	ft_clean_input_argv(void)
-{
-	ft_str_array_del(&g_mini.argv);
 }

@@ -6,13 +6,13 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 12:14:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/22 11:56:09 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 11:54:23 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/hfiles/minishell.h"
 
-static char	*get_full_param(t_list *list_item)
+static char	*get_full_param(t_env *list_item)
 {
 	char	*prefix;
 	char	*full_param;
@@ -23,14 +23,14 @@ static char	*get_full_param(t_list *list_item)
 	return (full_param);
 }
 
-char	**get_current_envp(t_list *head)
+char	**get_current_envp(t_env *head)
 {
 	char	**curr_envp;
 	int		n_param;
 	int		i;
-	t_list	*temp;
+	t_env	*temp;
 
-	n_param = ft_lstsize(g_mini.env) + 1;
+	n_param = count_params(g_mini.env) + 1;
 	curr_envp = (char **)ft_calloc(n_param, sizeof(char *));
 	if (!curr_envp)
 		return (NULL);
@@ -65,11 +65,20 @@ static int	is_found_and_or_exec(t_file *f)
 	return (0);
 }
 
+/**
+ * Check if the executable has it's full path for execve
+ * -> IF: It already has '/' in the filename, it already has the path
+ * -> ELSE: Add a '/' to the path, then join it with the filename
+ * -> RETURN: The full path to the filename
+*/
+
 static char	*get_file_path(char *path, char	*filename)
 {
 	char	*updated_path;
 	char	*file_path;
 
+	if (ft_ischrinset(filename, '/'))
+		return (ft_strdup(filename));
 	updated_path = ft_strjoin_char(path, '/');
 	if (!updated_path)
 		return (NULL);
@@ -82,6 +91,7 @@ static char	*get_file_path(char *path, char	*filename)
 
 /*
  * Goes through the entire PATH variable until it finds the right path
+	-	@get_file_path checks if the command given already has a full path
 	-	If it finds it, it checks if the file is executable
 	-	> If not executable => throw error
 	-	> If it goes through the entire PATH without finding it

@@ -6,59 +6,13 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/22 11:56:44 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 10:32:10 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/hfiles/minishell.h"
 
-bool	count_quotes(const char *str)
-{
-	int		sqoutes;
-	int		dquotes;
-	int		i;
-	int		j;
-	char	buf[4096];
 
-	sqoutes = 0;
-	dquotes = 0;
-	ft_bzero(buf, 4096);
-	i = -1;
-	j = 0;
-	while (str[++i])
-	{
-		if (str[i] == SINGLEQ)
-		{
-			sqoutes++;
-			buf[j] = 's';
-			j++;
-		}
-		if (str[i] == DOUBLEQ)
-		{
-			dquotes++;
-			buf[j] = 'd';
-			j++;
-		}
-	}
-	if (dquotes % 2 != 0 && sqoutes % 2 != 0)
-	{
-		errno = EPERM;
-		err_handler("Unclosed quotes");
-		return (0);
-	}
-	if (dquotes % 2 != 0)
-	{
-		printf("odd number of double quotes\n");
-		//check for sds in buf -> case where it is still OK
-	}
-	if (sqoutes % 2 != 0)
-	{
-		printf("odd number of single quotes\n");
-		//check for dsd in buf -> case where it is still OK
-	}
-	printf("buffer = %s\n", buf);
-	return (0);
-}
 
 /*
  * Handle cases:

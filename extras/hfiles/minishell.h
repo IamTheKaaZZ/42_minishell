@@ -6,14 +6,14 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/22 12:40:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 11:38:18 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/libft.h"
+# include "../libft/libft_bonus.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <signal.h>
@@ -38,10 +38,17 @@
 # define READ_END 0
 # define WRITE_END 1
 
+typedef struct s_env
+{
+	char			*keyword;
+	char			*content;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_minishell
 {
 	char			*input;
-	t_list			*env;
+	t_env			*env;
 	char			**path_var;
 	char			**argv;
 	struct termios	term;
@@ -99,15 +106,19 @@ void	ft_exit(t_minishell *mini);
 int		executor(char **argv);
 
 void	ft_handler(int signal);
-char	**get_current_envp(t_list *head);
+t_env	*new_env_param(char **param);
+t_env	*find_param(t_env **env, char *keyword);
+void	remove_param(t_env **env, char	*keyword);
+int		count_params(t_env *env);
+char	**get_current_envp(t_env *head);
 char	**ft_get_path(void);
 char	*get_full_cmd_path(char *command);
 void	check_for_quotes(void);
 
 /* ERROS AND CLEAN */
 
+void	clear_env_list(t_env **env);
 int		ft_clear_data(void);
-void	ft_clean_input_argv(void);
 void	ft_error_exit(const char *errmessage);
 int		err_handler(const char *errmessage);
 

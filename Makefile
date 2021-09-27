@@ -49,14 +49,14 @@ libft:
 	@echo "$(WHITE) [ .. ] Creating LIBFT [ .. ]$(QUIT)"
 	@make -C $(LIBFT)
 	@echo "\n$(GREEN)\n"
-	@cat ./fonts/libft_created.txt
+	@echo "LIBFT library CREATED"
 	@echo "$(WHITE) \n\n\n[ .. ] Creating '$(NAME)' [ .. ]$(QUIT)"
 
 clean:
 	@echo "$(RED) [ .. ] Deleting LIBFT [ .. ]"
 	@echo "$(RED)"
 	@make -C $(LIBFT) fclean
-	@cat ./fonts/libft_deleted.txt
+	@echo "LIBFT DELETED"
 	@echo "$(QUIT)"
 	@echo "$(RED) [ .. ] Deleting .o files [ .. ]$(QUIT)"
 	@rm -fr $(DIR_O)
@@ -64,7 +64,7 @@ clean:
 fclean:	clean
 	@echo "$(RED) [ .. ] Deleting '$(NAME)' executable  [ .. ]"
 	@rm -fr $(NAME)
-	@cat	./fonts/minishell_deleted.txt
+	@echo "'$(NAME) executable DELETED"
 	@echo "$(QUIT)"
 
 re:		fclean all
