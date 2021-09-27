@@ -6,45 +6,11 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 12:14:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 11:54:23 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 12:07:07 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/hfiles/minishell.h"
-
-static char	*get_full_param(t_env *list_item)
-{
-	char	*prefix;
-	char	*full_param;
-
-	prefix = ft_strjoin_char(list_item->keyword, '=');
-	full_param = ft_strjoin(prefix, list_item->content);
-	ft_strdel(&prefix);
-	return (full_param);
-}
-
-char	**get_current_envp(t_env *head)
-{
-	char	**curr_envp;
-	int		n_param;
-	int		i;
-	t_env	*temp;
-
-	n_param = count_params(g_mini.env) + 1;
-	curr_envp = (char **)ft_calloc(n_param, sizeof(char *));
-	if (!curr_envp)
-		return (NULL);
-	i = -1;
-	temp = head;
-	while (++i < n_param)
-	{
-		curr_envp[i] = get_full_param(temp);
-		if (!curr_envp[i])
-			ft_str_array_del(&curr_envp);
-		temp = temp->next;
-	}
-	return (curr_envp);
-}
 
 /*
  * Check if the executable is found AND/OR has execute permissions
@@ -125,4 +91,48 @@ char	*get_full_cmd_path(char *command)
 		err_handler(command);
 	ft_strdel(&cmd.file_path);
 	return (NULL);
+}
+
+/*
+ * If the path was already set, reset it
+*/
+
+char	**ft_get_path(void)
+{
+	t_env	*path;
+
+	if (g_mini.path_var)
+		ft_str_array_del(&g_mini.path_var);
+	path = find_param(&g_mini.env, "PATH");
+	return (ft_split(path->content, ':'));
+}
+
+/**
+ * Create the list of the starting environment variables
+*/
+
+t_env	*ft_env_list(char **env, t_minishell *mini)
+{
+	int		i;
+	t_env	*new;
+	t_env	*head;
+	t_env	*temp;
+
+	new = NULL;
+	head = NULL;
+	temp = mini->env;
+	i = -1;
+	while (env[++i])
+	{
+		new = ft_lstnew(ft_split(env[i], '='));
+		if (!new)
+		{
+			ft_lstclear(&head, free);
+			return (NULL);
+		}
+		if (!head)
+			head = new;
+		ft_lstadd_back(&temp, new);
+	}
+	return (head);
 }

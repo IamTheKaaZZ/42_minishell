@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 11:35:05 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 12:08:03 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_handler(int sig)
 	return ;
 }
 
-void	functions()
+void	functions(void)
 {
 	// if (mini->argv[0][0] == '$')
 	// 	ft_dollar_sign(mini, 0); // working for argv[1];
@@ -62,56 +62,6 @@ void	functions()
 	// 	ft_exit(mini);
 	else
 		executor(g_mini.argv);
-}
-
-//OBSOLETE function since getenv("PATH") does the trick
-/*
- * If the path was already set, reset it
-*/
-
-
-char	**ft_get_path(void)
-{
-	t_list	*temp;
-
-	if (g_mini.path_var)
-		ft_str_array_del(&g_mini.path_var);
-	temp = g_mini.env;
-	while (temp)
-	{
-		if (!ft_strncmp(temp->keyword, "PATH", 4))
-			return (ft_split(temp->content, ':'));
-		temp = temp->next;
-	}
-	return (NULL); // if there is not path then return error
-}
-
-// CREATING LIST //
-
-t_list	*ft_env_list(char **env, t_minishell *mini)
-{
-	int		i;
-	t_list	*new;
-	t_list	*head;
-	t_list	*temp;
-
-	new = NULL;
-	head = NULL;
-	temp = mini->env;
-	i = -1;
-	while (env[++i])
-	{
-		new = ft_lstnew(ft_split(env[i], '='));
-		if (!new)
-		{
-			ft_lstclear(&head, free);
-			return (NULL);
-		}
-		if (!head)
-			head = new;
-		ft_lstadd_back(&temp, new);
-	}
-	return (head);
 }
 
 /*
