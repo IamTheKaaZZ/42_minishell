@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 10:32:10 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 15:38:32 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ char	**quote_split(const char *str, bool sq, bool dq)
 	// int		doublequote;
 	// int		singlequote;
 
-	if (!count_quotes(str))
-		return (NULL);
+	// if (!count_quotes(str))
+	// 	return (NULL);
 	if (sq && dq)
 	{
 

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 12:14:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 12:07:07 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 15:24:07 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,28 +111,24 @@ char	**ft_get_path(void)
  * Create the list of the starting environment variables
 */
 
-t_env	*ft_env_list(char **env, t_minishell *mini)
+void	ft_env_list(char **env)
 {
 	int		i;
 	t_env	*new;
-	t_env	*head;
-	t_env	*temp;
+	char	**split_param;
 
 	new = NULL;
-	head = NULL;
-	temp = mini->env;
 	i = -1;
 	while (env[++i])
 	{
-		new = ft_lstnew(ft_split(env[i], '='));
+		split_param = ft_split(env[i], '=');
+		new = new_env_param(split_param);
 		if (!new)
 		{
-			ft_lstclear(&head, free);
-			return (NULL);
+			clear_env_list(&g_mini.env);
+			return ;
 		}
-		if (!head)
-			head = new;
-		ft_lstadd_back(&temp, new);
+		add_to_tail(&g_mini.env, new);
+		ft_str_array_del(&split_param);
 	}
-	return (head);
 }

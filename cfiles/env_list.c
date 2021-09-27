@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 10:49:27 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 11:38:42 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 15:23:36 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_env	*new_env_param(char **param)
 	return (new);
 }
 
-t_env	*find_tail(t_env *head)
+static t_env	*find_tail(t_env *head)
 {
 	t_env	*temp;
 
@@ -49,7 +49,7 @@ t_env	*find_tail(t_env *head)
  * Modified lst_add_back to fit the project
 */
 
-void	add_to_bottom(t_env **env, t_env *new)
+void	add_to_tail(t_env **env, t_env *new)
 {
 	if (!*env)
 	{

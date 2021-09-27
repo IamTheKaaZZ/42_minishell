@@ -15,7 +15,14 @@ void	remove_param(t_env **env, char	*keyword)
 
 	temp = *env;
 	if (temp != NULL && ft_strequal(temp->keyword, keyword))
-		return (temp);
+	{
+		*env = (*env)->next;
+		ft_strdel(&temp->keyword);
+		ft_strdel(&temp->content);
+		free(temp);
+		temp = NULL;
+		return ;
+	}
 	while (temp != NULL && !ft_strequal(temp->keyword, keyword))
 	{
 		prev = temp;
@@ -63,7 +70,7 @@ int	ft_clear_data(void)
 {
 	int	i;
 
-	ft_lstclear(&g_mini.env, free);
+	clear_env_list(&g_mini.env);
 	i = -1;
 	if (g_mini.path_var)
 		ft_str_array_del(&g_mini.path_var);

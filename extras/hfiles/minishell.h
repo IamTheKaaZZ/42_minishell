@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 11:38:18 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 15:23:11 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ t_env	*new_env_param(char **param);
 t_env	*find_param(t_env **env, char *keyword);
 void	remove_param(t_env **env, char	*keyword);
 int		count_params(t_env *env);
+void	add_to_tail(t_env **env, t_env *new);
+void	ft_env_list(char **env);
 char	**get_current_envp(t_env *head);
 char	**ft_get_path(void);
 char	*get_full_cmd_path(char *command);

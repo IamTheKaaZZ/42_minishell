@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 12:08:03 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/27 15:25:14 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	functions(void)
 /*
 *	Initialize the struct
 	-> ft_memset => sets all the variables of the struct to 0
-	-> Automatically add the missing / to the path variables
 */
 
 void	ft_init(char **argv, char **env)
@@ -80,9 +79,9 @@ void	ft_init(char **argv, char **env)
 	if (!g_mini.prompt)
 		ft_error_exit("malloc");
 	ft_strdel(&temp_prompt);
-	g_mini.env = ft_env_list(env, &g_mini);
+	ft_env_list(env);
 	if (!g_mini.env)
-		ft_error_exit("malloc");
+		ft_error_exit("env list creation");
 	if (tcgetattr(STDIN_FILENO, &g_mini.term) != 0)
 		ft_error_exit("tcgetattr");
 	g_mini.term.c_lflag &= ~ECHOCTL;

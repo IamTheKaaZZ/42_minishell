@@ -30,7 +30,7 @@ all:	$(NAME)
 $(NAME): libcheck libft $(DIR_O) $(OBJS)
 	@$(CC) $(CFLAGS) $(LDFLAGS) $(wildcard cfiles/*.c) $(wildcard extras/libft/*c) -o $(NAME) $(LINKS)
 	@echo "\n$(GREEN)\n"
-	@cat ./fonts/minishell_created.txt
+	@echo "$(NAME) executable CREATED"
 	@echo "\n$(QUIT)\n"
 
 $(DIR_O)%.o: cfiles/%.c
@@ -46,7 +46,7 @@ libcheck:
 	@bash scripts/lib_setup.sh
 
 libft:
-	@echo "$(WHITE) [ .. ] Creating LIBFT [ .. ]$(QUIT)"
+	@echo "$(WHITE) [ .. ] Creating LIBFT [ .. ]$(GREEN)"
 	@make -C $(LIBFT)
 	@echo "\n$(GREEN)\n"
 	@echo "LIBFT library CREATED"
@@ -64,7 +64,7 @@ clean:
 fclean:	clean
 	@echo "$(RED) [ .. ] Deleting '$(NAME)' executable  [ .. ]"
 	@rm -fr $(NAME)
-	@echo "'$(NAME) executable DELETED"
+	@echo "\n'$(NAME)' executable DELETED"
 	@echo "$(QUIT)"
 
 re:		fclean all

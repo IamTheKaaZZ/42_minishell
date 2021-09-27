@@ -6,7 +6,7 @@
 #    By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/08 10:32:48 by bcosters          #+#    #+#              #
-#    Updated: 2021/09/10 12:13:36 by bcosters         ###   ########.fr        #
+#    Updated: 2021/09/27 15:40:05 by bcosters         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,17 +68,17 @@ bonus:		fclean $(OBJDIR) $(OBJS_BONUS) $(HEADER)
 
 $(NAME):	progress $(OBJDIR) ${OBJS_OWN} ${HEADERS_OWN}
 			@ar rcs ${NAME} ${OBJS_OWN}
-			@echo "]\nFINISHED: Compiling COMPLETE LIBFT (ALL + OWN FUNCTIONS)"
+			@echo "]\n"
 
 $(OBJS):		| $(OBJDIR)
 $(OBJS_BONUS):	| $(OBJDIR)
 $(OBJS_OWN):	| $(OBJDIR)
 
 $(OBJDIR):
-			mkdir -p $(OBJDIR)
+			@mkdir -p $(OBJDIR)
 
 progress:
-			@printf "Compiling COMPLETE LIBFT (ALL + OWN FUNCTIONS)\n["
+			@printf "\n["
 
 
 .PHONY:		clean
