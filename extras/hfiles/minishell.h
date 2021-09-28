@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/28 11:28:34 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/28 12:57:41 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void	ft_unset(t_minishell *mini);
 void	ft_env(t_minishell *mini);
 void	ft_exit(t_minishell *mini);
 int		executor(char **argv);
+int		open_file_as_input(t_exec *ex, char *filename);
 
 void	ft_handler(int signal);
 t_env	*new_env_param(char **param);
@@ -117,7 +118,7 @@ char	**ft_get_path(void);
 char	*get_full_cmd_path(char *command);
 void	check_for_quotes(void);
 
-/* ERROS AND CLEAN */
+/* ERRORS AND CLEAN */
 
 void	clear_env_list(t_env **env);
 int		ft_clear_data(void);

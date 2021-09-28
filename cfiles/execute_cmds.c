@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:29:35 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/28 11:29:36 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/28 13:01:39 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,17 +97,8 @@ int	executor(char **argv)
 		if (!syntax_error_check(argv, ex.err, i))
 			break ;
 		if (ft_strequal(argv[i], "<"))
-		{
-			if (stat(argv[++i], &ex.in.stats) != -1
-				&& ex.in.stats.st_mode & S_IRUSR)
-			{
-				ex.in.fd = open(argv[i], O_RDONLY);
-				if (ex.in.fd == -1)
-					return (err_handler(argv[i]));
-			}
-			else
-				return (err_handler(argv[i]));
-		}
+			if (!open_file_as_input(&ex, argv[++i]))
+				break ;
 		if (ft_strequal(argv[i], "<<"))
 		{
 			//open here_doc and save lines temporarily
