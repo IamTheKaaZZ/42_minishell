@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:35:51 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/28 13:37:28 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/28 17:09:01 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,31 +37,44 @@ int	here_doc_as_input(t_exec *ex)
 {
 	static char	*here_doc;
 	char		*temp;
+	char		*line;
 	int			retval;
-	char		buffchar;
+	int			i;
 
-	retval = read(STDIN_FILENO, &buffchar, 1);
-	if (retval == 0) //EOF found
-		return (NULL);
-	if (retval == -1) // read error
-		return ((void *)err_handler("read"));
+	line = NULL;
+	retval = get_next_line(STDIN_FILENO, &line);
+	if (retval == 0)
+		return (here_doc);
+	if (retval == -1)
+		return ((void *)err_handler("get next line"));
+	if (ft_strequal(line, ex->limiter))
+	{
+		ft_strdel(&line);
+		return (here_doc);
+	}
 	while (retval > 0)
 	{
-		if (ft_ischrinset("\"\\\n", buffchar))
+		i = -1;
+		while (line[++i])
 		{
-
+			if (line[i] == '\\' && line[i + 1] == '\\')
+				i++;
+			temp = here_doc;
+			here_doc = ft_strjoin_char(temp, line[i]);
+			ft_strdel(&temp);
 		}
-		else
+		temp = here_doc;
+		here_doc = ft_strjoin_char(temp, '\n');
+		ft_strdel(&temp);
+		retval = get_next_line(STDIN_FILENO, &line);
+		if (retval == 0)
+			return (here_doc);
+		if (retval == -1)
+			return ((void *)err_handler("get next line"));
+		if (ft_strequal(line, ex->limiter))
 		{
-			if (!here_doc)
-				here_doc = ft_strjoin_char(NULL, buffchar);
-			else
-			{
-				temp = here_doc;
-				here_doc = ft_strjoin_char(temp, buffchar);
-				ft_strdel(&temp);
-			}
+			ft_strdel(&line);
+			return (here_doc);
 		}
-		retval = read(STDIN_FILENO, &buffchar, 1);
 	}
 }
