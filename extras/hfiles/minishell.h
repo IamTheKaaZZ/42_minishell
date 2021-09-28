@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 15:23:11 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/28 11:28:34 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	clear_env_list(t_env **env);
 int		ft_clear_data(void);
 void	ft_error_exit(const char *errmessage);
 int		err_handler(const char *errmessage);
+bool	syntax_error_check(char **argv, char *err, int i);
 
 /* DOLLAR */
 
