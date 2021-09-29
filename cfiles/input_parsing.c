@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 15:06:22 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 18:09:15 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 static void	get_next_str_len(char const **str, size_t *len, char c)
 {
 	size_t	i;
-	char	curr;
 
 	*str += *len;
 	*len = 0;
@@ -46,21 +45,51 @@ t_node	*quote_split(const char *str, bool sq, bool dq)
 {
 	t_node	*parsed_list;
 	size_t	len;
-	char	current;
-	size_t	quote_count;
+	int		squote;
+	int		dquote;
+	char	*token;
 
 	if (!str)
 		return (NULL);
-	current = ' ';
 	len = 0;
-	quote_count = 0;
+	squote = 0;
+	dquote = 0;
 	while (*str)
 	{
-		if (sq && dq)
+		if (dquote)
 		{
-			if (ft_strchr(str, ' ') < ft_strchr(str, '\'')
-				&& ft_strchr(str, ' ') < ft_strchr(str, '\''))
+			if (ft_strchr(str, '\"') == NULL)
+				err_handler("unclosed quote"); // clear all memory
+			get_next_str_len(&str, &len, '\"');
+			dquote = 0;
 		}
+		else if (squote)
+		{
+			if (ft_strchr(str, '\'') == NULL)
+				err_handler("unclosed quote"); // clear all memory
+			get_next_str_len(&str, &len, '\'');
+			squote = 0;
+		}
+		else if (ft_strchr(str, ' ') != NULL
+			&& ft_strchr(str, ' ') < ft_strchr(str, '\'')
+			&& ft_strchr(str, ' ') < ft_strchr(str, '\"'))
+			get_next_str_len(&str, &len, ' ');
+		else if (ft_strchr(str, '\"') != NULL
+			&& ft_strchr(str, '\"') < ft_strchr(str, '\'')
+			&& ft_strchr(str, '\"') < ft_strchr(str, ' '))
+		{
+			get_next_str_len(&str, &len, '\"');
+			dquote = 1;
+		}
+		else if (ft_strchr(str, '\'') != NULL
+			&& ft_strchr(str, '\'') < ft_strchr(str, '\"')
+			&& ft_strchr(str, '\'') < ft_strchr(str, ' '))
+		{
+			get_next_str_len(&str, &len, '\'');
+			squote = 1;
+		}
+		token = (char *)ft_calloc(len + 1, sizeof(char));
+		ft_strlcpy(token, str, len + 1);
 	}
 }
 
