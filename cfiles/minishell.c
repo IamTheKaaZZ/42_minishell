@@ -34,7 +34,8 @@ void	ft_handler(int sig)
 	if (sig == SIGQUIT)
 	{
 		//update prompt with cwd
-		write(1, g_mini.prompt, ft_strlen(g_mini.prompt));
+		// write(1, g_mini.prompt, ft_strlen(g_mini.prompt));
+		rl_on_new_line();
 		rl_redisplay();
 	}
 	return ;
@@ -105,7 +106,7 @@ char	*rl_gnl(t_minishell *mini)
 	if (line)
 		ft_strdel(&line);
 	line = readline(mini->prompt);
-	if (!line)
+	if (!line) // EOF
 		exit(ft_clear_data());
 	if (line != NULL && line[0] != 0)
 		add_history(line);

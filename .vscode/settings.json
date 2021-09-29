@@ -4,6 +4,7 @@
 		"bitset": "c",
 		"functional": "c",
 		"iterator": "c",
-		"memory": "c"
+		"memory": "c",
+		"minishell.h": "c"
 	}
 }
