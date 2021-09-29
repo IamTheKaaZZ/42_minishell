@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 13:08:27 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 13:39:52 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ typedef struct s_exec
 	int			pipe[2];
 	int			prev_fd;
 	int			wstatus;
-	t_file		in;
-	int			out[1024];
-	t_file		tmp;
-	char		*limiter;
+	// t_file		in;
+	// int			out[1024];
+	// t_file		tmp;
+	// char		*limiter;
 	char		err[100];
 	t_job		jobs[100];
 }	t_exec;

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:29:35 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 13:23:56 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 13:46:57 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,7 @@ static int	init_exec(t_exec *ex, char **argv)
 	ex->pipe[READ_END] = -1;
 	ex->pipe[WRITE_END] = -1;
 	ex->prev_fd = -1;
-	ex->in.fd = -1;
-	ft_memset(ex->out, -1, 1024);
-	ex->tmp.fd = -1;
-	i = 0;
-	while (*argv)
-	{
-		if (ft_strequal(argv[i], "|")
-			&& ft_strequal(argv[i], "<") && ft_strequal(argv[i], "<<")
-			&& ft_strequal(argv[i], ">") && ft_strequal(argv[i], ">>"))
-			i++;
-		argv++;
-	}
-	ex->cmds = (t_command *)ft_calloc(i + 1, sizeof(t_command));
-	if (!ex->cmds)
-		return (err_handler("malloc"));
+	ft_memset(ex->jobs, 0, 100 * sizeof(t_job));
 	return (EXIT_SUCCESS);
 }
 
@@ -56,19 +42,6 @@ static void	reset_exec(t_exec *ex)
 	close_pipe(ex->pipe);
 	close(ex->prev_fd);
 	ex->wstatus = 0;
-	close(ex->in.fd);
-	if (ex->in.file_path)
-		ft_strdel(&ex->in.file_path);
-	i = -1;
-	while (ex->out[++i] != -1)
-		close(ex->out[++i]);
-	if (ex->limiter)
-		ft_strdel(&ex->limiter);
-	unlink_tmp(NULL);
-	while (ex->cmds)
-	{
-		//free all the commands and their arguments
-	}
 	ft_bzero(ex->err, 100);
 }
 
@@ -104,7 +77,7 @@ int	create_jobs(t_exec *ex, char **argv)
 		else
 			j++;
 	}
-	
+	//handle redirections
 }
 
 int	executor(char **argv)
