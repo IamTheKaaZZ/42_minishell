@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 17:03:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 15:31:56 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	ft_handler(int sig)
 	if (sig == SIGQUIT)
 	{
 		//update prompt with cwd
-		write(1, g_mini.prompt, ft_strlen(g_mini.prompt));
+		// write(1, g_mini.prompt, ft_strlen(g_mini.prompt));
+		rl_on_new_line();
 		rl_redisplay();
 	}
 	return ;
