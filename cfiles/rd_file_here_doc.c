@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 11:50:54 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 12:56:24 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 14:31:58 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static bool	retval_or_limiter(t_job *j, char **line, int retval)
 		ft_strdel(line);
 		return (true);
 	}
+	return (true);
 }
 
 bool	unlink_tmp(char *error)

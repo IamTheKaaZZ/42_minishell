@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:29:35 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 13:46:57 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 14:33:12 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	create_jobs(t_exec *ex, char **argv)
 		else
 			j++;
 	}
-	//handle redirections
+	return (true);
 }
 
 int	executor(char **argv)

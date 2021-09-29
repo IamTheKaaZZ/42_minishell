@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 13:39:52 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 14:34:23 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct s_job
 {
 	t_node	*head;
 	t_file	in[1024];
-	int		out_fd[1024];
+	t_file	out_fd[1024];
 	int		tmp_fd;
 	char	*limiter;
 	bool	pipe;

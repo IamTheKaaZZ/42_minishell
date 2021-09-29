@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/28 11:30:25 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 15:06:22 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,50 @@
 	'"$SOMETHING"' => "$SOMETHING"
 */
 
-char	**quote_split(const char *str, bool sq, bool dq)
+/*
+**	Iteratively finds the next string and corresponding lenght*
+**	Every time this gets called.
+*/
+
+static void	get_next_str_len(char const **str, size_t *len, char c)
 {
-	char	**temp_dq;
-	// char	**temp_sq;
-	// int		doublequote;
-	// int		singlequote;
+	size_t	i;
+	char	curr;
 
-	// if (!count_quotes(str))
-	// 	return (NULL);
-	if (sq && dq)
+	*str += *len;
+	*len = 0;
+	i = 0;
+	while (**str && **str == c)
+		(*str)++;
+	while ((*str)[i])
 	{
+		if ((*str)[i] == c)
+			return ;
+		(*len)++;
+		i++;
+	}
+}
 
-	}
-	else if (sq)
-	{
+t_node	*quote_split(const char *str, bool sq, bool dq)
+{
+	t_node	*parsed_list;
+	size_t	len;
+	char	current;
+	size_t	quote_count;
 
-	}
-	else if (dq)
+	if (!str)
+		return (NULL);
+	current = ' ';
+	len = 0;
+	quote_count = 0;
+	while (*str)
 	{
-		temp_dq = ft_split(str, '\"');
+		if (sq && dq)
+		{
+			if (ft_strchr(str, ' ') < ft_strchr(str, '\'')
+				&& ft_strchr(str, ' ') < ft_strchr(str, '\''))
+		}
 	}
-	return (NULL);
 }
 
 void	check_for_quotes(void)
