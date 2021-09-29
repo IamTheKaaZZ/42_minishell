@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/28 12:57:41 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 12:03:58 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define UNSPEC 2
 # define READ_END 0
 # define WRITE_END 1
+# define TEMPFILE ".here_doc"
 
 typedef struct s_env
 {
@@ -79,7 +80,8 @@ typedef struct s_exec
 	int			prev_fd;
 	int			wstatus;
 	t_file		in;
-	t_file		out;
+	int			out[1024];
+	t_file		tmp;
 	char		*limiter;
 	t_command	*cmds;
 	char		err[100];
@@ -105,6 +107,7 @@ void	ft_env(t_minishell *mini);
 void	ft_exit(t_minishell *mini);
 int		executor(char **argv);
 int		open_file_as_input(t_exec *ex, char *filename);
+int		here_doc_as_input(t_exec *ex);
 
 void	ft_handler(int signal);
 t_env	*new_env_param(char **param);
@@ -125,6 +128,7 @@ int		ft_clear_data(void);
 void	ft_error_exit(const char *errmessage);
 int		err_handler(const char *errmessage);
 bool	syntax_error_check(char **argv, char *err, int i);
+bool	unlink_tmp(char *error);
 
 /* DOLLAR */
 
