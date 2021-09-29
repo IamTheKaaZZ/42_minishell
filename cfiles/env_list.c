@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 10:49:27 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 15:23:36 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 12:59:35 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@
  * -> param needs to be free'd either in here or in the fucntion calling this
 */
 
-t_env	*new_env_param(char **param)
+t_node	*new_env_param(char **param)
 {
-	t_env	*new;
+	t_node	*new;
 
-	new = (t_env *)malloc(sizeof(t_env));
+	new = (t_node *)malloc(sizeof(t_node));
 	if (!new)
 		return (NULL);
 	new->keyword = param[0];
@@ -31,9 +31,9 @@ t_env	*new_env_param(char **param)
 	return (new);
 }
 
-static t_env	*find_tail(t_env *head)
+static t_node	*find_tail(t_node *head)
 {
-	t_env	*temp;
+	t_node	*temp;
 
 	temp = head;
 	while (temp != NULL)
@@ -49,7 +49,7 @@ static t_env	*find_tail(t_env *head)
  * Modified lst_add_back to fit the project
 */
 
-void	add_to_tail(t_env **env, t_env *new)
+void	add_to_tail(t_node **env, t_node *new)
 {
 	if (!*env)
 	{
@@ -64,9 +64,9 @@ void	add_to_tail(t_env **env, t_env *new)
  * Find any param in the env list
 */
 
-t_env	*find_param(t_env **env, char *keyword)
+t_node	*find_param(t_node **env, char *keyword)
 {
-	t_env	*temp;
+	t_node	*temp;
 
 	temp = *env;
 	if (temp != NULL && ft_strequal(temp->keyword, keyword))
@@ -83,7 +83,7 @@ t_env	*find_param(t_env **env, char *keyword)
  * Count the amount of parameters in the list
 */
 
-int	count_params(t_env *env)
+int	count_params(t_node *env)
 {
 	int	i;
 

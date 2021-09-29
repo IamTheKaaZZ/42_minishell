@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 12:14:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 15:24:07 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 13:01:09 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	*get_full_cmd_path(char *command)
 
 char	**ft_get_path(void)
 {
-	t_env	*path;
+	t_node	*path;
 
 	if (g_mini.path_var)
 		ft_str_array_del(&g_mini.path_var);
@@ -114,7 +114,7 @@ char	**ft_get_path(void)
 void	ft_env_list(char **env)
 {
 	int		i;
-	t_env	*new;
+	t_node	*new;
 	char	**split_param;
 
 	new = NULL;

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:29:35 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 12:06:37 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 13:23:56 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,20 +86,40 @@ static void	reset_exec(t_exec *ex)
  * -> IMPORTANT: Split in jobs => everything before | or end is a job
 */
 
+int	create_jobs(t_exec *ex, char **argv)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	j = 0;
+	if (ft_strequal(argv[0], "|"))
+		return (err_handler(concat_err(ex->err, SYNTAX, "|")));
+	while (argv[++i])
+	{
+		if (!syntax_error_check(argv, ex->err, i))
+			return (false);
+		if (argv[i] != "|")
+			add_to_tail(&ex->jobs[j].head, new_node(argv));
+		else
+			j++;
+	}
+	
+}
+
 int	executor(char **argv)
 {
 	int			i;
+	int			j;
 	t_exec		ex;
 
 	if (init_exec(&ex, argv))
 		return ;
 	i = -1;
+	j = -1;
 	while (argv[++i])
 	{
-		if (ft_strequal(argv[0], "|"))
-			return (err_handler(concat_err(ex.err, SYNTAX, "|")));
-		if (!syntax_error_check(argv, ex.err, i))
-			break ;
+		//create as much infiles as < or <<
 		if (ft_strequal(argv[i], "<"))
 			if (!open_file_as_input(&ex, argv[++i]))
 				break ;
@@ -109,14 +129,14 @@ int	executor(char **argv)
 		//create as much outfiles as > or >>
 		if (ft_strequal(argv[i], ">"))
 		{
-			ex.out.fd = open(argv[++i], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-			if (ex.out.fd == -1)
+			ex.out[++j] = open(argv[++i], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			if (ex.out[j] == -1)
 				return (err_handler(argv[i]));
 		}
 		if (ft_strequal(argv[i], ">>"))
 		{
-			ex.out.fd = open(argv[++i], O_WRONLY | O_CREAT | O_APPEND, 0777);
-			if (ex.out.fd == -1)
+			ex.out[++j] = open(argv[++i], O_WRONLY | O_CREAT | O_APPEND, 0777);
+			if (ex.out[j] == -1)
 				return (err_handler(argv[i]));
 		}
 		while (argv[i] && !ft_strequal(argv[i], "|")

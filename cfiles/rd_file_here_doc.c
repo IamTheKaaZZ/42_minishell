@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 11:50:54 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 11:57:57 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/29 12:56:24 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@
  * -> ELSE: Return an error with the filename
 */
 
-int	open_file_as_input(t_exec *ex, char *filename)
+int	open_file_as_input(t_job *j, char *filename, int i)
 {
-	if (stat(filename, &ex->in.stats) != -1
-		&& ex->in.stats.st_mode & S_IRUSR)
+	if (stat(filename, &j->in[i].stats) != -1
+		&& j->in[i].stats.st_mode & S_IRUSR)
 	{
-		ex->in.fd = open(filename, O_RDONLY);
-		if (ex->in.fd == -1)
+		j->in[i].fd = open(filename, O_RDONLY);
+		if (j->in[i].fd == -1)
 			return (err_handler(filename));
 	}
 	else
@@ -33,7 +33,7 @@ int	open_file_as_input(t_exec *ex, char *filename)
 	return (true);
 }
 
-static bool	retval_or_limiter(t_exec *ex, char **line, int retval)
+static bool	retval_or_limiter(t_job *j, char **line, int retval)
 {
 	if (retval == 0)
 	{
@@ -45,7 +45,7 @@ static bool	retval_or_limiter(t_exec *ex, char **line, int retval)
 		ft_strdel(line);
 		return (err_handler("get next line"));
 	}
-	if (ft_strequal(line, ex->limiter))
+	if (ft_strequal(line, j->limiter))
 	{
 		ft_strdel(line);
 		return (true);
@@ -62,7 +62,7 @@ bool	unlink_tmp(char *error)
 		return (true);
 }
 
-static bool	write_to_tmp(t_exec *ex, char **line)
+static bool	write_to_tmp(t_job *j, char **line)
 {
 	int	i;
 
@@ -71,13 +71,13 @@ static bool	write_to_tmp(t_exec *ex, char **line)
 	{
 		if ((*line)[i] == '\\' && (*line)[i + 1] == '\\')
 			i++;
-		if (write(ex->tmp.fd, &(*line)[i], 1) < 0)
+		if (write(j->tmp_fd, &(*line)[i], 1) < 0)
 		{
 			ft_strdel(line);
 			return (unlink_tmp("write"));
 		}
 	}
-	if (write(ex->tmp.fd, "\n", 1) < 0)
+	if (write(j->tmp_fd, "\n", 1) < 0)
 	{
 		ft_strdel(line);
 		return (unlink_tmp("write"));
@@ -85,25 +85,25 @@ static bool	write_to_tmp(t_exec *ex, char **line)
 	return (true);
 }
 
-int	here_doc_as_input(t_exec *ex)
+int	here_doc_as_input(t_job *j)
 {
 	char		*line;
 	int			retval;
 
 	line = NULL;
-	ex->tmp.fd = open(TEMPFILE, O_RDWR | O_CREAT | O_TRUNC, 0777);
-	if (ex->tmp.fd == -1)
+	j->tmp_fd = open(TEMPFILE, O_RDWR | O_CREAT | O_APPEND, 0777);
+	if (j->tmp_fd == -1)
 		return (EXIT_FAILURE);
 	retval = get_next_line(STDIN_FILENO, &line);
-	if (retval_or_limiter(ex, &line, retval))
+	if (retval_or_limiter(j, &line, retval))
 		return (unlink_tmp(NULL));
 	while (retval > 0)
 	{
-		if (!write_to_tmp(ex, &line))
+		if (!write_to_tmp(j, &line))
 			return (EXIT_FAILURE);
 		ft_strdel(&line);
 		retval = get_next_line(STDIN_FILENO, &line);
-		if (retval_or_limiter(ex, &line, retval))
+		if (retval_or_limiter(j, &line, retval))
 			return (EXIT_SUCCESS);
 		else
 		{
