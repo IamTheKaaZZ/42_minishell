@@ -95,14 +95,12 @@ t_minishell	g_mini;
 *	FUNCTION PROTOTYPES
 */
 
-void	ft_echon(t_minishell *mini);
 void	ft_echo(void);
-void	ft_cd(t_minishell *mini);
-void	ft_pwd(t_minishell *mini);
-void	ft_export(t_minishell *mini);
-void	ft_unset(t_minishell *mini);
-void	ft_env(t_minishell *mini);
-void	ft_exit(t_minishell *mini);
+void	ft_cd(void);
+void	ft_env(void);
+void	ft_pwd(void);
+
+
 int		executor(char **argv);
 
 void	ft_handler(int signal);

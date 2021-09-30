@@ -33,7 +33,7 @@ void	ft_handler(int sig)
 	}
 	if (sig == SIGQUIT)
 	{
-		//update prompt with cwd
+		//update prompt with cwd ?? 
 		// write(1, g_mini.prompt, ft_strlen(g_mini.prompt));
 		rl_on_new_line();
 		rl_redisplay();
@@ -42,26 +42,21 @@ void	ft_handler(int sig)
 }
 
 void	functions(void)
+/*  */
 {
-	// if (mini->argv[0][0] == '$')
-	// 	ft_dollar_sign(mini, 0); // working for argv[1];
-	// if (!(ft_strncmp(g_mini.input, "echo -n", 7)))
-	// 	ft_echon(&g_mini);
-	// else if (!(ft_strncmp(g_mini.input, "echo", 4)))
-	// 	ft_echo();
-	// else if (!(ft_strncmp(mini->input, "cd", 2)))
-	// 	ft_cd(mini);
-	// else if (!(ft_strncmp(mini->input, "pwd", 3)))
-	// 	ft_pwd(mini);
-	// else if (!(ft_strncmp(mini->input, "export", 6)))
-	// 	ft_export(mini);
-	/*else if (!(ft_strncmp(mini->input, "unset", 5)))
-		ft_unset(mini);*/
-	// else if (!(ft_strncmp(mini->input, "env", 3)))
-	// 	ft_env(mini);
-	// else if (!(ft_strncmp(mini->input, "exit", 4)))
-	// 	ft_exit(mini);
-	// else
+	// if (!ft_strncmp(g_mini.input ,"echo", 4))
+	if (ft_strequal(*g_mini.argv, "echo"))
+		ft_echo();
+	// else if (!ft_strncmp(g_mini.input, "env", 3))
+	if (ft_strequal(*g_mini.argv, "env"))
+		ft_env();
+	// else if (!ft_strncmp(g_mini.input, "pwd", 3))
+	if (ft_strequal(*g_mini.argv, "pwd"))
+		ft_pwd();
+	// else if (!ft_strncmp(g_mini.input, "cd", 2))
+	if (ft_strequal(*g_mini.argv, "cd"))
+		ft_cd();
+	else
 		executor(g_mini.argv);
 }
 
@@ -70,16 +65,12 @@ void	functions(void)
 	-> ft_memset => sets all the variables of the struct to 0
 */
 
-void	ft_init(char **argv, char **env)
+void	ft_init(char **env)
 {
-	char	*temp_prompt;
-
 	ft_memset(&g_mini, 0, sizeof(t_minishell));
-	temp_prompt = ft_strtrim(argv[0], "./");
-	g_mini.prompt = ft_strjoin(temp_prompt, "\033[0;32;1m42\033[0m: ");
+	g_mini.prompt = ft_strdup("minishell\033[0;32;1m42\033[0m: ");
 	if (!g_mini.prompt)
 		ft_error_exit("malloc");
-	ft_strdel(&temp_prompt);
 	ft_env_list(env);
 	if (!g_mini.env)
 		ft_error_exit("env list creation");
@@ -115,7 +106,9 @@ char	*rl_gnl(t_minishell *mini)
 
 int	main(int argc, char **argv, char **env)
 {
-	ft_init(argv, env);
+	(void)argv;
+
+	ft_init(env);
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, ft_handler);
 	while (argc)
