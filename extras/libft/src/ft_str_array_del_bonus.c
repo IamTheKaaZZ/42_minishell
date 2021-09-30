@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 12:39:56 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/20 11:56:57 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/30 13:54:10 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	ft_str_array_del(char ***str_array)
 {
 	int	i;
 
+	if (!str_array || !*str_array)
+		return ;
 	i = -1;
 	while ((*str_array)[++i])
 		ft_strdel(&(*str_array)[i]);

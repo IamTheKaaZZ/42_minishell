@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 11:50:54 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 14:31:58 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/30 13:10:55 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static bool	retval_or_limiter(t_job *j, char **line, int retval)
 		ft_strdel(line);
 		return (err_handler("get next line"));
 	}
-	if (ft_strequal(line, j->limiter))
+	if (ft_strequal(*line, j->limiter))
 	{
 		ft_strdel(line);
 		return (true);

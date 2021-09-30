@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 17:03:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/30 13:21:23 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	functions(void)
 	// else if (!(ft_strncmp(mini->input, "exit", 4)))
 	// 	ft_exit(mini);
 	// else
-		executor(g_mini.argv);
+		// executor(g_mini.argv);
 }
 
 /*
@@ -121,7 +121,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		g_mini.input = rl_gnl(&g_mini);
 		check_for_quotes();
-		functions();
+		// functions();
 		ft_str_array_del(&g_mini.argv);
 	}
 }
