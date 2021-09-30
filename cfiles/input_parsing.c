@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/30 14:12:57 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/30 19:03:17 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,28 @@
 */
 
 /*
+**returns the index to the first occurrence of the character c in the string s*
+*/
+//ADD SKIPS TO ESCAPE CHARS {\n \' \" \v \r etc}
+size_t	strchr_index(const char *str, int c)
+{
+	size_t	i;
+	char	*temp;
+
+	temp = (char *)str;
+	if (c == 0)
+		return (ft_strlen(temp));
+	i = 0;
+	while (*(temp + i))
+	{
+		if (*(temp + i) == (unsigned char)c)
+			return (i);
+		i++;
+	}
+	return (INT_MAX);
+}
+
+/*
 **	Iteratively finds the next string and corresponding lenght*
 **	Every time this gets called.
 */
@@ -27,10 +49,9 @@ static bool	get_next_str_len(char const **str, size_t *len, char c)
 {
 	size_t	i;
 
-	*str += *len;
 	*len = 0;
 	i = 0;
-	while (**str && (**str == c || **str == ' '))
+	while (**str && **str == c)
 		(*str)++;
 	while ((*str)[i])
 	{
@@ -39,67 +60,55 @@ static bool	get_next_str_len(char const **str, size_t *len, char c)
 		(*len)++;
 		i++;
 	}
-	if ((*str)[i] == 0 && (c == '\'' || c == '\"'))
-		return (err_handler("unclosed quote"));
 	return (true);
 }
 
-// static bool	find_closing_quote(char const **str, size_t *len, int *dq, int *sq)
-// {
-// 	if (*dq)
-// 	{
-// 		if (ft_strchr(*str, '\"') == NULL)
-// 			return (err_handler("unclosed quote")); // clear all memory
-// 		get_next_str_len(str, len, '\"');
-// 		*dq = 0;
-// 	}
-// 	else if (*sq)
-// 	{
-// 		if (ft_strchr(*str, '\'') == NULL)
-// 			return (err_handler("unclosed quote")); // clear all memory
-// 		get_next_str_len(str, len, '\'');
-// 		*sq = 0;
-// 	}
-// 	return (true);
-// }
+/**
+ * normal split AND double quotes expand vars AND require escaping
+ * single quotes: Everything is literal.
+*/
 
-bool	parse_quotes_spaces(char const **str, size_t *len, int *dq, int *sq)
+bool	parse_quotes_spaces(char const **str, size_t *len)
 {
-	// if (*dq || *sq)
-	// {
-	// 	if (!find_closing_quote(str, len, dq, sq))
-	// 		return (false);
-	// }
-	(void)sq;
-	(void)dq;
-	if (ft_strchr(*str, ' ') != NULL
-		&& (!ft_strchr(*str, '\'')
-			|| ft_strchr(*str, ' ') < ft_strchr(*str, '\''))
-		&& (!ft_strchr(*str, '\"')
-			|| ft_strchr(*str, ' ') < ft_strchr(*str, '\"')))
-		get_next_str_len(str, len, ' ');
-	else if (ft_strchr(*str, '\'') != NULL
-		&& (!ft_strchr(*str, ' ')
-			|| ft_strchr(*str, '\'') < ft_strchr(*str, ' '))
-		&& (!ft_strchr(*str, '\"')
-			|| ft_strchr(*str, '\'') < ft_strchr(*str, '\"')))
+	size_t			start;
+	size_t			end;
+	static int		sq;
+	static int		dq;
+
+	start = 0;
+	*str += *len;
+	*len = 0;
+	if (dq)
 	{
-		if (!get_next_str_len(str, len, '\''))
-			return (false);
-		// *sq = 1;
+		(*str)++;
+		dq = 0;
 	}
-	else if (ft_strchr(*str, '\"') != NULL
-		&& (!ft_strchr(*str, ' ')
-			|| ft_strchr(*str, '\"') < ft_strchr(*str, ' '))
-		&& (!ft_strchr(*str, '\'')
-			|| ft_strchr(*str, '\"') < ft_strchr(*str, '\'')))
+	if (sq)
 	{
-		if (!get_next_str_len(str, len, '\"'))
-			return (false);
-		// *dq = 1;
+		(*str)++;
+		sq = 0;
 	}
-	else
+	while (**str && **str == ' ')
+		(*str)++;
+	if (strchr_index(*str, ' ') < strchr_index(*str, '\"')
+		&& strchr_index(*str, ' ') < strchr_index(*str, '\''))
 		get_next_str_len(str, len, ' ');
+	else if (strchr_index(*str, '\"') < strchr_index(*str, '\''))
+	{
+		start = strchr_index(*str, '\"');
+		(*str)++;
+		end = strchr_index(*str, '\"');
+		*len = end - start;
+		dq = 1;
+	}
+	else if (strchr_index(*str, '\'') < strchr_index(*str, '\"'))
+	{
+		start = strchr_index(*str, '\'');
+		(*str)++;
+		end = strchr_index(*str, '\'');
+		*len = end - start;
+		sq = 1;
+	}
 	return (true);
 }
 
@@ -107,30 +116,28 @@ t_node	*quote_split(const char *str)
 {
 	t_node	*parsed_list;
 	size_t	len;
-	int		squote;
-	int		dquote;
 	char	*token;
 
 	if (!str)
 		return (NULL);
 	len = 0;
-	squote = 0;
-	dquote = 0;
 	parsed_list = NULL;
 	while (*str)
 	{
-		if (!parse_quotes_spaces(&str, &len, &dquote, &squote))
+		if (!parse_quotes_spaces(&str, &len))
 		{
 			clear_env_list(&parsed_list);
 			return (NULL);
 		}
+		if ((len == 0 && !ft_ischrinset(str, ' ')
+				&& !ft_ischrinset(str, '\'') && !ft_ischrinset(str, '\"')))
+			len = ft_strlen(str);
+		if (!*str)
+			break ;
 		token = (char *)ft_calloc(len + 1, sizeof(char));
 		ft_strlcpy(token, str, len + 1);
-		printf("token: %s\n", token);
-		if (!parsed_list)
-			parsed_list = new_node(token);
-		else
-			add_to_tail(&parsed_list, new_node(token));
+		printf("len = %lu ,token: [%s]\n", len, token);
+		add_to_tail(&parsed_list, new_node(token));
 	}
 	return (parsed_list);
 }

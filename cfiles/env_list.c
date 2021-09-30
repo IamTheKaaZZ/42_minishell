@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 10:49:27 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 12:59:35 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/30 18:42:04 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,7 @@ static t_node	*find_tail(t_node *head)
 void	add_to_tail(t_node **env, t_node *new)
 {
 	if (!*env)
-	{
-		new->next = *env;
 		*env = new;
-	}
 	else
 		find_tail(*env)->next = new;
 }
