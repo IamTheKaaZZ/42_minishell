@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/01 13:00:15 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/01 14:44:48 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ typedef struct s_exec
 
 typedef struct s_expand
 {
-	size_t	start;
+	size_t	i;
 	size_t	len;
 	char	*prefix;
 	char	*to_expand;

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/01 14:01:12 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/01 15:04:07 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static bool	get_next_str_len(char const **str, size_t *len, char c)
  * single quotes: Everything is literal.
 */
 
-bool	parse_quotes_spaces(char const **str, size_t *len, bool *interpret)
+bool	parse_quotes_spaces(char const **str, size_t *len, bool *dqu, bool *noq)
 {
 	size_t			start;
 	size_t			end;
@@ -99,7 +99,7 @@ bool	parse_quotes_spaces(char const **str, size_t *len, bool *interpret)
 		&& strchr_index(*str, ' ') < strchr_index(*str, '\''))
 	{
 		get_next_str_len(str, len, ' ');
-		*interpret = true;
+		*noq = true;
 	}
 	else if (strchr_index(*str, '\"') < strchr_index(*str, '\''))
 	{
@@ -107,15 +107,18 @@ bool	parse_quotes_spaces(char const **str, size_t *len, bool *interpret)
 		(*str)++;
 		end = strchr_index(*str, '\"');
 		if (end == INT_MAX)
+			return (err_handler("unclosed double quote"));
 		*len = end - start;
 		dq = 1;
-		*interpret = true;
+		*dqu = true;
 	}
 	else if (strchr_index(*str, '\'') < strchr_index(*str, '\"'))
 	{
 		start = strchr_index(*str, '\'');
 		(*str)++;
 		end = strchr_index(*str, '\'');
+		if (end == INT_MAX)
+			return (err_handler("unclosed single quote"));
 		*len = end - start;
 		sq = 1;
 	}
@@ -126,27 +129,27 @@ bool	parse_quotes_spaces(char const **str, size_t *len, bool *interpret)
 
 static bool	start_len_expansion(t_expand *exp, char *str)
 {
-	exp->start = strchr_index(str, '$');
+	exp->i = strchr_index(str, '$');
 	// Don't expand if not followed by interpretable chars OR when escaped
-	if (*(str + exp->start + 1) == 0 || *(str + exp->start + 1) == ' '
-		|| *(str + exp->start + 1) == '\\'
-		|| (exp->start != 0 && *(str + exp->start - 1) == '\\'))
+	if (*(str + exp->i + 1) == 0 || *(str + exp->i + 1) == ' '
+		|| *(str + exp->i + 1) == '\\'
+		|| (exp->i != 0 && *(str + exp->i - 1) == '\\'))
 	{
 		// In case of incorrect syntax, skip to the next '$' if there is any
-		exp->start = strchr_index(str + exp->start + 1, '$');
+		exp->i = strchr_index(str + exp->i + 1, '$');
 	}
-	if (!ft_ischrinset(str + exp->start, '$'))
+	if (!ft_ischrinset(str + exp->i, '$'))
 		return (false);
-	if (!ft_ischrinset(str + exp->start + 1, ' ')
-		&& !ft_ischrinset(str + exp->start + 1, '\\'))
-		exp->len = ft_strlen(str + exp->start + 1);
+	if (!ft_ischrinset(str + exp->i + 1, ' ')
+		&& !ft_ischrinset(str + exp->i + 1, '\\'))
+		exp->len = ft_strlen(str + exp->i + 1);
 	else
 	{
-		if (strchr_index(str + exp->start + 1, ' ')
-			< strchr_index(str + exp->start + 1, '\\'))
-			exp->len = strchr_index(str + exp->start + 1, ' ');
+		if (strchr_index(str + exp->i + 1, ' ')
+			< strchr_index(str + exp->i + 1, '\\'))
+			exp->len = strchr_index(str + exp->i + 1, ' ');
 		else
-			exp->len = strchr_index(str + exp->start + 1, '\\');
+			exp->len = strchr_index(str + exp->i + 1, '\\');
 	}
 	return (true);
 }
@@ -167,10 +170,10 @@ static void	expand_and_join(t_expand *exp, char **str)
 {
 	t_node	*param;
 
-	exp->prefix = ft_substr(*str, 0, exp->start);
-	exp->to_expand = ft_substr(*str, exp->start + 1, exp->len);
-	exp->suffix = ft_substr(*str, exp->start + 1 + exp->len,
-			ft_strlen((*str) + exp->start + 1 + exp->len));
+	exp->prefix = ft_substr(*str, 0, exp->i);
+	exp->to_expand = ft_substr(*str, exp->i + 1, exp->len);
+	exp->suffix = ft_substr(*str, exp->i + 1 + exp->len,
+			ft_strlen((*str) + exp->i + 1 + exp->len));
 	ft_strdel(str);
 	param = find_param(&g_mini.env, exp->to_expand);
 	if (!param)
@@ -187,6 +190,21 @@ static void	expand_and_join(t_expand *exp, char **str)
 	*str = exp->interpreted;
 }
 
+static bool	escape_slashes(t_expand *exp, char **str)
+{
+	exp->prefix = ft_substr(*str, 0, exp->i);
+	exp->suffix = ft_substr(*str, exp->i + 1,
+			ft_strlen(*str + exp->i + 1));
+	exp->interpreted = ft_strjoin(exp->prefix, exp->suffix);
+	ft_strdel(str);
+	*str = exp->interpreted;
+	ft_strdel(&exp->prefix);
+	ft_strdel(&exp->suffix);
+	if ((*str)[exp->i] == 0)
+		return (false);
+	return (true);
+}
+
 /**
  * INTERPRET THE TOKEN when needed
  * -> EXPAND: $... env parameters -> expand them if they exist
@@ -194,14 +212,14 @@ static void	expand_and_join(t_expand *exp, char **str)
  * -> ESCAPE: '\' when followed by a char (\n, \", \v, etc)
 */
 
-char	*process_token(char const *str, size_t *len, bool *interpret)
+char	*process_token(char const *str, size_t *len, bool dq, bool noq)
 {
 	char		*tmp;
 	t_expand	exp;
 
 	tmp = (char *)ft_calloc(len + 1, sizeof(char));
 	ft_strlcpy(tmp, str, len + 1);
-	if (!interpret)
+	if (!dq && !noq)
 		return (tmp);
 	ft_bzero(&exp, sizeof(t_expand));
 	while (ft_ischrinset(tmp, '$'))
@@ -210,7 +228,25 @@ char	*process_token(char const *str, size_t *len, bool *interpret)
 			break ;
 		expand_and_join(&exp, &tmp);
 	}
-	//remove escape '\' when they are followed by a non-whitespace
+	//remove escape '\' in cases: \$ \" '\\'
+	exp.i = -1;
+	while (tmp[++exp.i])
+	{
+		if (tmp[exp.i] == '\\')
+		{
+			if (tmp[exp.i + 1] != 0 && (tmp[exp.i + 1] == '$'
+					|| (tmp[exp.i + 1] == '\"') || (tmp[exp.i + 1] == '\\')))
+			{
+				if (!escape_slashes(&exp, &tmp))
+					break ;
+			}
+			if (!dq && noq && (tmp[exp.i + 1] != 0) || tmp[exp.i + 1] != ' ')
+			{
+				if (!escape_slashes(&exp, &tmp))
+					break ;
+			}
+		}
+	}
 }
 
 t_node	*quote_split(const char *str)
@@ -218,16 +254,18 @@ t_node	*quote_split(const char *str)
 	t_node	*parsed_list;
 	size_t	len;
 	char	*token;
-	bool	interpret;
+	bool	dquote;
+	bool	no_quote;
 
 	if (!str)
 		return (NULL);
 	len = 0;
 	parsed_list = NULL;
-	interpret = false;
+	dquote = false;
+	no_quote = false;
 	while (*str)
 	{
-		if (!parse_quotes_spaces(&str, &len, &interpret))
+		if (!parse_quotes_spaces(&str, &len, &dquote, &no_quote))
 		{
 			clear_env_list(&parsed_list);
 			return (NULL);
@@ -237,8 +275,7 @@ t_node	*quote_split(const char *str)
 			len = ft_strlen(str);
 		if (!*str)
 			break ;
-		token = (char *)ft_calloc(len + 1, sizeof(char));
-		ft_strlcpy(token, str, len + 1);
+		token = process_token(str, &len, &dquote, &no_quote);
 		printf("len = %lu ,token: [%s]\n", len, token);
 		add_to_tail(&parsed_list, new_node(token));
 	}
