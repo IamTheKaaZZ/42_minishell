@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/01 14:44:48 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/01 17:16:40 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ t_node	*new_node(char *content);
 void	add_to_tail(t_node **env, t_node *new);
 void	ft_env_list(char **env);
 char	**get_current_envp(t_node *head);
+char	**list_to_argv(t_node *head);
 char	**ft_get_path(void);
 char	*get_full_cmd_path(char *command);
 void	check_for_quotes(void);

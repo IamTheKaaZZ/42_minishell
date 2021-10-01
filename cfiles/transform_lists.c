@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   update_envp.c                                      :+:      :+:    :+:   */
+/*   transform_lists.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/27 11:59:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 13:05:21 by bcosters         ###   ########.fr       */
+/*   Created: 2021/10/01 17:15:58 by bcosters          #+#    #+#             */
+/*   Updated: 2021/10/01 17:17:50 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	**get_current_envp(t_node *head)
 }
 
 /**
- * Only use the content of the nodes for the pipeline
+ * Only use the content of the nodes for the pipeline and parsing
 */
 
 t_node	*new_node(char *content)
@@ -65,4 +65,32 @@ t_node	*new_node(char *content)
 	new->content = content;
 	new->next = NULL;
 	return (new);
+}
+
+/**
+ * Convert a linked list with a char *content to an array of strings
+ * -> NULL-terminated
+*/
+
+char	**list_to_argv(t_node *head)
+{
+	char	**argv;
+	int		n_param;
+	int		i;
+	t_node	*temp;
+
+	n_param = count_params(head);
+	argv = (char **)ft_calloc(n_param + 1, sizeof(char *));
+	if (!argv)
+		return (NULL);
+	i = -1;
+	temp = head;
+	while (++i < n_param)
+	{
+		argv[i] = ft_strdup(temp->content);
+		if (!argv[i])
+			ft_str_array_del(&argv);
+		temp = temp->next;
+	}
+	return (argv);
 }

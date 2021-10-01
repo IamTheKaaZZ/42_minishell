@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/01 15:04:07 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/01 17:24:59 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,11 @@ bool	parse_quotes_spaces(char const **str, size_t *len, bool *dqu, bool *noq)
 		*len = end - start;
 		sq = 1;
 	}
+	else
+	{
+		get_next_str_len(str, len, ' ');
+		*noq = true;
+	}
 	return (true);
 }
 
@@ -138,18 +143,42 @@ static bool	start_len_expansion(t_expand *exp, char *str)
 		// In case of incorrect syntax, skip to the next '$' if there is any
 		exp->i = strchr_index(str + exp->i + 1, '$');
 	}
-	if (!ft_ischrinset(str + exp->i, '$'))
+	if (exp->i == INT_MAX || !ft_ischrinset(str + exp->i, '$'))
 		return (false);
 	if (!ft_ischrinset(str + exp->i + 1, ' ')
-		&& !ft_ischrinset(str + exp->i + 1, '\\'))
+		&& !ft_ischrinset(str + exp->i + 1, '\\')
+		&& !ft_ischrinset(str + exp->i + 1, '\'')
+		&& !ft_ischrinset(str + exp->i + 1, '\"')
+		&& !ft_ischrinset(str + exp->i + 1, '$'))
 		exp->len = ft_strlen(str + exp->i + 1);
 	else
 	{
 		if (strchr_index(str + exp->i + 1, ' ')
-			< strchr_index(str + exp->i + 1, '\\'))
+			< strchr_index(str + exp->i + 1, '\\')
+			&& strchr_index(str + exp->i + 1, ' ')
+			< strchr_index(str + exp->i + 1, '\'')
+			&& strchr_index(str + exp->i + 1, ' ')
+			< strchr_index(str + exp->i + 1, '\"')
+			&& strchr_index(str + exp->i + 1, ' ')
+			< strchr_index(str + exp->i + 1, '$'))
 			exp->len = strchr_index(str + exp->i + 1, ' ');
-		else
+		else if (strchr_index(str + exp->i + 1, '\\')
+			< strchr_index(str + exp->i + 1, '\'')
+			&& strchr_index(str + exp->i + 1, '\\')
+			< strchr_index(str + exp->i + 1, '\"')
+			&& strchr_index(str + exp->i + 1, '\\')
+			< strchr_index(str + exp->i + 1, '$'))
 			exp->len = strchr_index(str + exp->i + 1, '\\');
+		else if (strchr_index(str + exp->i + 1, '\'')
+			< strchr_index(str + exp->i + 1, '\"')
+			&& strchr_index(str + exp->i + 1, '\'')
+			< strchr_index(str + exp->i + 1, '$'))
+			exp->len = strchr_index(str + exp->i + 1, '\'');
+		else if (strchr_index(str + exp->i + 1, '\"')
+			< strchr_index(str + exp->i + 1, '$'))
+			exp->len = strchr_index(str + exp->i + 1, '\"');
+		else
+			exp->len = strchr_index(str + exp->i + 1, '$');
 	}
 	return (true);
 }
@@ -217,8 +246,8 @@ char	*process_token(char const *str, size_t *len, bool dq, bool noq)
 	char		*tmp;
 	t_expand	exp;
 
-	tmp = (char *)ft_calloc(len + 1, sizeof(char));
-	ft_strlcpy(tmp, str, len + 1);
+	tmp = (char *)ft_calloc(*len + 1, sizeof(char));
+	ft_strlcpy(tmp, str, *len + 1);
 	if (!dq && !noq)
 		return (tmp);
 	ft_bzero(&exp, sizeof(t_expand));
@@ -240,70 +269,54 @@ char	*process_token(char const *str, size_t *len, bool dq, bool noq)
 				if (!escape_slashes(&exp, &tmp))
 					break ;
 			}
-			if (!dq && noq && (tmp[exp.i + 1] != 0) || tmp[exp.i + 1] != ' ')
+			if (!dq && noq && (tmp[exp.i + 1] != 0 || tmp[exp.i + 1] != ' '))
 			{
 				if (!escape_slashes(&exp, &tmp))
 					break ;
 			}
 		}
 	}
+	return (tmp);
 }
 
-t_node	*quote_split(const char *str)
+void	split_input(t_node **parsed_list, const char *str, bool *dq, bool *noq)
 {
-	t_node	*parsed_list;
 	size_t	len;
 	char	*token;
-	bool	dquote;
-	bool	no_quote;
 
 	if (!str)
-		return (NULL);
+		return ;
 	len = 0;
-	parsed_list = NULL;
-	dquote = false;
-	no_quote = false;
 	while (*str)
 	{
-		if (!parse_quotes_spaces(&str, &len, &dquote, &no_quote))
+		if (!parse_quotes_spaces(&str, &len, dq, noq))
 		{
-			clear_env_list(&parsed_list);
-			return (NULL);
+			clear_env_list(parsed_list);
+			return ;
 		}
 		if ((len == 0 && !ft_ischrinset(str, ' ')
 				&& !ft_ischrinset(str, '\'') && !ft_ischrinset(str, '\"')))
 			len = ft_strlen(str);
 		if (!*str)
 			break ;
-		token = process_token(str, &len, &dquote, &no_quote);
-		printf("len = %lu ,token: [%s]\n", len, token);
-		add_to_tail(&parsed_list, new_node(token));
+		token = process_token(str, &len, *dq, *noq);
+		add_to_tail(parsed_list, new_node(token));
 	}
-	return (parsed_list);
 }
+
 
 void	check_for_quotes(void)
 {
-	bool	singleq;
-	bool	doubleq;
 	t_node	*parsed_list;
+	bool	dquote;
+	bool	no_quote;
 
-	singleq = false;
-	doubleq = false;
-	if (ft_ischrinset(g_mini.input, SINGLEQ))
-		singleq = true;
-	if (ft_ischrinset(g_mini.input, DOUBLEQ))
-		doubleq = true;
-	if (singleq || doubleq)
-	{
-		parsed_list = quote_split(g_mini.input);
-		if (!parsed_list)
-			return ;
-	}
-	else
-	{
-		g_mini.argv = ft_split(g_mini.input, ' ');
-		if (!g_mini.argv)
-			return ;
-	}
+	parsed_list = NULL;
+	dquote = false;
+	no_quote = false;
+	split_input(&parsed_list, g_mini.input, &dquote, &no_quote);
+	if (!parsed_list)
+		return ;
+	g_mini.argv = list_to_argv(parsed_list);
+	clear_env_list(&parsed_list);
 }

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/30 13:21:23 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/01 17:03:41 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,9 @@ int	main(int argc, char **argv, char **env)
 		g_mini.input = rl_gnl(&g_mini);
 		check_for_quotes();
 		// functions();
+		int i = -1;
+		while (g_mini.argv[++i])
+			printf("[%s]\n", g_mini.argv[i]);
 		ft_str_array_del(&g_mini.argv);
 	}
 }
