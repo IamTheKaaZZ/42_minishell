@@ -99,7 +99,7 @@ char	*get_full_cmd_path(char *command)
 
 char	**ft_get_path(void)
 {
-	t_env	*path;
+	t_node	*path;
 
 	if (g_mini.path_var)
 		ft_str_array_del(&g_mini.path_var);
@@ -114,7 +114,7 @@ char	**ft_get_path(void)
 void	ft_env_list(char **env)
 {
 	int		i;
-	t_env	*new;
+	t_node	*new;
 	char	**split_param;
 
 	new = NULL;

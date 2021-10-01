@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 15:13:02 by bcosters          #+#    #+#             */
-/*   Updated: 2021/06/23 12:46:15 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/28 13:09:15 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,6 @@ char	*ft_strjoin_realloc(char *s1, const char *s2)
 	while (s2 && *s2)
 		join[i++] = *s2++;
 	join[i] = '\0';
+	ft_strdel(&s1);
 	return (join);
 }

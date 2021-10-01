@@ -115,7 +115,10 @@ int	main(int argc, char **argv, char **env)
 	{
 		g_mini.input = rl_gnl(&g_mini);
 		check_for_quotes();
-		functions();
+		// functions();
+		int i = -1;
+		while (g_mini.argv[++i])
+			printf("[%s]\n", g_mini.argv[i]);
 		ft_str_array_del(&g_mini.argv);
 	}
 }

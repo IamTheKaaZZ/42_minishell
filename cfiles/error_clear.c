@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:27:30 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/28 11:27:32 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/09/30 15:51:16 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
  * 		->	Delete and free the disconnected parameter
 */
 
-void	remove_param(t_env **env, char	*keyword)
+void	remove_param(t_node **env, char	*keyword)
 {
-	t_env	*temp;
-	t_env	*prev;
+	t_node	*temp;
+	t_node	*prev;
 
 	temp = *env;
 	if (temp != NULL && ft_strequal(temp->keyword, keyword))
@@ -53,9 +53,9 @@ void	remove_param(t_env **env, char	*keyword)
  * Modified lst_clear for the project
 */
 
-void	clear_env_list(t_env **env)
+void	clear_env_list(t_node **env)
 {
-	t_env	*temp;
+	t_node	*temp;
 
 	if (!env)
 		return ;
@@ -64,9 +64,9 @@ void	clear_env_list(t_env **env)
 	{
 		ft_strdel(&temp->keyword);
 		ft_strdel(&temp->content);
+		*env = (*env)->next;
 		free(temp);
 		temp = NULL;
-		*env = (*env)->next;
 		temp = *env;
 	}
 }

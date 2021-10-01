@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   update_envp.c                                      :+:      :+:    :+:   */
+/*   transform_lists.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/27 11:59:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/27 12:01:55 by bcosters         ###   ########.fr       */
+/*   Created: 2021/10/01 17:15:58 by bcosters          #+#    #+#             */
+/*   Updated: 2021/10/01 17:17:50 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/hfiles/minishell.h"
 
-static char	*get_full_param(t_env *list_item)
+static char	*get_full_param(t_node *list_item)
 {
 	char	*prefix;
 	char	*full_param;
@@ -27,12 +27,12 @@ static char	*get_full_param(t_env *list_item)
  * Convert the current env list into an array of strings for execve
 */
 
-char	**get_current_envp(t_env *head)
+char	**get_current_envp(t_node *head)
 {
 	char	**curr_envp;
 	int		n_param;
 	int		i;
-	t_env	*temp;
+	t_node	*temp;
 
 	n_param = count_params(g_mini.env) + 1;
 	curr_envp = (char **)ft_calloc(n_param, sizeof(char *));
@@ -48,4 +48,49 @@ char	**get_current_envp(t_env *head)
 		temp = temp->next;
 	}
 	return (curr_envp);
+}
+
+/**
+ * Only use the content of the nodes for the pipeline and parsing
+*/
+
+t_node	*new_node(char *content)
+{
+	t_node	*new;
+
+	new = (t_node *)malloc(sizeof(t_node));
+	if (!new)
+		return (NULL);
+	new->keyword = NULL;
+	new->content = content;
+	new->next = NULL;
+	return (new);
+}
+
+/**
+ * Convert a linked list with a char *content to an array of strings
+ * -> NULL-terminated
+*/
+
+char	**list_to_argv(t_node *head)
+{
+	char	**argv;
+	int		n_param;
+	int		i;
+	t_node	*temp;
+
+	n_param = count_params(head);
+	argv = (char **)ft_calloc(n_param + 1, sizeof(char *));
+	if (!argv)
+		return (NULL);
+	i = -1;
+	temp = head;
+	while (++i < n_param)
+	{
+		argv[i] = ft_strdup(temp->content);
+		if (!argv[i])
+			ft_str_array_del(&argv);
+		temp = temp->next;
+	}
+	return (argv);
 }
