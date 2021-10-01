@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 14:34:23 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/01 13:00:15 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,17 @@ typedef struct s_exec
 	char		err[100];
 	t_job		jobs[100];
 }	t_exec;
+
+typedef struct s_expand
+{
+	size_t	start;
+	size_t	len;
+	char	*prefix;
+	char	*to_expand;
+	char	*expanded;
+	char	*suffix;
+	char	*interpreted;
+}	t_expand;
 
 /*
 *	GLOBAL VAR
