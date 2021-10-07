@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 14:01:13 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 16:08:39 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ typedef struct s_parse
 	size_t		end;
 	size_t		*len;
 	bool		*dqu;
-	bool		*noq;
+	const char	**str;
 }	t_parse;
 
 /*
@@ -125,6 +125,8 @@ t_minishell	g_mini;
 */
 
 bool	parse_input_line(void);
+bool	parse_quotes_spaces(char const **str, size_t *len,
+			bool *dqu, bool *noq);
 char	**list_to_argv(t_node *head);
 char	*process_token(char const *str, size_t *len, bool dq, bool noq);
 size_t	strchr_index(const char *str, int c);
@@ -175,7 +177,4 @@ int		err_handler(const char *errmessage);
 bool	syntax_error_check(char **argv, char *err, int i);
 bool	unlink_tmp(char *error);
 
-/* DOLLAR */
-
-int		ft_dollar_sign(t_minishell *mini, int i);
 #endif

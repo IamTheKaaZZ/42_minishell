@@ -10,10 +10,10 @@ QUIT	= \033[0m
 # MACROS
 
 NAME	=	minishell
-SRCS	=	$(wildcard cfiles/*.c)
-DIR_O	=	OBJ/
-OBJS	=	$(SRCS:cfiles/%.c=OBJ/%.o)
-DOTH	=	extras/hfiles
+SRCS	=	$(wildcard src/*.c)
+DIR_O	=	obj/
+OBJS	=	$(SRCS:src/%.c=obj/%.o)
+DOTH	=	extras/includes
 LIBFT	=	extras/libft
 LFT_EXE	=	extras/libft
 CC		=	gcc
@@ -28,12 +28,12 @@ LINKS	=	-L./$(LIBFT) -lft `pkg-config readline --libs`
 all:	$(NAME)
 
 $(NAME): libcheck libft $(DIR_O) $(OBJS)
-	@$(CC) $(CFLAGS) $(LDFLAGS) $(wildcard cfiles/*.c) $(wildcard extras/libft/src/*c) -o $(NAME) $(LINKS)
+	@$(CC) $(CFLAGS) $(LDFLAGS) $(wildcard src/*.c) $(wildcard extras/libft/src/*c) -o $(NAME) $(LINKS)
 	@echo "\n$(GREEN)\n"
 	@echo "$(NAME) executable CREATED"
 	@echo "\n$(QUIT)\n"
 
-$(DIR_O)%.o: cfiles/%.c
+$(DIR_O)%.o: src/%.c
 	@$(CC) -c $(CFLAGS) $(INCLUDE) $< -o $@
 	@echo "$(GREEN)#$(QUIT)\c"
 
