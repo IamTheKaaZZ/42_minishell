@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 10:55:57 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 12:40:47 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 13:42:58 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,10 @@ static void	expand_and_join(t_expand *exp, char **str)
 	*str = exp->interpreted;
 }
 
+/**
+ * If a character can be escaped => remove the \ from the string
+*/
+
 static bool	escape_slashes(t_expand *exp, char **str)
 {
 	exp->prefix = ft_substr(*str, 0, exp->i);
@@ -100,7 +104,11 @@ static bool	escape_slashes(t_expand *exp, char **str)
 	return (true);
 }
 
-	//remove escape '\' in cases: \$ \" '\\'
+/**
+ * Handle special characters that can be escaped by \
+ * CASES: \$ \" '\\' etc...
+*/
+
 static void	handle_escape_chars(t_expand *exp, char **str,
 								bool dq, bool noq)
 {

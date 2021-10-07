@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 12:16:08 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 14:01:13 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,15 @@ typedef struct s_expand
 	char	*suffix;
 	char	*interpreted;
 }	t_expand;
+
+typedef struct s_parse
+{
+	size_t		start;
+	size_t		end;
+	size_t		*len;
+	bool		*dqu;
+	bool		*noq;
+}	t_parse;
 
 /*
 *	GLOBAL VAR

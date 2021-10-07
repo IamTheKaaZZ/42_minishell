@@ -6,14 +6,14 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 11:49:03 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 12:15:52 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 13:45:04 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/includes/minishell.h"
 
-/*
-**returns the index to the first occurrence of the character c in the string s*
+/**
+ * Find the index to the first occurrence of the character c in the string
 */
 
 size_t	strchr_index(const char *str, int c)
@@ -39,6 +39,10 @@ size_t	strchr_index(const char *str, int c)
 	return (INT_MAX);
 }
 
+/**
+ * Boolean to check if one or more character from charset exist in the string
+*/
+
 bool	str_contains_chars(const char *str, char *charset)
 {
 	int	i;
@@ -51,6 +55,10 @@ bool	str_contains_chars(const char *str, char *charset)
 			return (true);
 	return (false);
 }
+
+/**
+ * Boolean that checks if the char c occurs before any characters in charset
+*/
 
 bool	char_before_others(const char *str, char c, char *charset)
 {

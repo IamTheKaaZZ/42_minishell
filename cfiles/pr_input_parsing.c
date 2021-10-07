@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 12:08:59 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 14:04:37 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,15 @@ static bool	get_next_str_len(char const **str, size_t *len, char c)
 	return (true);
 }
 
+static void	init_parse(t_parse *p, size_t *len, bool *dqu, bool *noq)
+{
+	p->start = 0;
+	p->end = 0;
+	p->len = len;
+	p->dqu = dqu;
+	p->noq = noq;
+}
+
 /**
  * normal split AND double quotes expand vars AND require escaping
  * single quotes: Everything is literal.
@@ -48,13 +57,14 @@ static bool	get_next_str_len(char const **str, size_t *len, char c)
 
 bool	parse_quotes_spaces(char const **str, size_t *len, bool *dqu, bool *noq)
 {
-	size_t			start;
-	size_t			end;
+	t_parse		p;
+	// size_t			start;
+	// size_t			end;
 	static int		sq;
 	static int		dq;
 
-	start = 0;
-	*str += *len;
+	init_parse(&p, len, dqu, noq);
+	*str += *p->len;
 	*len = 0;
 	if (dq)
 	{
@@ -68,24 +78,25 @@ bool	parse_quotes_spaces(char const **str, size_t *len, bool *dqu, bool *noq)
 	}
 	while (**str && **str == ' ')
 		(*str)++;
-	if (strchr_index(*str, ' ') < strchr_index(*str, '\"')
-		&& strchr_index(*str, ' ') < strchr_index(*str, '\''))
+	if (char_before_others(*str, ' ', "\"\'"))
 	{
 		get_next_str_len(str, len, ' ');
 		*noq = true;
 	}
-	else if (strchr_index(*str, '\"') < strchr_index(*str, '\''))
+	else if (char_before_others(*str, '\"', "\'"))
 	{
-		start = strchr_index(*str, '\"');
-		(*str)++;
-		end = strchr_index(*str, '\"');
-		if (end == INT_MAX)
-			return (err_handler("unclosed double quote"));
-		*len = end - start;
+		if (!find_dquote_str(str, &start, &end, len))
+			return (false);
+		// start = strchr_index(*str, '\"');
+		// (*str)++;
+		// end = strchr_index(*str, '\"');
+		// if (end == INT_MAX)
+		// 	return (err_handler("unclosed double quote"));
+		// *len = end - start;
 		dq = 1;
 		*dqu = true;
 	}
-	else if (strchr_index(*str, '\'') < strchr_index(*str, '\"'))
+	else if (char_before_others(*str, '\'', "\""))
 	{
 		start = strchr_index(*str, '\'');
 		(*str)++;
