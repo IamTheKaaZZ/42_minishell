@@ -6,11 +6,11 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 11:50:54 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/30 13:10:55 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 11:05:51 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../extras/hfiles/minishell.h"
+#include "../extras/includes/minishell.h"
 
 /**
  * function that handles "< file"

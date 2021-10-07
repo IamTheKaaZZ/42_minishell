@@ -6,11 +6,11 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/01 17:03:41 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 11:46:49 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../extras/hfiles/minishell.h"
+#include "../extras/includes/minishell.h"
 
 // t_minishell	g_mini;
 
@@ -120,7 +120,8 @@ int	main(int argc, char **argv, char **env)
 	while (argc)
 	{
 		g_mini.input = rl_gnl(&g_mini);
-		check_for_quotes();
+		if (!parse_input_line())
+			continue ;
 		// functions();
 		int i = -1;
 		while (g_mini.argv[++i])

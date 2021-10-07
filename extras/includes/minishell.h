@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/01 17:16:40 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 12:16:08 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,34 @@ t_minishell	g_mini;
 *	FUNCTION PROTOTYPES
 */
 
+/**
+ * 1.	PARSING
+*/
+
+bool	parse_input_line(void);
+char	**list_to_argv(t_node *head);
+char	*process_token(char const *str, size_t *len, bool dq, bool noq);
+size_t	strchr_index(const char *str, int c);
+bool	str_contains_chars(const char *str, char *charset);
+bool	char_before_others(const char *str, char c, char *charset);
+
+/**
+ * 2.	LIST FUNCTIONS
+*/
+
+t_node	*new_env_param(char **param);
+t_node	*find_param(t_node **env, char *keyword);
+void	remove_param(t_node **env, char	*keyword);
+int		count_params(t_node *env);
+t_node	*new_node(char *content);
+void	add_to_tail(t_node **env, t_node *new);
+void	ft_env_list(char **env);
+char	**get_current_envp(t_node *head);
+
+/**
+ * 3.	BUILTINS
+*/
+
 void	ft_echon(t_minishell *mini);
 void	ft_echo(void);
 void	ft_cd(t_minishell *mini);
@@ -124,20 +152,12 @@ int		open_file_as_input(t_job *j, char *filename, int i);
 int		here_doc_as_input(t_job *j);
 
 void	ft_handler(int signal);
-t_node	*new_env_param(char **param);
-t_node	*find_param(t_node **env, char *keyword);
-void	remove_param(t_node **env, char	*keyword);
-int		count_params(t_node *env);
-t_node	*new_node(char *content);
-void	add_to_tail(t_node **env, t_node *new);
-void	ft_env_list(char **env);
-char	**get_current_envp(t_node *head);
-char	**list_to_argv(t_node *head);
 char	**ft_get_path(void);
 char	*get_full_cmd_path(char *command);
-void	check_for_quotes(void);
 
-/* ERRORS AND CLEAN */
+/**
+ * 4.	ERROR HANDLING + DATA CLEAN
+*/
 
 void	clear_env_list(t_node **env);
 int		ft_clear_data(void);
