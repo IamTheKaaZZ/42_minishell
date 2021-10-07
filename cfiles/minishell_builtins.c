@@ -14,17 +14,49 @@
 
 /*error handling!!*/
 
-void	ft_echo(void)
+static char	*ft_strupdate(char *s1, char *s2)
+{
+	char	*tmp;
+
+	tmp = s1;
+	if (!s1)
+		return (s2);
+	s1 = ft_strjoin(s1, s2);
+	free(tmp);
+	if (!s1)
+		return (NULL);
+	return(s1);
+}
+
+char	*ft_echo(void)
 /*	Rought-cut
 
 	expanding variables ??
 		var search function
 	*/
 {
-	if (ft_strequal(g_mini.argv[1], "-n"))
-		ft_putendl_fd(g_mini.input + 5, 1);
-	else
-		ft_putnstr_fd(g_mini.input + 8, ft_strlen(g_mini.input) - 8, 1);
+	char	**argp;
+	bool	nl;
+	char	*buf; // return or save in struct?
+
+	nl = 1;
+	argp = g_mini.argv; // if g_mini.argv == "ëcho"
+	if (*(++argp) && !ft_strcmp(*argp, "-n"))
+		nl = 0;
+	while (++argp && *argp)
+	{
+		if (ft_strchr("|<>", **argp))
+			return (buf);
+		buf = ft_strupdate(buf, *argp);
+	}
+	if (!buf)
+		return (NULL);
+	ft_putstr_fd(buf, 1);
+	if (nl)
+		write(1, "\n", 1);
+	free(buf);
+	return (0);
+	// if '>'or somthn ??
 }
 
 void	ft_cd(void)
@@ -79,7 +111,7 @@ void	ft_pwd(void)
 	char	*buf;
 
 	buf = NULL;
-	if (g_mini.argv[1] && !ft_strchr("<>|&", *g_mini.argv[1]))
+	if (g_mini.argv[1] && !ft_strchr("<>|", *g_mini.argv[1])) // ??
 	{
 		err_handler("pwd: too many arguments");
 	}
@@ -87,32 +119,35 @@ void	ft_pwd(void)
 	{
 		buf = getcwd(NULL, 0);
 		if (!buf)
+		{
+			free(buf);
 			err_handler("Failed to get current working directory.");
+		}
 		ft_putendl_fd(buf, 1);
 		free(buf);
 	}
 }
 
 void	ft_env(void)
-/* t_env functions (-> env_list.c):
+/* t_node functions (-> env_list.c):
 	
-	t_env *
+	t_node *
 -	new_env_param(char **param)
 
-	static t_env *
--	find_tail(t_env *head)
-	
-	void
--	add_to_tail(t_env **env, t_env *new)
+	static t_node *
+-	find_tail(t_node *head)
 
-	t_env *
--	find_param(t_env **env, char *keyword)
+	void
+-	add_to_tail(t_node **env, t_node *new)
+
+	t_node *
+-	find_param(t_node **env, char *keyword)
 
 	int
--	count_params(t_env *env)
+-	count_params(t_node *env)
 */
 {
-	t_env	*head;
+	t_node	*head;
 
 	head = g_mini.env;
 	while (head->next)

@@ -42,22 +42,26 @@ void	ft_handler(int sig)
 }
 
 void	functions(void)
-/*  */
+/**
+ *  Need iterate between args
+ * void * preferably kept in struct to save lines and more easibly manageable
+ */
 {
-	// if (!ft_strncmp(g_mini.input ,"echo", 4))
+	void	*out;
+
+	out = NULL;
 	if (ft_strequal(*g_mini.argv, "echo"))
-		ft_echo();
-	// else if (!ft_strncmp(g_mini.input, "env", 3))
-	if (ft_strequal(*g_mini.argv, "env"))
+		out = ft_echo();
+	else if (ft_strequal(*g_mini.argv, "env"))
 		ft_env();
-	// else if (!ft_strncmp(g_mini.input, "pwd", 3))
-	if (ft_strequal(*g_mini.argv, "pwd"))
+	else if (ft_strequal(*g_mini.argv, "pwd"))
 		ft_pwd();
-	// else if (!ft_strncmp(g_mini.input, "cd", 2))
-	if (ft_strequal(*g_mini.argv, "cd"))
+	else if (ft_strequal(*g_mini.argv, "cd"))
 		ft_cd();
-	else
-		executor(g_mini.argv);
+	// else
+	// 	executor(g_mini.argv);
+	if (out)
+		free(out);
 }
 
 /*
@@ -115,7 +119,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		g_mini.input = rl_gnl(&g_mini);
 		check_for_quotes();
-		// functions();
+		functions();
 		int i = -1;
 		while (g_mini.argv[++i])
 			printf("[%s]\n", g_mini.argv[i]);

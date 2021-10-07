@@ -111,7 +111,7 @@ t_minishell	g_mini;
 *	FUNCTION PROTOTYPES
 */
 
-void	ft_echo(void);
+char	*ft_echo(void);
 void	ft_cd(void);
 void	ft_env(void);
 void	ft_pwd(void);
