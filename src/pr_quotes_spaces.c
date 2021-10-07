@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:32:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 15:58:31 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 16:52:58 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,18 @@ static void	get_next_str_len(const char **str, size_t *len, char c, bool *noq)
 static bool	find_quote_str(t_parse *p, int *sq, int *dq, char quote)
 {
 	p->start = strchr_index(*(p->str), quote);
+	if ((!*dq && p->start > 0) || (!*sq && p->start > 0))
+	{
+		*p->len = p->start;
+		return (true);
+	}
 	(*(p->str))++;
 	p->end = strchr_index(*(p->str), quote);
 	if (p->end == INT_MAX && quote == '\"')
 		return (err_handler("unclosed double quote"));
 	if (p->end == INT_MAX && quote == '\'')
 		return (err_handler("unclosed single quote"));
-	if (p->start == p->end)
-		*p->len = p->end;
-	else
-		*p->len = p->end - p->start;
+	*p->len = p->end - p->start;
 	if (quote == '\"')
 	{
 		*p->dqu = true;

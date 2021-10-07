@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 15:34:48 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 17:08:47 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,11 @@ void	split_input(t_node **parsed_list, const char *str,
 			clear_env_list(parsed_list);
 			return ;
 		}
-		if ((len == 0 && !ft_ischrinset(str, ' ')
-				&& !ft_ischrinset(str, '\'') && !ft_ischrinset(str, '\"')))
+		if ((len == 0 && !str_contains_chars(str, " \'\"")))
 			len = ft_strlen(str);
 		if (!*str)
 			break ;
-		token = process_token(str, &len, *dq, *noq);
+		token = process_token(str, &len, dq, noq);
 		add_to_tail(parsed_list, new_node(token));
 	}
 }

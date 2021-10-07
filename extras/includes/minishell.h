@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 16:08:39 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 17:08:19 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ bool	parse_input_line(void);
 bool	parse_quotes_spaces(char const **str, size_t *len,
 			bool *dqu, bool *noq);
 char	**list_to_argv(t_node *head);
-char	*process_token(char const *str, size_t *len, bool dq, bool noq);
+char	*process_token(char const *str, size_t *len, bool *dq, bool *noq);
 size_t	strchr_index(const char *str, int c);
 bool	str_contains_chars(const char *str, char *charset);
 bool	char_before_others(const char *str, char c, char *charset);

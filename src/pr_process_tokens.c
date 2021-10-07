@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 10:55:57 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 13:42:58 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 17:07:32 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,14 +142,14 @@ static void	handle_escape_chars(t_expand *exp, char **str,
 */
 
 char	*process_token(char const *str, size_t *len,
-						bool dq, bool noq)
+						bool *dq, bool *noq)
 {
 	char		*tmp;
 	t_expand	exp;
 
 	tmp = (char *)ft_calloc(*len + 1, sizeof(char));
 	ft_strlcpy(tmp, str, *len + 1);
-	if (!dq && !noq)
+	if (!*dq && !*noq)
 		return (tmp);
 	ft_bzero(&exp, sizeof(t_expand));
 	while (ft_ischrinset(tmp, '$'))
@@ -158,6 +158,8 @@ char	*process_token(char const *str, size_t *len,
 			break ;
 		expand_and_join(&exp, &tmp);
 	}
-	handle_escape_chars(&exp, &tmp, dq, noq);
+	handle_escape_chars(&exp, &tmp, *dq, *noq);
+	*dq = false;
+	*noq = false;
 	return (tmp);
 }
