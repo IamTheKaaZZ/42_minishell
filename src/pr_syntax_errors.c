@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_errors.c                                    :+:      :+:    :+:   */
+/*   pr_syntax_errors.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/28 11:27:20 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/28 11:28:39 by bcosters         ###   ########.fr       */
+/*   Created: 2021/10/07 11:07:45 by bcosters          #+#    #+#             */
+/*   Updated: 2021/10/07 11:07:47 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../extras/hfiles/minishell.h"
+#include "../extras/includes/minishell.h"
 
 static char	*concat_err(char *err, int flag, char *to_add)
 {

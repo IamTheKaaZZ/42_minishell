@@ -6,11 +6,11 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/29 15:31:56 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/07 17:16:50 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../extras/hfiles/minishell.h"
+#include "../extras/includes/minishell.h"
 
 // t_minishell	g_mini;
 
@@ -62,7 +62,7 @@ void	functions(void)
 	// else if (!(ft_strncmp(mini->input, "exit", 4)))
 	// 	ft_exit(mini);
 	// else
-		executor(g_mini.argv);
+		// executor(g_mini.argv);
 }
 
 /*
@@ -121,8 +121,12 @@ int	main(int argc, char **argv, char **env)
 	while (argc)
 	{
 		g_mini.input = rl_gnl(&g_mini);
-		check_for_quotes();
-		functions();
+		if (!parse_input_line())
+			continue ;
+		// functions();
+		int i = -1;
+		while (g_mini.argv[++i])
+			printf("[%s]\n", g_mini.argv[i]);
 		ft_str_array_del(&g_mini.argv);
 	}
 }
