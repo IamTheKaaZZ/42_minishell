@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 10:55:57 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/08 10:51:40 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/08 12:14:50 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,7 @@ static bool	escape_slashes(t_expand *exp, char **str)
  * CASES: \$ \" '\\' etc...
 */
 
-static void	handle_escape_chars(t_expand *exp, char **str,
-								bool dq, bool noq)
+static void	handle_escape_chars(t_expand *exp, char **str, t_prbools *b)
 {
 	if (ft_strlen(*str) == 1)
 		return ;
@@ -126,7 +125,7 @@ static void	handle_escape_chars(t_expand *exp, char **str,
 				if (!escape_slashes(exp, str))
 					return ;
 			}
-			if (!dq && noq
+			if (!b->dquote && b->no_quote
 				&& ((*str)[exp->i + 1] != 0 || (*str)[exp->i + 1] != ' '))
 			{
 				if (!escape_slashes(exp, str))
@@ -143,15 +142,14 @@ static void	handle_escape_chars(t_expand *exp, char **str,
  * -> ESCAPE: '\' when followed by a char (\n, \", \v, etc)
 */
 
-char	*process_token(char const *str, size_t *len,
-						bool *dq, bool *noq)
+char	*process_token(char const *str, size_t *len, t_prbools *b)
 {
 	char		*tmp;
 	t_expand	exp;
 
 	tmp = (char *)ft_calloc(*len + 1, sizeof(char));
 	ft_strlcpy(tmp, str, *len + 1);
-	if (!*dq && !*noq)
+	if (!b->dquote && !b->no_quote)
 		return (tmp);
 	ft_bzero(&exp, sizeof(t_expand));
 	while (ft_ischrinset(tmp, '$'))
@@ -160,8 +158,8 @@ char	*process_token(char const *str, size_t *len,
 			break ;
 		expand_and_join(&exp, &tmp);
 	}
-	handle_escape_chars(&exp, &tmp, *dq, *noq);
-	*dq = false;
-	*noq = false;
+	handle_escape_chars(&exp, &tmp, b);
+	b->dquote = false;
+	b->no_quote = false;
 	return (tmp);
 }
