@@ -47,11 +47,8 @@ void	functions(void)
  * void * preferably kept in struct to save lines and more easibly manageable
  */
 {
-	void	*out;
-
-	out = NULL;
 	if (ft_strequal(*g_mini.argv, "echo"))
-		out = ft_echo();
+		ft_echo();
 	else if (ft_strequal(*g_mini.argv, "env"))
 		ft_env();
 	else if (ft_strequal(*g_mini.argv, "pwd"))
@@ -60,8 +57,6 @@ void	functions(void)
 		ft_cd();
 	// else
 	// 	executor(g_mini.argv);
-	if (out)
-		free(out);
 }
 
 /*
@@ -118,17 +113,12 @@ int	main(int argc, char **argv, char **env)
 	while (argc)
 	{
 		g_mini.input = rl_gnl(&g_mini);
-<<<<<<< HEAD:cfiles/minishell.c
-		check_for_quotes();
-		functions();
-=======
 		if (!parse_input_line())
 			continue ;
-		// functions();
->>>>>>> master:src/minishell.c
-		int i = -1;
-		while (g_mini.argv[++i])
-			printf("[%s]\n", g_mini.argv[i]);
+		functions();
+		// int i = -1;
+		// while (g_mini.argv[++i])
+		// 	printf("[%s]\n", g_mini.argv[i]);
 		ft_str_array_del(&g_mini.argv);
 	}
 }

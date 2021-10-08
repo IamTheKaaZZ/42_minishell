@@ -14,49 +14,37 @@
 
 /*error handling!!*/
 
-static char	*ft_strupdate(char *s1, char *s2)
-{
-	char	*tmp;
-
-	tmp = s1;
-	if (!s1)
-		return (s2);
-	s1 = ft_strjoin(s1, s2);
-	free(tmp);
-	if (!s1)
-		return (NULL);
-	return(s1);
-}
-
-char	*ft_echo(void)
+void	ft_echo(void)
 /*	Rought-cut
 
 	expanding variables ??
 		var search function
 	*/
 {
-	char	**argp;
+	int		i;
 	bool	nl;
-	char	*buf; // return or save in struct?
 
 	nl = 1;
-	argp = g_mini.argv; // if g_mini.argv == "ëcho"
-	if (*(++argp) && !ft_strcmp(*argp, "-n"))
-		nl = 0;
-	while (++argp && *argp)
+	i = 1;
+	if (g_mini.argv[i])
 	{
-		if (ft_strchr("|<>", **argp))
-			return (buf);
-		buf = ft_strupdate(buf, *argp);
+		if (!ft_strcmp(g_mini.argv[i], "-n"))
+		{
+			nl = 0;
+			i++;
+		}
+		while (g_mini.argv[i] != NULL)
+		{
+			if (i > 2)
+				ft_putchar_fd(' ', 1);
+			if (str_contains_chars(g_mini.argv[i], "|<>&"))
+				return ; // for now
+			ft_putstr_fd(g_mini.argv[i++], 1);
+			i++;
+		}
 	}
-	if (!buf)
-		return (NULL);
-	ft_putstr_fd(buf, 1);
 	if (nl)
 		write(1, "\n", 1);
-	free(buf);
-	return (0);
-	// if '>'or somthn ??
 }
 
 void	ft_cd(void)

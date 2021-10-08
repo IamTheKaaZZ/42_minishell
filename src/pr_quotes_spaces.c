@@ -101,10 +101,10 @@ bool	parse_quotes_spaces(char const **str, size_t *len, t_prbools *b)
 	static int	sq;
 	static int	dq;
 
-	init_parse(&p, len, dqu, str);
+	init_parse(&p, len, &b->dquote, str);
 	skip_spaces_quotes(&p, &dq, &sq);
 	if (char_before_others(*str, ' ', "\"\'"))
-		get_next_str_len(p.str, p.len, ' ', noq);
+		get_next_str_len(p.str, p.len, ' ', &b->no_quote);
 	else if (char_before_others(*str, '\"', "\'"))
 	{
 		if (!find_quote_str(&p, &sq, &dq, '\"'))

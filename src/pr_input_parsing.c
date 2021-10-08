@@ -28,7 +28,7 @@ void	split_input(t_node **parsed_list, const char *str, t_prbools *b)
 	len = 0;
 	while (*str)
 	{
-		if (!parse_quotes_spaces(&str, &len, dq, noq))
+		if (!parse_quotes_spaces(&str, &len, b))
 		{
 			clear_env_list(parsed_list);
 			return ;
@@ -37,7 +37,7 @@ void	split_input(t_node **parsed_list, const char *str, t_prbools *b)
 			len = ft_strlen(str);
 		if (!*str)
 			break ;
-		token = process_token(str, &len, dq, noq);
+		token = process_token(str, &len, &b->dquote, &b->no_quote);
 		add_to_tail(parsed_list, new_node(token));
 	}
 }
@@ -51,7 +51,7 @@ bool	parse_input_line(void)
 
 	parsed_list = NULL;
 	ft_bzero(&bools, sizeof(t_prbools));
-	split_input(&parsed_list, g_mini.input, &dquote, &no_quote);
+	split_input(&parsed_list, g_mini.input, &bools);
 	if (!parsed_list)
 		return (false);
 	g_mini.argv = list_to_argv(parsed_list);
