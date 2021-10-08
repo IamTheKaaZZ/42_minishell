@@ -116,9 +116,9 @@ int	main(int argc, char **argv, char **env)
 		if (!parse_input_line())
 			continue ;
 		functions();
-		// int i = -1;
-		// while (g_mini.argv[++i])
-		// 	printf("[%s]\n", g_mini.argv[i]);
+		int i = -1;
+		while (g_mini.argv[++i])
+			printf("[%s]\n", g_mini.argv[i]);
 		ft_str_array_del(&g_mini.argv);
 	}
 }

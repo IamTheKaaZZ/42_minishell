@@ -12,42 +12,6 @@
 
 #include "../extras/includes/minishell.h"
 
-/*error handling!!*/
-
-void	ft_echo(void)
-/*	Rought-cut
-
-	expanding variables ??
-		var search function
-	*/
-{
-	int		i;
-	bool	nl;
-
-	nl = 1;
-	i = 1;
-	if (g_mini.argv[i])
-	{
-		if (!ft_strcmp(g_mini.argv[i], "-n"))
-		{
-			nl = 0;
-			i++;
-		}
-		while (g_mini.argv[i] != NULL)
-		{
-			if (i > 2)
-				ft_putchar_fd(' ', 1);
-			if (str_contains_chars(g_mini.argv[i], "|<>&"))
-				return ; // for now
-			ft_putstr_fd(g_mini.argv[i++], 1);
-			i++;
-		}
-	}
-	if (nl)
-		write(1, "\n", 1);
-}
-
-void	ft_cd(void)
 /*int
 -  chdir(const char *path); returns 0 or -1 (errno)
 
@@ -68,27 +32,83 @@ void	ft_cd(void)
 
 	int
 -	closedir(DIR *dirp);
+error handling!!*/
 
-	if starting with '/' just pass string to function
-	if starting with '~' look for $HOME 
-	else look for repository in current wd*/
+void	ft_echo(void)
+/*	Rought-cut
+
+	expanding variables ??
+		var search function
+	*/
 {
-	DIR				*dir;
-	// struct dirent	*s_dir;
+	int		i;
+	bool	nl;
 
-	//check argv[1] for validity
-	dir = opendir(g_mini.argv[1]);
-	if (!dir)
+	nl = 1;
+	i = 1;
+	if (g_mini.argv[i])
 	{
-		err_handler("Failed to open directory.");
+		if (!ft_strcmp(g_mini.argv[i], "-n"))
+		{
+			nl = 0;
+			i++;
+		}
+		while (g_mini.argv[i])
+		{
+			if ((nl && i > 1) || (!nl && i > 2)) // terrible
+				ft_putchar_fd(' ', 1);
+			if (str_contains_chars(g_mini.argv[i], "|<>&"))
+				return ; // for now
+			ft_putstr_fd(g_mini.argv[i++], 1);
+		}
+	}
+	if (nl)
+		write(1, "\n", 1);
+}
+
+void	ft_cd(void)
+/** WAITING FOR ~ TO BE DEALT WITH
+ * if starting with '~' look for $HOME 
+	change $PWD*/
+{
+	char	err[100];
+	char	*path; // if tilde
+	char	**env_var;
+
+	env_var = NULL;
+	path = g_mini.argv[1];
+	if (!path)
+		return ;
+	ft_bzero(err, 100);
+	/*PROTO*/
+	if (*path == '~')
+	{
+		if (chdir(find_param(&g_mini.env, "HOME")->content))
+		{
+			err_handler("chdir find_param err!!!!!!!!");
+			return ;
+		}
+		path++;
+	}
+	/*PROTO*/
+	if (path && chdir(path) == -1)
+	{
+		ft_strlcat(err, "cd: ", 5);
+		ft_strlcat(err, g_mini.argv[1], ft_strlen(g_mini.argv[1]));
+		err_handler(err);
 		return ;
 	}
-
-	// if (chdir(g_mini.input + 2) == -1)
-	// 	err_handler("Function chdir returned an error.");
-
-	if (closedir(dir))
-		err_handler("Failed to close directory.");
+	path = getcwd(NULL, 0);
+	env_var = &find_param(&g_mini.env, "PWD")->content;
+	if (!path || !env_var)
+	{
+		ft_strlcat(err, "cd: ", 5);
+		ft_strlcat(err, g_mini.argv[1], ft_strlen(g_mini.argv[1]));
+		err_handler(err);
+		return ;
+	}
+	free(*env_var);
+	*env_var = path;
 }
 
 void	ft_pwd(void)
