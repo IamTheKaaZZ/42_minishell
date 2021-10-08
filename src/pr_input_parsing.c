@@ -6,11 +6,47 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/08 12:47:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/08 17:04:49 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/includes/minishell.h"
+
+static void	combine_args(t_node **list, char **token, char **joined, bool sp)
+{
+	char	*temp;
+
+	if (sp == false)
+	{
+		temp = *joined;
+		*joined = ft_strjoin(temp, *token);
+		ft_strdel(&temp);
+		ft_strdel(token);
+	}
+	if (sp == true)
+	{
+		if (*joined != NULL)
+		{
+			add_to_tail(list, new_node(*joined));
+			*joined = NULL;
+		}
+		temp = *joined;
+		*joined = ft_strjoin(temp, *token);
+		ft_strdel(&temp);
+		ft_strdel(token);
+	}
+}
+
+static bool	init_split(const char *str, size_t *len, char **joined)
+{
+	if (!str)
+		return (false);
+	*len = 0;
+	*joined = NULL;
+	while (*str && *str == ' ')
+		str++;
+	return (true);
+}
 
 /*
  * Handle cases:
@@ -22,10 +58,10 @@ void	split_input(t_node **parsed_list, const char *str, t_prbools *b)
 {
 	size_t	len;
 	char	*token;
+	char	*joined;
 
-	if (!str)
+	if (!init_split(str, &len, &joined))
 		return ;
-	len = 0;
 	while (*str)
 	{
 		if (!parse_quotes_spaces(&str, &len, b))
@@ -38,9 +74,11 @@ void	split_input(t_node **parsed_list, const char *str, t_prbools *b)
 		if (!*str)
 			break ;
 		token = process_token(str, &len, b);
-		printf("space found = %d - %s\n", b->space_found, token);
-		add_to_tail(parsed_list, new_node(token));
+		combine_args(parsed_list, &token, &joined, b->space_found);
+		str += len;
 	}
+	if (joined != NULL)
+		add_to_tail(parsed_list, new_node(joined));
 }
 
 bool	parse_input_line(void)
