@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:32:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/08 12:34:56 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/08 13:08:15 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ static void	get_next_str_len(t_parse *p, char c)
 	while ((*p->str)[i])
 	{
 		if ((*p->str)[i] == c)
+		{
+			p->bools->space_found = true;
 			return ;
+		}
 		(*p->len)++;
 		i++;
 	}
@@ -41,6 +44,7 @@ static bool	find_quote_str(t_parse *p, int *sq, int *dq, char quote)
 	if ((!*dq && p->start > 0) || (!*sq && p->start > 0))
 	{
 		*p->len = p->start;
+		p->bools->space_found = false;
 		return (true);
 	}
 	(*(p->str))++;
@@ -75,8 +79,6 @@ static void	init_parse(t_parse *p, size_t *len, t_prbools *b, const char **str)
 
 static void	skip_spaces_quotes(t_parse *p, int *dq, int *sq)
 {
-	char	start;
-
 	if (*dq)
 	{
 		(*(p->str))++;
@@ -87,11 +89,11 @@ static void	skip_spaces_quotes(t_parse *p, int *dq, int *sq)
 		(*(p->str))++;
 		*sq = 0;
 	}
-	start = **(p->str);
 	while (**(p->str) && **(p->str) == ' ')
-		(*(p->str))++;
-	if (**(p->str) == start)
+	{
 		p->bools->space_found = false;
+		(*(p->str))++;
+	}
 }
 
 /**
