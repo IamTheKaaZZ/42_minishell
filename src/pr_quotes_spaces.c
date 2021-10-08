@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:32:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 16:52:58 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:04:59 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,13 @@ static bool	find_quote_str(t_parse *p, int *sq, int *dq, char quote)
 
 static void	init_parse(t_parse *p, size_t *len, bool *dqu, const char **str)
 {
+	static int	space_found;
+
 	p->start = 0;
 	p->end = 0;
 	p->len = len;
 	p->dqu = dqu;
+	p->space_found = &space_found;
 	p->str = str;
 	*p->str += *p->len;
 	*p->len = 0;
@@ -92,7 +95,7 @@ static void	skip_spaces_quotes(t_parse *p, int *dq, int *sq)
  * single quotes: Everything is literal.
 */
 
-bool	parse_quotes_spaces(char const **str, size_t *len, bool *dqu, bool *noq)
+bool	parse_quotes_spaces(char const **str, size_t *len, t_prbools *b)
 {
 	t_parse		p;
 	static int	sq;

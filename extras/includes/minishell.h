@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 17:08:19 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:05:24 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,16 @@ typedef struct s_parse
 	size_t		end;
 	size_t		*len;
 	bool		*dqu;
+	int			*space_found;
 	const char	**str;
 }	t_parse;
+
+typedef struct s_prbools
+{
+	bool	dquote;
+	bool	no_quote;
+	bool	space_found;
+}	t_prbools;
 
 /*
 *	GLOBAL VAR
@@ -125,8 +133,7 @@ t_minishell	g_mini;
 */
 
 bool	parse_input_line(void);
-bool	parse_quotes_spaces(char const **str, size_t *len,
-			bool *dqu, bool *noq);
+bool	parse_quotes_spaces(char const **str, size_t *len, t_prbools *b);
 char	**list_to_argv(t_node *head);
 char	*process_token(char const *str, size_t *len, bool *dq, bool *noq);
 size_t	strchr_index(const char *str, int c);

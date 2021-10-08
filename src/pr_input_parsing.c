@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 17:08:47 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:05:46 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@
 	'"$SOMETHING"' => "$SOMETHING"
 */
 
-void	split_input(t_node **parsed_list, const char *str,
-					bool *dq, bool *noq)
+void	split_input(t_node **parsed_list, const char *str, t_prbools *b)
 {
 	size_t	len;
 	char	*token;
@@ -45,15 +44,13 @@ void	split_input(t_node **parsed_list, const char *str,
 
 bool	parse_input_line(void)
 {
-	t_node	*parsed_list;
-	bool	dquote;
-	bool	no_quote;
-	int		i;
-	char	error[100];
+	t_node		*parsed_list;
+	t_prbools	bools;
+	int			i;
+	char		error[100];
 
 	parsed_list = NULL;
-	dquote = false;
-	no_quote = false;
+	ft_bzero(&bools, sizeof(t_prbools));
 	split_input(&parsed_list, g_mini.input, &dquote, &no_quote);
 	if (!parsed_list)
 		return (false);

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 10:55:57 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 17:07:32 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/08 10:51:40 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ static bool	escape_slashes(t_expand *exp, char **str)
 static void	handle_escape_chars(t_expand *exp, char **str,
 								bool dq, bool noq)
 {
+	if (ft_strlen(*str) == 1)
+		return ;
 	exp->i = -1;
 	while ((*str)[++exp->i])
 	{
