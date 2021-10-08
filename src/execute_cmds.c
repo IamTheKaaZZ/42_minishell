@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../extras/hfiles/minishell.h"
+#include "../extras/includes/minishell.h"
 
 // static int	init_exec(t_exec *ex, char **argv)
 // {

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_list.c                                         :+:      :+:    :+:   */
+/*   lt_env_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/27 10:49:27 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/30 18:42:04 by bcosters         ###   ########.fr       */
+/*   Created: 2021/10/07 16:01:41 by bcosters          #+#    #+#             */
+/*   Updated: 2021/10/07 16:01:43 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../extras/hfiles/minishell.h"
+#include "../extras/includes/minishell.h"
 
 /**
  * Modified lst_new for the project

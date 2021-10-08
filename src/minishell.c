@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../extras/hfiles/minishell.h"
+#include "../extras/includes/minishell.h"
 
 // t_minishell	g_mini;
 
@@ -118,8 +118,14 @@ int	main(int argc, char **argv, char **env)
 	while (argc)
 	{
 		g_mini.input = rl_gnl(&g_mini);
+<<<<<<< HEAD:cfiles/minishell.c
 		check_for_quotes();
 		functions();
+=======
+		if (!parse_input_line())
+			continue ;
+		// functions();
+>>>>>>> master:src/minishell.c
 		int i = -1;
 		while (g_mini.argv[++i])
 			printf("[%s]\n", g_mini.argv[i]);

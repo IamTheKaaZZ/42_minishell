@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   transform_lists.c                                  :+:      :+:    :+:   */
+/*   lt_transform_lists.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/01 17:15:58 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/01 17:17:50 by bcosters         ###   ########.fr       */
+/*   Created: 2021/10/07 16:01:22 by bcosters          #+#    #+#             */
+/*   Updated: 2021/10/07 16:01:23 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../extras/hfiles/minishell.h"
+#include "../extras/includes/minishell.h"
 
 static char	*get_full_param(t_node *list_item)
 {
