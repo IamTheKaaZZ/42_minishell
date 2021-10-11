@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 11:49:03 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 13:45:04 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 10:52:55 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,27 @@ bool	char_before_others(const char *str, char c, char *charset)
 	while (charset[++i])
 		if (strchr_index(str, c) > strchr_index(str, charset[i]))
 			return (false);
+	return (true);
+}
+
+/**
+ * Boolean that checks if the charset occurs before any characters in other
+*/
+
+bool	charset_before_other(const char *str, char *charset, char *other)
+{
+	int	i;
+	int	j;
+
+	if (!str || !*other || !charset)
+		return (false);
+	i = -1;
+	while (other[++i])
+	{
+		j = -1;
+		while (charset[++j])
+			if (strchr_index(str, charset[j]) > strchr_index(str, other[i]))
+				return (false);
+	}
 	return (true);
 }

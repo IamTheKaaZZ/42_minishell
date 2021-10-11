@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/08 17:04:49 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 10:47:10 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static void	combine_args(t_node **list, char **token, char **joined, bool sp)
 		ft_strdel(&temp);
 		ft_strdel(token);
 	}
+	printf("joined = [%s]\n", *joined);
 }
 
 static bool	init_split(const char *str, size_t *len, char **joined)

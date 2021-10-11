@@ -6,37 +6,11 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:32:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/08 16:55:20 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 11:18:58 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/includes/minishell.h"
-
-/*
-**	Iteratively finds the next string and corresponding lenght*
-**	Every time this gets called.
-*/
-
-static void	get_next_str_len(t_parse *p, char c)
-{
-	size_t	i;
-
-	*p->len = 0;
-	i = 0;
-	while (**p->str && **p->str == c)
-		(*p->str)++;
-	while ((*p->str)[i])
-	{
-		if ((*p->str)[i] == c)
-		{
-			p->bools->no_quote = true;
-			return ;
-		}
-		(*p->len)++;
-		i++;
-	}
-	p->bools->no_quote = true;
-}
 
 static bool	find_quote_str(t_parse *p, int *sq, int *dq, char quote)
 {
@@ -95,6 +69,28 @@ static void	skip_spaces_quotes(t_parse *p, int *dq, int *sq)
 	}
 }
 
+static void	split_redirections(t_parse *p)
+{
+	if (char_before_others(*p->str, '|', "<>"))
+		*p->len = 1;
+	else if (char_before_others(*p->str, '<', ">"))
+	{
+		p->start = strchr_index(*p->str, '<');
+		if ((*p->str)[p->start + 1] != 0 && (*p->str)[p->start + 1] == '<')
+			*p->len = 2;
+		else
+			*p->len = 1;
+	}
+	else if (char_before_others(*p->str, '>', "<"))
+	{
+		p->start = strchr_index(*p->str, '>');
+		if ((*p->str)[p->start + 1] != 0 && (*p->str)[p->start + 1] == '>')
+			*p->len = 2;
+		else
+			*p->len = 1;
+	}
+}
+
 /**
  * normal split AND double quotes expand vars AND require escaping
  * single quotes: Everything is literal.
@@ -108,8 +104,13 @@ bool	parse_quotes_spaces(char const **str, size_t *len, t_prbools *b)
 
 	init_parse(&p, len, b, str);
 	skip_spaces_quotes(&p, &dq, &sq);
-	if (char_before_others(*str, ' ', "\"\'"))
-		get_next_str_len(&p, ' ');
+	if (charset_before_other(*str, " <>|", "\"\'"))
+	{
+		if (char_before_others(*str, ' ', "<>|"))
+			get_next_str_len(&p, ' ');
+		else
+			split_redirections(&p);
+	}
 	else if (char_before_others(*str, '\"', "\'"))
 	{
 		if (!find_quote_str(&p, &sq, &dq, '\"'))
