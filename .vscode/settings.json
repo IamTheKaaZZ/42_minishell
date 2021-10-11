@@ -5,6 +5,8 @@
 		"functional": "c",
 		"iterator": "c",
 		"memory": "c",
-		"sstream": "c"
+		"sstream": "c",
+		"__locale": "c",
+		"ios": "c"
 	}
 }

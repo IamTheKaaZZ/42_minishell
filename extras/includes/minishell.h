@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 13:25:33 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 16:29:36 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,13 @@ typedef struct s_file
 
 typedef struct s_job
 {
-	t_node	*head;
-	t_file	in[1024];
-	t_file	out_fd[1024];
+	t_node	*command;
+	t_node	*infiles;
+	t_node	*outfiles;
 	int		tmp_fd;
-	char	*limiter;
-	bool	pipe;
+	t_file	last_in;
+	int		last_out;
+	char	**cmd_argv;
 }	t_job;
 
 typedef struct s_exec
@@ -147,7 +148,7 @@ t_node	*new_env_param(char **param);
 t_node	*find_param(t_node **env, char *keyword);
 void	remove_param(t_node **env, char	*keyword);
 int		count_params(t_node *env);
-t_node	*new_node(char *content);
+t_node	*new_node(char *keyword, char *content);
 void	add_to_tail(t_node **env, t_node *new);
 void	ft_env_list(char **env);
 char	**get_current_envp(t_node *head);
@@ -165,8 +166,8 @@ void	ft_unset(t_minishell *mini);
 void	ft_env(t_minishell *mini);
 void	ft_exit(t_minishell *mini);
 int		executor(char **argv);
-int		open_file_as_input(t_job *j, char *filename, int i);
-int		here_doc_as_input(t_job *j);
+int		open_file_as_input(t_job *j, char *filename);
+int		here_doc_as_input(int tmp_fd, char *limiter);
 
 void	ft_handler(int signal);
 char	**ft_get_path(void);

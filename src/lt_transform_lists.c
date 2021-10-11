@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:01:22 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 16:01:23 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 15:08:40 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ char	**get_current_envp(t_node *head)
  * Only use the content of the nodes for the pipeline and parsing
 */
 
-t_node	*new_node(char *content)
+t_node	*new_node(char *keyword, char *content)
 {
 	t_node	*new;
 
 	new = (t_node *)malloc(sizeof(t_node));
 	if (!new)
 		return (NULL);
-	new->keyword = NULL;
+	new->keyword = keyword;
 	new->content = content;
 	new->next = NULL;
 	return (new);
@@ -87,6 +87,8 @@ char	**list_to_argv(t_node *head)
 	temp = head;
 	while (++i < n_param)
 	{
+		if (!temp->content)
+			break ;
 		argv[i] = ft_strdup(temp->content);
 		if (!argv[i])
 			ft_str_array_del(&argv);

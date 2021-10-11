@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 13:29:16 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 15:09:51 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ static bool	special_token(t_node **list, char **token, char **joined)
 		|| ft_strequal(*token, "<") || ft_strequal(*token, "<<")
 		|| ft_strequal(*token, ">") || ft_strequal(*token, ">>"))
 	{
-		add_to_tail(list, new_node(*joined));
+		add_to_tail(list, new_node(NULL, *joined));
 		*joined = NULL;
-		add_to_tail(list, new_node(*token));
+		add_to_tail(list, new_node(NULL, *token));
 		return (true);
 	}
 	return (false);
@@ -43,7 +43,7 @@ static void	combine_args(t_node **list, char **token, char **joined, bool sp)
 	{
 		if (*joined != NULL)
 		{
-			add_to_tail(list, new_node(*joined));
+			add_to_tail(list, new_node(NULL, *joined));
 			*joined = NULL;
 		}
 		temp = *joined;
@@ -94,7 +94,7 @@ void	split_input(t_node **parsed_list, const char *str, t_prbools *b)
 		str += len;
 	}
 	if (joined != NULL)
-		add_to_tail(parsed_list, new_node(joined));
+		add_to_tail(parsed_list, new_node(NULL, joined));
 }
 
 bool	parse_input_line(void)
