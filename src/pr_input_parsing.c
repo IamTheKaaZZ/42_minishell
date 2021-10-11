@@ -6,16 +6,32 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 10:47:10 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 13:29:16 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/includes/minishell.h"
 
+static bool	special_token(t_node **list, char **token, char **joined)
+{
+	if (ft_strequal(*token, "|")
+		|| ft_strequal(*token, "<") || ft_strequal(*token, "<<")
+		|| ft_strequal(*token, ">") || ft_strequal(*token, ">>"))
+	{
+		add_to_tail(list, new_node(*joined));
+		*joined = NULL;
+		add_to_tail(list, new_node(*token));
+		return (true);
+	}
+	return (false);
+}
+
 static void	combine_args(t_node **list, char **token, char **joined, bool sp)
 {
 	char	*temp;
 
+	if (special_token(list, token, joined))
+		return ;
 	if (sp == false)
 	{
 		temp = *joined;
@@ -23,7 +39,7 @@ static void	combine_args(t_node **list, char **token, char **joined, bool sp)
 		ft_strdel(&temp);
 		ft_strdel(token);
 	}
-	if (sp == true)
+	else if (sp == true)
 	{
 		if (*joined != NULL)
 		{
@@ -35,7 +51,6 @@ static void	combine_args(t_node **list, char **token, char **joined, bool sp)
 		ft_strdel(&temp);
 		ft_strdel(token);
 	}
-	printf("joined = [%s]\n", *joined);
 }
 
 static bool	init_split(const char *str, size_t *len, char **joined)

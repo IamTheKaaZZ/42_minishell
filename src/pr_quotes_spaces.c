@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:32:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 11:25:19 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 13:25:47 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,34 +66,6 @@ static void	skip_spaces_quotes(t_parse *p, int *dq, int *sq)
 	{
 		p->bools->space_found = true;
 		(*(p->str))++;
-	}
-}
-
-static void	split_redirections(t_parse *p)
-{
-	if (char_before_others(*p->str, '|', "<>"))
-	{
-		p->start = strchr_index(*p->str, '|');
-		if (p->start > 0)
-			*p->len = p->start;
-		else
-			*p->len = 1;
-	}
-	else if (char_before_others(*p->str, '<', ">"))
-	{
-		p->start = strchr_index(*p->str, '<');
-		if ((*p->str)[p->start + 1] != 0 && (*p->str)[p->start + 1] == '<')
-			*p->len = 2;
-		else
-			*p->len = 1;
-	}
-	else if (char_before_others(*p->str, '>', "<"))
-	{
-		p->start = strchr_index(*p->str, '>');
-		if ((*p->str)[p->start + 1] != 0 && (*p->str)[p->start + 1] == '>')
-			*p->len = 2;
-		else
-			*p->len = 1;
 	}
 }
 

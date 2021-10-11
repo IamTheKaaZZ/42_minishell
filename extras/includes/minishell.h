@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 11:18:19 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 13:25:33 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ bool	str_contains_chars(const char *str, char *charset);
 bool	char_before_others(const char *str, char c, char *charset);
 bool	charset_before_other(const char *str, char *charset, char *other);
 void	get_next_str_len(t_parse *p, char c);
+void	split_redirections(t_parse *p);
 
 /**
  * 2.	LIST FUNCTIONS
