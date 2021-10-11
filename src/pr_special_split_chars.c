@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 11:03:01 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 11:18:04 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 11:19:49 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,8 @@ void	get_next_str_len(t_parse *p, char c)
 
 	*p->len = 0;
 	i = 0;
-	if (skip == true)
-	{
-		while (**p->str && **p->str == c)
-			(*p->str)++;
-	}
+	while (**p->str && **p->str == c)
+		(*p->str)++;
 	while ((*p->str)[i])
 	{
 		if ((*p->str)[i] == c)

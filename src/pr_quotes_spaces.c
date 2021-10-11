@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:32:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 11:18:58 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 11:25:19 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,13 @@ static void	skip_spaces_quotes(t_parse *p, int *dq, int *sq)
 static void	split_redirections(t_parse *p)
 {
 	if (char_before_others(*p->str, '|', "<>"))
-		*p->len = 1;
+	{
+		p->start = strchr_index(*p->str, '|');
+		if (p->start > 0)
+			*p->len = p->start;
+		else
+			*p->len = 1;
+	}
 	else if (char_before_others(*p->str, '<', ">"))
 	{
 		p->start = strchr_index(*p->str, '<');
