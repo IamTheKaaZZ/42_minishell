@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 10:22:35 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 16:31:46 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 17:04:53 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,9 @@
  * 			=> echo hello > f1 > f2 >> f3 => same but f3 gets appended each time
 */
 
-static size_t	count_args(char **argv)
-{
-	int	i;
-
-	i = 0;
-	while (argv[i])
-		i++;
-	return (i);
-}
-
 static void	fill_lists(t_job *jobs, char **argv, int *i, int *j)
 {
+	//save the last in and out
 	if (ft_strequal(argv[*i], "|"))
 	{
 		jobs[*j].cmd_argv = list_to_argv(jobs[*j].command);
@@ -84,6 +75,7 @@ static void	fill_input_lists(t_node **here_docs, t_node **files, t_node *temp)
 
 static void	order_by_priority(t_node **infiles)
 {
+	//save last in and out
 	t_node	*here_docs;
 	t_node	*files;
 	t_node	*temp;
