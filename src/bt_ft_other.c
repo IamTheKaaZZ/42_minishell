@@ -136,34 +136,31 @@ void	ft_pwd(void)
 	}
 }
 
-void	ft_env(void)
-/* t_node functions (-> env_list.c):
-	
-	t_node *
--	new_env_param(char **param)
-
-	static t_node *
--	find_tail(t_node *head)
-
-	void
--	add_to_tail(t_node **env, t_node *new)
-
-	t_node *
--	find_param(t_node **env, char *keyword)
-
-	int
--	count_params(t_node *env)
-*/
+void	ft_exit(void)
 {
-	t_node	*head;
+	int	ret;
+	int	i;
 
-	head = g_mini.env;
-	while (head->next)
+	ret = 0;
+	i = -1;
+	if (g_mini.argv[2])
 	{
-		ft_putstr_fd(head->keyword, 1);
-		ft_putchar_fd('=', 1);
-		ft_putendl_fd(head->content, 1);
-		head = head->next;
+		err_handler("exit: too many arguments");
+		return ;
 	}
+	while (g_mini.argv[1][++i])
+	{
+		if (g_mini.argv[1][i] == '+')
+			continue ;
+		if (!ft_isdigit(g_mini.argv[1][i]))
+		{
+			err_handler("exit: numeric argument required");
+			ret = 255;
+		}
+	}
+	if (g_mini.argv[1] && !ret)
+		ret = ft_atoi(g_mini.argv[1]);
+	ft_clear_data();
+	ft_putstr_fd("exit", 1);
+	exit(ret);
 }
-

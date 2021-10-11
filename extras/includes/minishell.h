@@ -158,11 +158,13 @@ char	**get_current_envp(t_node *head);
 /**
  * 3.	BUILTINS
 */
-
-void	ft_cd(void);
+/*bt_ft_env.c*/
 void	ft_env(void);
+/*bt_ft_other.c*/
+void	ft_cd(void);
 void	ft_pwd(void);
 void	ft_echo(void);
+void	ft_exit(void);
 int		executor(char **argv);
 
 int		open_file_as_input(t_job *j, char *filename, int i);

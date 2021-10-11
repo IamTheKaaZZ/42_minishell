@@ -55,6 +55,8 @@ void	functions(void)
 		ft_pwd();
 	else if (ft_strequal(*g_mini.argv, "cd"))
 		ft_cd();
+	else if (ft_strequal(*g_mini.argv, "exit"))
+		ft_exit();
 	// else
 	// 	executor(g_mini.argv);
 }
@@ -116,9 +118,9 @@ int	main(int argc, char **argv, char **env)
 		if (!parse_input_line())
 			continue ;
 		functions();
-		int i = -1;
-		while (g_mini.argv[++i])
-			printf("[%s]\n", g_mini.argv[i]);
+		// int i = -1;
+		// while (g_mini.argv[++i])
+		// 	printf("[%s]\n", g_mini.argv[i]);
 		ft_str_array_del(&g_mini.argv);
 	}
 }
