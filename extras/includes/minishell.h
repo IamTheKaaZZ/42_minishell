@@ -160,11 +160,13 @@ char	**get_current_envp(t_node *head);
 */
 /*bt_ft_env.c*/
 void	ft_env(void);
+void	ft_unset(void);
+void	ft_export(void);
 /*bt_ft_other.c*/
 void	ft_cd(void);
 void	ft_pwd(void);
 void	ft_echo(void);
-void	ft_exit(void);
+void	ft_exit(int i);
 int		executor(char **argv);
 
 int		open_file_as_input(t_job *j, char *filename, int i);

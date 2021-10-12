@@ -12,28 +12,6 @@
 
 #include "../extras/includes/minishell.h"
 
-/*int
--  chdir(const char *path); returns 0 or -1 (errno)
-
-  int
--  stat(const char *restrict path, struct stat *restrict buf);
-
-  int
--  lstat(const char *restrict path, struct stat *restrict buf);
-
-  int
--  fstat(int fildes, struct stat *buf);
-
-	DIR *
--	opendir(const char *filename);
-
-	struct dirent *
--	readdir(DIR *dirp);
-
-	int
--	closedir(DIR *dirp);
-error handling!!*/
-
 void	ft_echo(void)
 /*	Rought-cut
 
@@ -48,7 +26,7 @@ void	ft_echo(void)
 	i = 1;
 	if (g_mini.argv[i])
 	{
-		if (!ft_strcmp(g_mini.argv[i], "-n"))
+		if (*g_mini.argv[i] && !ft_strcmp(g_mini.argv[i], "-n"))
 		{
 			nl = 0;
 			i++;
@@ -57,8 +35,8 @@ void	ft_echo(void)
 		{
 			if ((nl && i > 1) || (!nl && i > 2)) // terrible
 				ft_putchar_fd(' ', 1);
-			if (str_contains_chars(g_mini.argv[i], "|<>&"))
-				return ; // for now
+			if (str_contains_chars(g_mini.argv[i], "|<>&")) // for now
+				return ;
 			ft_putstr_fd(g_mini.argv[i++], 1);
 		}
 	}
@@ -72,7 +50,7 @@ void	ft_cd(void)
 	change $PWD*/
 {
 	char	err[100];
-	char	*path; // if tilde
+	char	*path;
 	char	**env_var;
 
 	env_var = NULL;
@@ -136,31 +114,31 @@ void	ft_pwd(void)
 	}
 }
 
-void	ft_exit(void)
+void	ft_exit(int i)
 {
 	int	ret;
-	int	i;
 
 	ret = 0;
-	i = -1;
-	if (g_mini.argv[2])
+	if (g_mini.argv[1])
 	{
-		err_handler("exit: too many arguments");
-		return ;
-	}
-	while (g_mini.argv[1][++i])
-	{
-		if (g_mini.argv[1][i] == '+')
-			continue ;
-		if (!ft_isdigit(g_mini.argv[1][i]))
+		if (g_mini.argv[2])
 		{
-			err_handler("exit: numeric argument required");
-			ret = 255;
+			err_handler("exit: too many arguments");
+			return ;
 		}
+		while (g_mini.argv[1][++i])
+		{
+			if (g_mini.argv[1][i] == '+')
+				continue ;
+			if (!ft_isdigit(g_mini.argv[1][i]))
+			{
+				err_handler("exit: numeric argument required");
+				ret = 255;
+			}
+		}
+		if (!ret)
+			ret = ft_atoi(g_mini.argv[1]);
 	}
-	if (g_mini.argv[1] && !ret)
-		ret = ft_atoi(g_mini.argv[1]);
-	ft_clear_data();
-	ft_putstr_fd("exit", 1);
-	exit(ret);
+	ft_putstr_fd("exit\n", 1);
+	exit(ret + ft_clear_data());
 }

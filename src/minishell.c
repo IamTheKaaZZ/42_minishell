@@ -56,7 +56,12 @@ void	functions(void)
 	else if (ft_strequal(*g_mini.argv, "cd"))
 		ft_cd();
 	else if (ft_strequal(*g_mini.argv, "exit"))
-		ft_exit();
+		ft_exit(-1);
+	else if (ft_strequal(*g_mini.argv, "unset"))
+		ft_unset();
+	else if (ft_strequal(*g_mini.argv, "export"))
+		ft_export();
+	
 	// else
 	// 	executor(g_mini.argv);
 }

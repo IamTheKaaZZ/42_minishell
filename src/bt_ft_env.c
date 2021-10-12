@@ -34,7 +34,7 @@ void	ft_env(void)
 	t_node	*head;
 
 	head = g_mini.env;
-	while (head->next)
+	while (head)
 	{
 		ft_putstr_fd(head->keyword, 1);
 		ft_putchar_fd('=', 1);
@@ -43,12 +43,49 @@ void	ft_env(void)
 	}
 }
 
-// void	ft_export(void)
-// {
+void	ft_export(void)
+/**
+ * Where are we keeping "not exported env vars"?
+*/
+{
+	char	**split_param;
+	t_node	*new;
 
-// }
+	if (!g_mini.argv[1])
+		return ;
+	/*TMP*/
+	if (!ft_strchr(g_mini.argv[1], '='))
+		return ;
+	/*TMP*/
+	split_param = ft_split(g_mini.argv[1], '=');
+	new = new_env_param(split_param);
+	if (!new)
+	{
+		free(split_param[0]);
+		free(split_param[1]);
+		free(split_param);
+		return ;
+	}
+	add_to_tail(&g_mini.env, new);
+}
 
-// void	ft_unset(void)
-// {
+void	ft_unset(void)
+{
+	t_node	*param;
+	t_node	*tmp;
 
-// }
+	param = find_param(&g_mini.env, g_mini.argv[1]);
+	if (!param)
+		return ;
+	tmp = g_mini.env;
+	if (tmp != param)
+	{
+		while (tmp->next != param)
+			tmp = tmp->next;
+		tmp->next = param->next;
+	}
+	else
+		g_mini.env = g_mini.env->next;
+	free(param);
+	param = NULL;
+}
