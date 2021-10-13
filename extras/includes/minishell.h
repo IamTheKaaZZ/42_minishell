@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 14:23:13 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 16:55:36 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_exec
 	int			wstatus;
 	char		err[100];
 	t_process	proc[100];
+	int			p_count;
 }	t_exec;
 
 typedef struct s_expand
