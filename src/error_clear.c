@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:27:30 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 11:05:51 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 15:02:41 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,13 +119,16 @@ void	ft_error_exit(const char *errmessage)
     255\* - Exit status out of range
 */
 
-int	err_handler(const char *errmessage)
+bool	err_handler(const char *errmessage)
 {
-	if (errno == ENOENT || errno == ENOTDIR || errno == EBADF
-		|| errno == EACCES || errno == EFAULT)
-		g_mini.exit_code = 127;
-	else if (g_mini.exit_code == 0)
-		g_mini.exit_code = 1;
+	if (g_mini.exit_code == 0)
+	{
+		if (errno == ENOENT || errno == ENOTDIR || errno == EBADF
+			|| errno == EACCES || errno == EFAULT)
+			g_mini.exit_code = 127;
+		else
+			g_mini.exit_code = 1;
+	}
 	write(2, "minishell: ", 12);
 	if (errno == 0 || errno == EFAULT)
 		ft_putendl_fd((char *)errmessage, 2);

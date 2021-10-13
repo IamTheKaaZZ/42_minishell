@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:01:41 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 16:01:43 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 09:46:09 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_node	*new_env_param(char **param)
 	return (new);
 }
 
-static t_node	*find_tail(t_node *head)
+t_node	*find_tail(t_node *head)
 {
 	t_node	*temp;
 
