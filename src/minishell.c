@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 15:05:49 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 15:16:20 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,5 @@ int	main(int argc, char **argv, char **env)
 		while (g_mini.argv[++i])
 			printf("[%s]\n", g_mini.argv[i]);
 		ft_str_array_del(&g_mini.argv);
-		g_mini.exit_code = 0;
 	}
 }
