@@ -99,6 +99,7 @@ void	ft_pwd(void)
 	buf = NULL;
 	if (g_mini.argv[1] && !ft_strchr("<>|", *g_mini.argv[1])) // ??
 	{
+		g_mini.exit_code = 2;
 		err_handler("pwd: too many arguments");
 	}
 	else
@@ -107,7 +108,8 @@ void	ft_pwd(void)
 		if (!buf)
 		{
 			free(buf);
-			err_handler("Failed to get current working directory.");
+			g_mini.exit_code = 2;
+			err_handler("pwd: Failed to get current working directory.");
 		}
 		ft_putendl_fd(buf, 1);
 		free(buf);
