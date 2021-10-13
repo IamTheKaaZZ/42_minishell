@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 16:29:36 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 09:48:53 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,18 @@ typedef struct s_file
 	struct stat	stats;
 }	t_file;
 
-typedef struct s_job
+typedef struct s_process
 {
 	t_node	*command;
 	t_node	*infiles;
 	t_node	*outfiles;
+	t_node	*last_inf;
+	t_node	*last_outf;
 	int		tmp_fd;
 	t_file	last_in;
 	int		last_out;
 	char	**cmd_argv;
-}	t_job;
+}	t_process;
 
 typedef struct s_exec
 {
@@ -84,7 +86,7 @@ typedef struct s_exec
 	int			prev_fd;
 	int			wstatus;
 	char		err[100];
-	t_job		jobs[100];
+	t_process	proc[100];
 }	t_exec;
 
 typedef struct s_expand
@@ -149,6 +151,7 @@ t_node	*find_param(t_node **env, char *keyword);
 void	remove_param(t_node **env, char	*keyword);
 int		count_params(t_node *env);
 t_node	*new_node(char *keyword, char *content);
+t_node	*find_tail(t_node *head);
 void	add_to_tail(t_node **env, t_node *new);
 void	ft_env_list(char **env);
 char	**get_current_envp(t_node *head);
@@ -166,7 +169,7 @@ void	ft_unset(t_minishell *mini);
 void	ft_env(t_minishell *mini);
 void	ft_exit(t_minishell *mini);
 int		executor(char **argv);
-int		open_file_as_input(t_job *j, char *filename);
+int		open_file_as_input(t_process *j, char *filename);
 int		here_doc_as_input(int tmp_fd, char *limiter);
 
 void	ft_handler(int signal);

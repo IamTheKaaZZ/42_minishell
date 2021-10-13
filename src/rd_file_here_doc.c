@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/29 11:50:54 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 15:25:56 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 09:48:15 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * -> ELSE: Return an error with the filename
 */
 
-int	open_file_as_input(t_job *j, char *filename)
+int	open_file_as_input(t_process *j, char *filename)
 {
 	if (stat(filename, &j->last_in.stats) != -1
 		&& j->last_in.stats.st_mode & S_IRUSR)

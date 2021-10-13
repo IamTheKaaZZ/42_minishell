@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rd_create_jobs.c                                   :+:      :+:    :+:   */
+/*   rd_create_processes.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 10:22:35 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 17:04:53 by bcosters         ###   ########.fr       */
+/*   Created: 2021/10/13 09:51:34 by bcosters          #+#    #+#             */
+/*   Updated: 2021/10/13 09:52:14 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * Everything before a '|' or the end of argv is split into a job
  *  =>	Order of execution is important
- *  =>	Jobs are created backwards (right to left)
+ *  =>	processes are created (left to right), later executed right to left
  * 	INPUT:
  * 		PRIORITIES:
  * 			1.	Here_doc input (and error checking) (in order if multiple)
@@ -33,30 +33,31 @@
  * 			=> echo hello > f1 > f2 >> f3 => same but f3 gets appended each time
 */
 
-static void	fill_lists(t_job *jobs, char **argv, int *i, int *j)
+static void	fill_lists(t_process *proc, char **argv, int *i, int *j)
 {
-	//save the last in and out
-	if (ft_strequal(argv[*i], "|"))
+	if (ft_strequal(argv[*i], "|")) //save the last in and out
 	{
-		jobs[*j].cmd_argv = list_to_argv(jobs[*j].command);
-		clear_env_list(&jobs[*j].command);
+		proc[*j].cmd_argv = list_to_argv(proc[*j].command);
+		clear_env_list(&proc[*j].command);
+		proc[*j].last_inf = find_tail(proc[*j].infiles);
+		proc[*j].last_outf = find_tail(proc[*j].outfiles);
 		(*j)++;
 	}
 	else if (ft_strequal(argv[*i], "<<"))
 	{
-		if (!jobs[*j].command) //empty here_docs have NULL as keyword
-			add_to_tail(&jobs[*j].infiles, new_node("bad_heredoc", argv[++*i]));
+		if (!proc[*j].command) //empty here_docs have NULL as keyword
+			add_to_tail(&proc[*j].infiles, new_node("bad_heredoc", argv[++*i]));
 		else
-			add_to_tail(&jobs[*j].infiles, new_node("heredoc", argv[++*i]));
+			add_to_tail(&proc[*j].infiles, new_node("heredoc", argv[++*i]));
 	}
 	else if (ft_strequal(argv[*i], "<"))
-		add_to_tail(&jobs[*j].infiles, new_node(NULL, argv[++*i]));
+		add_to_tail(&proc[*j].infiles, new_node(NULL, argv[++*i]));
 	else if (ft_strequal(argv[*i], ">"))
-		add_to_tail(&jobs[*j].outfiles, new_node("trunc", argv[++*i]));
+		add_to_tail(&proc[*j].outfiles, new_node("trunc", argv[++*i]));
 	else if (ft_strequal(argv[*i], ">>"))
-		add_to_tail(&jobs[*j].outfiles, new_node("append", argv[++*i]));
+		add_to_tail(&proc[*j].outfiles, new_node("append", argv[++*i]));
 	else
-		add_to_tail(&jobs[*j].command, new_node(NULL, argv[*i]));
+		add_to_tail(&proc[*j].command, new_node(NULL, argv[*i]));
 }
 
 static void	fill_input_lists(t_node **here_docs, t_node **files, t_node *temp)
@@ -75,7 +76,6 @@ static void	fill_input_lists(t_node **here_docs, t_node **files, t_node *temp)
 
 static void	order_by_priority(t_node **infiles)
 {
-	//save last in and out
 	t_node	*here_docs;
 	t_node	*files;
 	t_node	*temp;
@@ -95,18 +95,18 @@ static void	order_by_priority(t_node **infiles)
 	*infiles = here_docs;
 }
 
-int	create_jobs(t_job *jobs)
+int	create_processes(t_process *proc)
 {
 	int	i;
 	int	j;
-	int	jobcount;
+	int	proccount;
 
 	i = -1;
 	j = 0;
 	while (g_mini.argv[++i])
-		fill_lists(jobs, g_mini.argv, &i, &j);
-	jobcount = j + 1;
+		fill_lists(proc, g_mini.argv, &i, &j);
+	proccount = j + 1;
 	while (j--)
-		order_by_priority(&jobs[j].infiles);
-	return (jobcount);
+		order_by_priority(&proc[j].infiles);
+	return (proccount);
 }
