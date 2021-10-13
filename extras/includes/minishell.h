@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 12:37:37 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 14:23:13 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ typedef struct s_expand
 {
 	size_t	i;
 	size_t	len;
+	char	*exit_code;
 	char	*prefix;
 	char	*to_expand;
 	char	*expanded;
@@ -134,6 +135,8 @@ bool	parse_input_line(void);
 bool	parse_quotes_spaces(char const **str, size_t *len, t_prbools *b);
 char	**list_to_argv(t_node *head);
 char	*process_token(char const *str, size_t *len, t_prbools *b);
+void	expand_and_join(t_expand *exp, char **str);
+void	handle_escape_chars(t_expand *exp, char **str, t_prbools *b);
 size_t	strchr_index(const char *str, int c);
 bool	str_contains_chars(const char *str, char *charset);
 bool	char_before_others(const char *str, char c, char *charset);

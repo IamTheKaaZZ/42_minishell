@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 11:04:58 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 11:54:32 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 14:37:06 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,14 @@ static bool	write_to_tmp(int tmp_fd, char **line)
  * =>	set file_path to .heredoc
 */
 
-static void	init_here_doc(t_file *tmp, char **line)
+static bool	init_here_doc(t_file *tmp, char **line)
 {
 	*line = NULL;
 	tmp->fd = open(TEMPFILE, O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (tmp->fd == -1)
-		return (EXIT_FAILURE);
+		return (err_handler("creation temporary file"));
 	tmp->file_path = TEMPFILE;
+	return (true);
 }
 
 /**
@@ -118,7 +119,8 @@ bool	here_doc_as_input(t_file *tmp, char *limiter)
 	char		*line;
 	int			retval;
 
-	init_here_doc(tmp, &line);
+	if (!init_here_doc(tmp, &line))
+		return (false);
 	write(STDOUT_FILENO, "> ", 2);
 	retval = get_next_line(STDIN_FILENO, &line);
 	if (!retval_or_limiter(limiter, &line, retval))

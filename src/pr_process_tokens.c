@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 10:55:57 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/08 12:14:50 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 14:45:55 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,120 +46,49 @@ static bool	start_len_expansion(t_expand *exp, char *str)
 }
 
 /**
- * EXPAND THE VARIABLE AND RETURN THE JOINED STRING
- * -> SPLIT: the string into:
- * 			PREFIX:		Anything before the '$'
- * 			TOEXPAND:	The keyword to expand
- * 			SUFFIX:		What is left of the string
- * ->	Delete the starting string
- * -> EXPANDED: Find the parameter by keyword in the env list
- * -> JOIN: prefix + expanded + suffix => interpreted string
- * ->	Free all extra memory used in the operations
+ * Function to expand ~ to the content of HOME
 */
 
-static void	expand_and_join(t_expand *exp, char **str)
+static char	*expand_tilde(char **token)
 {
-	t_node	*param;
+	char		*temp;
 
-	exp->prefix = ft_substr(*str, 0, exp->i);
-	exp->to_expand = ft_substr(*str, exp->i + 1, exp->len);
-	if (ft_strlen(exp->prefix) + ft_strlen(exp->to_expand) + 1
-		== ft_strlen(*str))
-		exp->suffix = NULL;
-	else
-		exp->suffix = ft_substr(*str, exp->i + 1 + exp->len,
-				ft_strlen((*str) + exp->i + 1 + exp->len));
-	ft_strdel(str);
-	param = find_param(&g_mini.env, exp->to_expand);
-	if (!param)
-		exp->expanded = NULL;
-	else
-		exp->expanded = param->content;
-	exp->interpreted = ft_strjoin(exp->prefix, exp->expanded);
-	*str = exp->interpreted;
-	exp->interpreted = ft_strjoin(*str, exp->suffix);
-	ft_strdel(str);
-	ft_strdel(&exp->prefix);
-	ft_strdel(&exp->to_expand);
-	ft_strdel(&exp->suffix);
-	*str = exp->interpreted;
-}
-
-/**
- * If a character can be escaped => remove the \ from the string
-*/
-
-static bool	escape_slashes(t_expand *exp, char **str)
-{
-	exp->prefix = ft_substr(*str, 0, exp->i);
-	exp->suffix = ft_substr(*str, exp->i + 1,
-			ft_strlen(*str + exp->i + 1));
-	exp->interpreted = ft_strjoin(exp->prefix, exp->suffix);
-	ft_strdel(str);
-	*str = exp->interpreted;
-	ft_strdel(&exp->prefix);
-	ft_strdel(&exp->suffix);
-	if ((*str)[exp->i] == 0)
-		return (false);
-	return (true);
-}
-
-/**
- * Handle special characters that can be escaped by \
- * CASES: \$ \" '\\' etc...
-*/
-
-static void	handle_escape_chars(t_expand *exp, char **str, t_prbools *b)
-{
-	if (ft_strlen(*str) == 1)
-		return ;
-	exp->i = -1;
-	while ((*str)[++exp->i])
-	{
-		if ((*str)[exp->i] == '\\')
-		{
-			if ((*str)[exp->i + 1] != 0 && ((*str)[exp->i + 1] == '$'
-					|| ((*str)[exp->i + 1] == '\"')
-					|| ((*str)[exp->i + 1] == '\\')))
-			{
-				if (!escape_slashes(exp, str))
-					return ;
-			}
-			if (!b->dquote && b->no_quote
-				&& ((*str)[exp->i + 1] != 0 || (*str)[exp->i + 1] != ' '))
-			{
-				if (!escape_slashes(exp, str))
-					return ;
-			}
-		}
-	}
+	temp = *token;
+	*token = ft_strdup(find_param(&g_mini.env, "HOME")->content);
+	if (!*token)
+		*token = ft_strdup("");
+	ft_strdel(&temp);
+	return (*token);
 }
 
 /**
  * INTERPRET THE TOKEN when needed
- * -> EXPAND: $... env parameters -> expand them if they exist
+ * -> EXPAND: 1. $... env parameters -> expand them if they exist
+ * 			  2. $? -> previous exit code
  * 		otherwise: delete the entire sequence until the next whitespace
  * -> ESCAPE: '\' when followed by a char (\n, \", \v, etc)
 */
 
 char	*process_token(char const *str, size_t *len, t_prbools *b)
 {
-	char		*tmp;
+	char		*token;
 	t_expand	exp;
 
-	tmp = (char *)ft_calloc(*len + 1, sizeof(char));
-	ft_strlcpy(tmp, str, *len + 1);
+	token = (char *)ft_calloc(*len + 1, sizeof(char));
+	ft_strlcpy(token, str, *len + 1);
 	if (!b->dquote && !b->no_quote)
-		return (tmp);
+		return (token);
+	if (ft_strequal(token, "~") && b->no_quote)
+		return (expand_tilde(&token));
 	ft_bzero(&exp, sizeof(t_expand));
-	while (ft_ischrinset(tmp, '$'))
+	while (ft_ischrinset(token, '$'))
 	{
-		if (!start_len_expansion(&exp, tmp))
+		if (!start_len_expansion(&exp, token))
 			break ;
-		expand_and_join(&exp, &tmp);
+		expand_and_join(&exp, &token);
 	}
-	handle_escape_chars(&exp, &tmp, b);
+	handle_escape_chars(&exp, &token, b);
 	b->dquote = false;
 	b->no_quote = false;
-	return (tmp);
+	return (token);
 }
