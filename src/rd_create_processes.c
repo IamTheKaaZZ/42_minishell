@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 09:51:34 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 09:52:14 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 11:09:30 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,7 @@ static void	fill_lists(t_process *proc, char **argv, int *i, int *j)
 		(*j)++;
 	}
 	else if (ft_strequal(argv[*i], "<<"))
-	{
-		if (!proc[*j].command) //empty here_docs have NULL as keyword
-			add_to_tail(&proc[*j].infiles, new_node("bad_heredoc", argv[++*i]));
-		else
-			add_to_tail(&proc[*j].infiles, new_node("heredoc", argv[++*i]));
-	}
+		add_to_tail(&proc[*j].infiles, new_node("heredoc", argv[++*i]));
 	else if (ft_strequal(argv[*i], "<"))
 		add_to_tail(&proc[*j].infiles, new_node(NULL, argv[++*i]));
 	else if (ft_strequal(argv[*i], ">"))
@@ -64,9 +59,7 @@ static void	fill_input_lists(t_node **here_docs, t_node **files, t_node *temp)
 {
 	while (temp != NULL)
 	{
-		if (ft_strequal("bad_heredoc", temp->keyword))
-			add_to_tail(here_docs, new_node(temp->keyword, temp->content));
-		else if (ft_strequal("heredoc", temp->keyword))
+		if (ft_strequal("heredoc", temp->keyword))
 			add_to_tail(here_docs, new_node(temp->keyword, temp->content));
 		else
 			add_to_tail(files, new_node(temp->keyword, temp->content));

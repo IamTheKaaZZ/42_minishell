@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 09:48:53 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 11:06:54 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ typedef struct s_process
 	t_node	*outfiles;
 	t_node	*last_inf;
 	t_node	*last_outf;
-	int		tmp_fd;
 	t_file	last_in;
 	int		last_out;
 	char	**cmd_argv;
@@ -169,8 +168,8 @@ void	ft_unset(t_minishell *mini);
 void	ft_env(t_minishell *mini);
 void	ft_exit(t_minishell *mini);
 int		executor(char **argv);
-int		open_file_as_input(t_process *j, char *filename);
-int		here_doc_as_input(int tmp_fd, char *limiter);
+// bool	open_file_as_input(t_file *f, char *filename);
+bool	here_doc_as_input(t_file *tmp, char *limiter);
 
 void	ft_handler(int signal);
 char	**ft_get_path(void);
@@ -183,7 +182,7 @@ char	*get_full_cmd_path(char *command);
 void	clear_env_list(t_node **env);
 int		ft_clear_data(void);
 void	ft_error_exit(const char *errmessage);
-int		err_handler(const char *errmessage);
+bool	err_handler(const char *errmessage);
 bool	syntax_error_check(char **argv, char *err, int i);
 bool	unlink_tmp(char *error);
 

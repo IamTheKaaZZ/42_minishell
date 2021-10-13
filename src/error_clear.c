@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:27:30 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 11:05:51 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 10:44:53 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	ft_error_exit(const char *errmessage)
     255\* - Exit status out of range
 */
 
-int	err_handler(const char *errmessage)
+bool	err_handler(const char *errmessage)
 {
 	if (errno == ENOENT || errno == ENOTDIR || errno == EBADF
 		|| errno == EACCES || errno == EFAULT)
