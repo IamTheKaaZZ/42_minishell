@@ -103,9 +103,8 @@ char	*rl_gnl(t_minishell *mini)
 	if (line)
 		ft_strdel(&line);
 	line = readline(mini->prompt);
-	if (!line) // EOF
+	if (!line)
 		exit(ft_clear_data());
-	}
 	if (line != NULL && line[0] != 0)
 		add_history(line);
 	return (line);

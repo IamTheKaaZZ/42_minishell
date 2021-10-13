@@ -118,13 +118,12 @@ void	ft_pwd(void)
 
 void	ft_exit(int i)
 {
-	int	ret;
-
-	ret = 0;
+	g_mini.exit_code = 0;
 	if (g_mini.argv[1])
 	{
 		if (g_mini.argv[2])
 		{
+			g_mini.exit_code = 2;
 			err_handler("exit: too many arguments");
 			return ;
 		}
@@ -135,12 +134,12 @@ void	ft_exit(int i)
 			if (!ft_isdigit(g_mini.argv[1][i]))
 			{
 				err_handler("exit: numeric argument required");
-				ret = 255;
+				g_mini.exit_code = 255;
 			}
 		}
-		if (!ret)
-			ret = ft_atoi(g_mini.argv[1]);
+		if (!g_mini.exit_code)
+			g_mini.exit_code = ft_atoi(g_mini.argv[1]);
 	}
 	ft_putstr_fd("exit\n", 1);
-	exit(ret + ft_clear_data());
+	exit(g_mini.exit_code + ft_clear_data());
 }
