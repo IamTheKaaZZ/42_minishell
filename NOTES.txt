@@ -1,3 +1,24 @@
+int
+-  chdir(const char *path); returns 0 or -1 (errno)
+
+  int
+-  stat(const char *restrict path, struct stat *restrict buf);
+
+  int
+-  lstat(const char *restrict path, struct stat *restrict buf);
+
+  int
+-  fstat(int fildes, struct stat *buf);
+
+	DIR *
+-	opendir(const char *filename);
+
+	struct dirent *
+-	readdir(DIR *dirp);
+
+	int
+-	closedir(DIR *dirp);
+error handling!!
 
 -------------->[Tony's stuff]<---------------
 
