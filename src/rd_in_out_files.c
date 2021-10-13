@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 10:05:43 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 11:12:47 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 12:46:12 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ static bool	open_file_as_input(t_file *f, char *filename)
 
 /**
  * Open all possible input files but only save the last one in last_in
+ * =>	here documents have the keyword "heredoc"
+ * =>	normal input files have NULL as keyword
+ * 		=>	check for errors for both
+ * =>	If it's not the last one:
+ * 		=>	delete the temp file if it's a heredoc
+ * 		=>	close the fd is it's a normal file
+ * =>	If it's the last one => save it in last_in
+ * =>	Clear the list after use
 */
 
 bool	open_infiles(t_process *proc)
@@ -53,19 +61,19 @@ bool	open_infiles(t_process *proc)
 		if (ft_strequal(temp->keyword, "heredoc")
 			&& !here_doc_as_input(&tmp, temp->content))
 			return (err_handler("here_doc"));
-		else if (temp->keyword == NULL
-			&& !open_file_as_input(&tmp, temp->content))
+		else if (!open_file_as_input(&tmp, temp->content))
 			return (false);
-		if (temp != proc->last_outf)
+		if (temp != proc->last_inf)
 		{
 			if (temp->keyword != NULL && !unlink_tmp(NULL))
 				return (false);
 			else if (close(tmp.fd) < 0)
 				return (err_handler(temp->content));
 		}
+		else
+			proc->last_in = tmp;
 		temp = temp->next;
 	}
-	proc->last_in = tmp;
 	clear_env_list(&proc->infiles);
 	return (true);
 }
@@ -75,6 +83,7 @@ bool	open_infiles(t_process *proc)
  * =>	Depending on the keyword open the file with O_TRUNC or O_APPEND
  * =>	IF:	It's not the last one => close the fd
  * =>	ELSE: Save the fd in proc->last_out for later
+ * =>	Clear the list after use
 */
 
 bool	open_outfiles(t_process *proc)

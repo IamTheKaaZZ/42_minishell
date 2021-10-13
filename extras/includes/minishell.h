@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 11:06:54 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 12:37:37 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,14 +169,22 @@ void	ft_env(t_minishell *mini);
 void	ft_exit(t_minishell *mini);
 int		executor(char **argv);
 // bool	open_file_as_input(t_file *f, char *filename);
-bool	here_doc_as_input(t_file *tmp, char *limiter);
 
 void	ft_handler(int signal);
 char	**ft_get_path(void);
 char	*get_full_cmd_path(char *command);
 
 /**
- * 4.	ERROR HANDLING + DATA CLEAN
+ * 4.	PROCESSES
+*/
+
+int		create_processes(t_process *proc);
+bool	here_doc_as_input(t_file *tmp, char *limiter);
+bool	open_infiles(t_process *proc);
+bool	open_outfiles(t_process *proc);
+
+/**
+ * 5.	ERROR HANDLING + DATA CLEAN
 */
 
 void	clear_env_list(t_node **env);
