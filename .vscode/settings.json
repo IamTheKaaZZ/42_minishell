@@ -5,6 +5,7 @@
 		"functional": "c",
 		"iterator": "c",
 		"memory": "c",
-		"sstream": "c"
+		"sstream": "c",
+		"minishell.h": "c"
 	}
 }
