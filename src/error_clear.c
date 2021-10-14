@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:27:30 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 15:02:41 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 12:30:03 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,24 @@ void	remove_param(t_node **env, char	*keyword)
  * Modified lst_clear for the project
 */
 
-void	clear_env_list(t_node **env)
+void	clear_list(t_node **head, bool content)
 {
 	t_node	*temp;
 
-	if (!env)
+	if (!head)
 		return ;
-	temp = *env;
-	while (*env != NULL)
+	temp = *head;
+	while (*head != NULL)
 	{
-		ft_strdel(&temp->keyword);
-		ft_strdel(&temp->content);
-		*env = (*env)->next;
+		if (content == true)
+		{
+			ft_strdel(&temp->keyword);
+			ft_strdel(&temp->content);
+		}
+		*head = (*head)->next;
 		free(temp);
 		temp = NULL;
-		temp = *env;
+		temp = *head;
 	}
 }
 /*
@@ -82,7 +85,7 @@ int	ft_clear_data(void)
 {
 	int	i;
 
-	clear_env_list(&g_mini.env);
+	clear_list(&g_mini.env, true);
 	i = -1;
 	if (g_mini.path_var)
 		ft_str_array_del(&g_mini.path_var);

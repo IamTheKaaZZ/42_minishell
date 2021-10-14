@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 10:05:43 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 12:46:12 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 12:31:36 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ bool	open_infiles(t_process *proc)
 			proc->last_in = tmp;
 		temp = temp->next;
 	}
-	clear_env_list(&proc->infiles);
+	clear_list(&proc->infiles, true);
 	return (true);
 }
 
@@ -108,6 +108,6 @@ bool	open_outfiles(t_process *proc)
 		temp = temp->next;
 	}
 	proc->last_out = tmpfd;
-	clear_env_list(&proc->outfiles);
+	clear_list(&proc->outfiles, true);
 	return (true);
 }

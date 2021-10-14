@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 14:51:08 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 12:31:02 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	split_input(t_node **parsed_list, const char *str, t_prbools *b)
 	{
 		if (!parse_quotes_spaces(&str, &len, b))
 		{
-			clear_env_list(parsed_list);
+			clear_list(parsed_list, true);
 			return ;
 		}
 		if ((len == 0 && !str_contains_chars(str, " \'\"")))
@@ -110,7 +110,7 @@ bool	parse_input_line(void)
 	if (!parsed_list)
 		return (false);
 	g_mini.argv = list_to_argv(parsed_list);
-	clear_env_list(&parsed_list);
+	clear_list(&parsed_list, true);
 	if (!g_mini.argv)
 		return (false);
 	i = -1;

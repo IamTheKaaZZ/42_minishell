@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 10:43:13 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 12:27:20 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ int		count_params(t_node *env);
 t_node	*new_node(char *keyword, char *content);
 t_node	*find_tail(t_node *head);
 void	add_to_tail(t_node **env, t_node *new);
+void	add_new_to_tail(t_node **head, char *keyword, char *content);
 void	ft_env_list(char **env);
 char	**get_current_envp(t_node *head);
 
@@ -193,7 +194,7 @@ bool	start_processes(void);
  * 5.	ERROR HANDLING + DATA CLEAN
 */
 
-void	clear_env_list(t_node **env);
+void	clear_list(t_node **head, bool content);
 int		ft_clear_data(void);
 void	ft_error_exit(const char *errmessage);
 bool	err_handler(const char *errmessage);

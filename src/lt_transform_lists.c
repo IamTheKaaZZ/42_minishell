@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:01:22 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 10:27:15 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 12:07:24 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,15 @@ t_node	*new_node(char *keyword, char *content)
 	new->content = content;
 	new->next = NULL;
 	return (new);
+}
+
+/**
+ * Add a new node to the tail of the list
+*/
+
+void	add_new_to_tail(t_node **head, char *keyword, char *content)
+{
+	add_to_tail(head, new_node(keyword, content));
 }
 
 /**

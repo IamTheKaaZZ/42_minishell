@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 10:38:38 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 12:34:57 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static bool	init_exec(t_exec *ex)
 		j = -1;
 		while (ex->proc[i].cmd_argv[++j])
 			printf("[%s], ", ex->proc[i].cmd_argv[j]);
+		printf("\n");
 	}
 	return (true);
 }
