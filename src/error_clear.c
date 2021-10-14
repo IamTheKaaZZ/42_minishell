@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:27:30 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 12:30:03 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 15:42:23 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	remove_param(t_node **env, char	*keyword)
  * Modified lst_clear for the project
 */
 
-void	clear_list(t_node **head, bool content)
+void	clear_list(t_node **head, bool clear)
 {
 	t_node	*temp;
 
@@ -62,7 +62,7 @@ void	clear_list(t_node **head, bool content)
 	temp = *head;
 	while (*head != NULL)
 	{
-		if (content == true)
+		if (clear == true)
 		{
 			ft_strdel(&temp->keyword);
 			ft_strdel(&temp->content);

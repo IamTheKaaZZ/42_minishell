@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 12:27:20 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 13:56:49 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ bool	start_processes(void);
  * 5.	ERROR HANDLING + DATA CLEAN
 */
 
-void	clear_list(t_node **head, bool content);
+void	clear_list(t_node **head, bool clear);
 int		ft_clear_data(void);
 void	ft_error_exit(const char *errmessage);
 bool	err_handler(const char *errmessage);

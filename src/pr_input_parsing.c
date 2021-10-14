@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 12:31:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 14:12:28 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static bool	special_token(t_node **list, char **token, char **joined)
 		|| ft_strequal(*token, "<") || ft_strequal(*token, "<<")
 		|| ft_strequal(*token, ">") || ft_strequal(*token, ">>"))
 	{
-		add_to_tail(list, new_node(NULL, *joined));
+		if (*joined != NULL)
+			add_to_tail(list, new_node(NULL, *joined));
 		*joined = NULL;
 		add_to_tail(list, new_node(NULL, *token));
 		return (true);

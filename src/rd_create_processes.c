@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 09:51:34 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 12:28:45 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 16:10:40 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,25 @@ static bool	fill_lists(t_process *proc, char **argv, int *i, int *j)
 			return (err_handler("too many processes [Max 100]"));
 	}
 	else if (ft_strequal(argv[*i], "<<"))
-		add_new_to_tail(&proc[*j].infiles, ft_strdup("heredoc"), argv[++*i]);
+	{
+		add_new_to_tail(&proc[*j].infiles, "heredoc", argv[++*i]);
+		printf("found `%s`, added `%s` to infiles\n", argv[*i -1], argv[*i]);
+	}
 	else if (ft_strequal(argv[*i], "<"))
+	{
 		add_new_to_tail(&proc[*j].infiles, NULL, argv[++*i]);
+		printf("found `%s`, added `%s` to infiles\n", argv[*i -1], argv[*i]);
+	}
 	else if (ft_strequal(argv[*i], ">"))
-		add_new_to_tail(&proc[*j].outfiles, ft_strdup("trunc"), argv[++*i]);
+	{
+		add_new_to_tail(&proc[*j].outfiles, "trunc", argv[++*i]);
+		printf("found `%s`, added `%s` to outfiles\n", argv[*i -1], argv[*i]);
+	}
 	else if (ft_strequal(argv[*i], ">>"))
-		add_new_to_tail(&proc[*j].outfiles, ft_strdup("append"), argv[++*i]);
+	{
+		add_new_to_tail(&proc[*j].outfiles, "append", argv[++*i]);
+		printf("found `%s`, added `%s` to oufiles\n", argv[*i -1], argv[*i]);
+	}
 	else
 	{
 		printf("added to cmd_argv: %s\n", argv[*i]);
@@ -83,14 +95,13 @@ static void	order_by_priority(t_node **infiles)
 	files = NULL;
 	temp = *infiles;
 	fill_input_lists(&here_docs, &files, temp);
-	clear_list(infiles, true);
 	temp = files;
 	while (temp != NULL)
 	{
 		add_new_to_tail(&here_docs, temp->keyword, temp->content);
 		temp = temp->next;
 	}
-	clear_list(&files, true);
+	clear_list(&files, false);
 	*infiles = here_docs;
 }
 
@@ -104,8 +115,6 @@ int	create_processes(t_process *proc)
 	j = 0;
 	while (g_mini.argv[++i])
 	{
-		proc[j].last_in.fd = -1;
-		proc[j].last_out = -1;
 		if (!fill_lists(proc, g_mini.argv, &i, &j))
 			return (-1);
 	}
@@ -117,7 +126,7 @@ int	create_processes(t_process *proc)
 		proc[j].last_outf = find_tail(proc[j].outfiles);
 	}
 	proccount = j + 1;
-	while (j--)
+	while (--j >= 0)
 		order_by_priority(&proc[j].infiles);
 	return (proccount);
 }
