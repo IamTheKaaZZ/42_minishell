@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 09:51:34 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 16:10:40 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 17:49:34 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,26 +48,26 @@ static bool	fill_lists(t_process *proc, char **argv, int *i, int *j)
 	else if (ft_strequal(argv[*i], "<<"))
 	{
 		add_new_to_tail(&proc[*j].infiles, "heredoc", argv[++*i]);
-		printf("found `%s`, added `%s` to infiles\n", argv[*i -1], argv[*i]);
+		// printf("found `%s`, added `%s` to infiles\n", argv[*i -1], argv[*i]);
 	}
 	else if (ft_strequal(argv[*i], "<"))
 	{
 		add_new_to_tail(&proc[*j].infiles, NULL, argv[++*i]);
-		printf("found `%s`, added `%s` to infiles\n", argv[*i -1], argv[*i]);
+		// printf("found `%s`, added `%s` to infiles\n", argv[*i -1], argv[*i]);
 	}
 	else if (ft_strequal(argv[*i], ">"))
 	{
 		add_new_to_tail(&proc[*j].outfiles, "trunc", argv[++*i]);
-		printf("found `%s`, added `%s` to outfiles\n", argv[*i -1], argv[*i]);
+		// printf("found `%s`, added `%s` to outfiles\n", argv[*i -1], argv[*i]);
 	}
 	else if (ft_strequal(argv[*i], ">>"))
 	{
 		add_new_to_tail(&proc[*j].outfiles, "append", argv[++*i]);
-		printf("found `%s`, added `%s` to oufiles\n", argv[*i -1], argv[*i]);
+		// printf("found `%s`, added `%s` to oufiles\n", argv[*i -1], argv[*i]);
 	}
 	else
 	{
-		printf("added to cmd_argv: %s\n", argv[*i]);
+		// printf("added to cmd_argv: %s\n", argv[*i]);
 		add_new_to_tail(&proc[*j].command, NULL, argv[*i]);
 	}
 	return (true);
@@ -126,7 +126,8 @@ int	create_processes(t_process *proc)
 		proc[j].last_outf = find_tail(proc[j].outfiles);
 	}
 	proccount = j + 1;
-	while (--j >= 0)
+	j++;
+	while (j--)
 		order_by_priority(&proc[j].infiles);
 	return (proccount);
 }

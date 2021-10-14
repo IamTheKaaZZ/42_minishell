@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 13:56:49 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 17:18:45 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ t_node	*find_tail(t_node *head);
 void	add_to_tail(t_node **env, t_node *new);
 void	add_new_to_tail(t_node **head, char *keyword, char *content);
 void	ft_env_list(char **env);
-char	**get_current_envp(t_node *head);
+char	**get_current_envp(void);
 
 /**
  * 3.	BUILTINS

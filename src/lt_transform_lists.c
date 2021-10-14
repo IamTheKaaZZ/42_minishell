@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:01:22 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 12:07:24 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 17:18:32 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	*get_full_param(t_node *list_item)
  * Convert the current env list into an array of strings for execve
 */
 
-char	**get_current_envp(t_node *head)
+char	**get_current_envp(void)
 {
 	char	**curr_envp;
 	int		n_param;
@@ -39,7 +39,7 @@ char	**get_current_envp(t_node *head)
 	if (!curr_envp)
 		return (NULL);
 	i = -1;
-	temp = head;
+	temp = g_mini.env;
 	while (++i < n_param)
 	{
 		curr_envp[i] = get_full_param(temp);
