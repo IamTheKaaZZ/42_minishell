@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 16:55:36 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 10:43:13 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ typedef struct s_exec
 	int			pipe[2];
 	int			prev_fd;
 	int			wstatus;
-	char		err[100];
 	t_process	proc[100];
 	int			p_count;
 }	t_exec;
@@ -172,7 +171,6 @@ void	ft_unset(t_minishell *mini);
 void	ft_env(t_minishell *mini);
 void	ft_exit(t_minishell *mini);
 int		executor(char **argv);
-// bool	open_file_as_input(t_file *f, char *filename);
 
 void	ft_handler(int signal);
 char	**ft_get_path(void);
@@ -186,6 +184,10 @@ int		create_processes(t_process *proc);
 bool	here_doc_as_input(t_file *tmp, char *limiter);
 bool	open_infiles(t_process *proc);
 bool	open_outfiles(t_process *proc);
+void	close_pipe(int *pipe);
+bool	open_pipe(int *fd);
+char	*builtin_or_execve(char *command);
+bool	start_processes(void);
 
 /**
  * 5.	ERROR HANDLING + DATA CLEAN

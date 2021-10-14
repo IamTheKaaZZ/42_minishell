@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 09:51:34 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 16:54:29 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 10:42:37 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,29 @@
  * 			=> echo hello > f1 > f2 >> f3 => same but f3 gets appended each time
 */
 
-static void	fill_lists(t_process *proc, char **argv, int *i, int *j)
+static bool	fill_lists(t_process *proc, char **argv, int *i, int *j)
 {
-	if (ft_strequal(argv[*i], "|")) //save the last in and out
+	if (ft_strequal(argv[*i], "|"))
 	{
 		proc[*j].cmd_argv = list_to_argv(proc[*j].command);
 		clear_env_list(&proc[*j].command);
 		proc[*j].last_inf = find_tail(proc[*j].infiles);
 		proc[*j].last_outf = find_tail(proc[*j].outfiles);
-		(*j)++; //add a hardcap (j > 99 => ERROR too many processes)
+		(*j)++;
+		if (*j > 99)
+			return (err_handler("too many processes [Max 100]"));
 	}
 	else if (ft_strequal(argv[*i], "<<"))
-		add_to_tail(&proc[*j].infiles, new_node("heredoc", argv[++*i]));
+		add_to_tail(&proc[*j].infiles, new_node(ft_strdup("heredoc"), argv[++*i]));
 	else if (ft_strequal(argv[*i], "<"))
 		add_to_tail(&proc[*j].infiles, new_node(NULL, argv[++*i]));
 	else if (ft_strequal(argv[*i], ">"))
-		add_to_tail(&proc[*j].outfiles, new_node("trunc", argv[++*i]));
+		add_to_tail(&proc[*j].outfiles, new_node(ft_strdup("trunc"), argv[++*i]));
 	else if (ft_strequal(argv[*i], ">>"))
-		add_to_tail(&proc[*j].outfiles, new_node("append", argv[++*i]));
+		add_to_tail(&proc[*j].outfiles, new_node(ft_strdup("append"), argv[++*i]));
 	else
 		add_to_tail(&proc[*j].command, new_node(NULL, argv[*i]));
+	return (true);
 }
 
 static void	fill_input_lists(t_node **here_docs, t_node **files, t_node *temp)
@@ -97,7 +100,12 @@ int	create_processes(t_process *proc)
 	i = -1;
 	j = 0;
 	while (g_mini.argv[++i])
-		fill_lists(proc, g_mini.argv, &i, &j);
+	{
+		proc[j].last_in.fd = -1;
+		proc[j].last_out = -1;
+		if (!fill_lists(proc, g_mini.argv, &i, &j))
+			return (-1);
+	}
 	proccount = j + 1;
 	while (j--)
 		order_by_priority(&proc[j].infiles);

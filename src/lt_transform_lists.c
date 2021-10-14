@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:01:22 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 15:08:40 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/14 10:27:15 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	**list_to_argv(t_node *head)
 	n_param = count_params(head);
 	argv = (char **)ft_calloc(n_param + 1, sizeof(char *));
 	if (!argv)
-		return (NULL);
+		return ((void *)err_handler("malloc"));
 	i = -1;
 	temp = head;
 	while (++i < n_param)
