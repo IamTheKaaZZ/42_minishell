@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/08 11:05:24 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 16:55:36 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,17 @@ typedef struct s_file
 	struct stat	stats;
 }	t_file;
 
-typedef struct s_job
+typedef struct s_process
 {
-	t_node	*head;
-	t_file	in[1024];
-	t_file	out_fd[1024];
-	int		tmp_fd;
-	char	*limiter;
-	bool	pipe;
-}	t_job;
+	t_node	*command;
+	t_node	*infiles;
+	t_node	*outfiles;
+	t_node	*last_inf;
+	t_node	*last_outf;
+	t_file	last_in;
+	int		last_out;
+	char	**cmd_argv;
+}	t_process;
 
 typedef struct s_exec
 {
@@ -82,18 +84,16 @@ typedef struct s_exec
 	int			pipe[2];
 	int			prev_fd;
 	int			wstatus;
-	// t_file		in;
-	// int			out[1024];
-	// t_file		tmp;
-	// char		*limiter;
 	char		err[100];
-	t_job		jobs[100];
+	t_process	proc[100];
+	int			p_count;
 }	t_exec;
 
 typedef struct s_expand
 {
 	size_t	i;
 	size_t	len;
+	char	*exit_code;
 	char	*prefix;
 	char	*to_expand;
 	char	*expanded;
@@ -101,22 +101,22 @@ typedef struct s_expand
 	char	*interpreted;
 }	t_expand;
 
+typedef struct s_prbools
+{
+	bool	sqoute;
+	bool	dquote;
+	bool	no_quote;
+	bool	space_found;
+}	t_prbools;
+
 typedef struct s_parse
 {
 	size_t		start;
 	size_t		end;
 	size_t		*len;
-	bool		*dqu;
-	int			*space_found;
 	const char	**str;
+	t_prbools	*bools;
 }	t_parse;
-
-typedef struct s_prbools
-{
-	bool	dquote;
-	bool	no_quote;
-	bool	space_found;
-}	t_prbools;
 
 /*
 *	GLOBAL VAR
@@ -135,10 +135,15 @@ t_minishell	g_mini;
 bool	parse_input_line(void);
 bool	parse_quotes_spaces(char const **str, size_t *len, t_prbools *b);
 char	**list_to_argv(t_node *head);
-char	*process_token(char const *str, size_t *len, bool *dq, bool *noq);
+char	*process_token(char const *str, size_t *len, t_prbools *b);
+void	expand_and_join(t_expand *exp, char **str);
+void	handle_escape_chars(t_expand *exp, char **str, t_prbools *b);
 size_t	strchr_index(const char *str, int c);
 bool	str_contains_chars(const char *str, char *charset);
 bool	char_before_others(const char *str, char c, char *charset);
+bool	charset_before_other(const char *str, char *charset, char *other);
+void	get_next_str_len(t_parse *p, char c);
+void	split_redirections(t_parse *p);
 
 /**
  * 2.	LIST FUNCTIONS
@@ -148,7 +153,8 @@ t_node	*new_env_param(char **param);
 t_node	*find_param(t_node **env, char *keyword);
 void	remove_param(t_node **env, char	*keyword);
 int		count_params(t_node *env);
-t_node	*new_node(char *content);
+t_node	*new_node(char *keyword, char *content);
+t_node	*find_tail(t_node *head);
 void	add_to_tail(t_node **env, t_node *new);
 void	ft_env_list(char **env);
 char	**get_current_envp(t_node *head);
@@ -166,21 +172,29 @@ void	ft_unset(t_minishell *mini);
 void	ft_env(t_minishell *mini);
 void	ft_exit(t_minishell *mini);
 int		executor(char **argv);
-int		open_file_as_input(t_job *j, char *filename, int i);
-int		here_doc_as_input(t_job *j);
+// bool	open_file_as_input(t_file *f, char *filename);
 
 void	ft_handler(int signal);
 char	**ft_get_path(void);
 char	*get_full_cmd_path(char *command);
 
 /**
- * 4.	ERROR HANDLING + DATA CLEAN
+ * 4.	PROCESSES
+*/
+
+int		create_processes(t_process *proc);
+bool	here_doc_as_input(t_file *tmp, char *limiter);
+bool	open_infiles(t_process *proc);
+bool	open_outfiles(t_process *proc);
+
+/**
+ * 5.	ERROR HANDLING + DATA CLEAN
 */
 
 void	clear_env_list(t_node **env);
 int		ft_clear_data(void);
 void	ft_error_exit(const char *errmessage);
-int		err_handler(const char *errmessage);
+bool	err_handler(const char *errmessage);
 bool	syntax_error_check(char **argv, char *err, int i);
 bool	unlink_tmp(char *error);
 

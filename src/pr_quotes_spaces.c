@@ -6,40 +6,19 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:32:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/08 11:04:59 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 13:25:47 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/includes/minishell.h"
-
-/*
-**	Iteratively finds the next string and corresponding lenght*
-**	Every time this gets called.
-*/
-
-static void	get_next_str_len(const char **str, size_t *len, char c, bool *noq)
-{
-	size_t	i;
-
-	*len = 0;
-	i = 0;
-	while (**str && **str == c)
-		(*str)++;
-	while ((*str)[i])
-	{
-		if ((*str)[i] == c)
-			return ;
-		(*len)++;
-		i++;
-	}
-	*noq = true;
-}
 
 static bool	find_quote_str(t_parse *p, int *sq, int *dq, char quote)
 {
 	p->start = strchr_index(*(p->str), quote);
 	if ((!*dq && p->start > 0) || (!*sq && p->start > 0))
 	{
+		if (!*dq && !*sq)
+			p->bools->no_quote = true;
 		*p->len = p->start;
 		return (true);
 	}
@@ -52,7 +31,7 @@ static bool	find_quote_str(t_parse *p, int *sq, int *dq, char quote)
 	*p->len = p->end - p->start;
 	if (quote == '\"')
 	{
-		*p->dqu = true;
+		p->bools->dquote = true;
 		*dq = 1;
 	}
 	else if (quote == '\'')
@@ -60,17 +39,14 @@ static bool	find_quote_str(t_parse *p, int *sq, int *dq, char quote)
 	return (true);
 }
 
-static void	init_parse(t_parse *p, size_t *len, bool *dqu, const char **str)
+static void	init_parse(t_parse *p, size_t *len, t_prbools *b, const char **str)
 {
-	static int	space_found;
-
 	p->start = 0;
 	p->end = 0;
 	p->len = len;
-	p->dqu = dqu;
-	p->space_found = &space_found;
 	p->str = str;
-	*p->str += *p->len;
+	p->bools = b;
+	p->bools->space_found = false;
 	*p->len = 0;
 }
 
@@ -87,7 +63,10 @@ static void	skip_spaces_quotes(t_parse *p, int *dq, int *sq)
 		*sq = 0;
 	}
 	while (**(p->str) && **(p->str) == ' ')
+	{
+		p->bools->space_found = true;
 		(*(p->str))++;
+	}
 }
 
 /**
@@ -101,10 +80,15 @@ bool	parse_quotes_spaces(char const **str, size_t *len, t_prbools *b)
 	static int	sq;
 	static int	dq;
 
-	init_parse(&p, len, dqu, str);
+	init_parse(&p, len, b, str);
 	skip_spaces_quotes(&p, &dq, &sq);
-	if (char_before_others(*str, ' ', "\"\'"))
-		get_next_str_len(p.str, p.len, ' ', noq);
+	if (charset_before_other(*str, " <>|", "\"\'"))
+	{
+		if (char_before_others(*str, ' ', "<>|"))
+			get_next_str_len(&p, ' ');
+		else
+			split_redirections(&p);
+	}
 	else if (char_before_others(*str, '\"', "\'"))
 	{
 		if (!find_quote_str(&p, &sq, &dq, '\"'))

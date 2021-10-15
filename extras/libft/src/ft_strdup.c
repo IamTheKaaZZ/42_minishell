@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/10 15:07:45 by bcosters          #+#    #+#             */
-/*   Updated: 2021/04/08 17:00:59 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/11 14:41:02 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*ft_strdup(const char *s)
 	size_t	size;
 	char	*dup;
 
+	if (!s)
+		return (NULL);
 	size = ft_strlen(s) + 1;
 	dup = (char *)malloc(size * sizeof(char));
 	if (!(dup))

@@ -6,11 +6,63 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 10:12:04 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/08 11:05:46 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/13 14:51:08 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/includes/minishell.h"
+
+static bool	special_token(t_node **list, char **token, char **joined)
+{
+	if (ft_strequal(*token, "|")
+		|| ft_strequal(*token, "<") || ft_strequal(*token, "<<")
+		|| ft_strequal(*token, ">") || ft_strequal(*token, ">>"))
+	{
+		add_to_tail(list, new_node(NULL, *joined));
+		*joined = NULL;
+		add_to_tail(list, new_node(NULL, *token));
+		return (true);
+	}
+	return (false);
+}
+
+static void	combine_args(t_node **list, char **token, char **joined, bool sp)
+{
+	char	*temp;
+
+	if (special_token(list, token, joined))
+		return ;
+	if (sp == false)
+	{
+		temp = *joined;
+		*joined = ft_strjoin(temp, *token);
+		ft_strdel(&temp);
+		ft_strdel(token);
+	}
+	else if (sp == true)
+	{
+		if (*joined != NULL)
+		{
+			add_to_tail(list, new_node(NULL, *joined));
+			*joined = NULL;
+		}
+		temp = *joined;
+		*joined = ft_strjoin(temp, *token);
+		ft_strdel(&temp);
+		ft_strdel(token);
+	}
+}
+
+static bool	init_split(const char *str, size_t *len, char **joined)
+{
+	if (!str)
+		return (false);
+	*len = 0;
+	*joined = NULL;
+	while (*str && *str == ' ')
+		str++;
+	return (true);
+}
 
 /*
  * Handle cases:
@@ -22,13 +74,13 @@ void	split_input(t_node **parsed_list, const char *str, t_prbools *b)
 {
 	size_t	len;
 	char	*token;
+	char	*joined;
 
-	if (!str)
+	if (!init_split(str, &len, &joined))
 		return ;
-	len = 0;
 	while (*str)
 	{
-		if (!parse_quotes_spaces(&str, &len, dq, noq))
+		if (!parse_quotes_spaces(&str, &len, b))
 		{
 			clear_env_list(parsed_list);
 			return ;
@@ -37,9 +89,12 @@ void	split_input(t_node **parsed_list, const char *str, t_prbools *b)
 			len = ft_strlen(str);
 		if (!*str)
 			break ;
-		token = process_token(str, &len, dq, noq);
-		add_to_tail(parsed_list, new_node(token));
+		token = process_token(str, &len, b);
+		combine_args(parsed_list, &token, &joined, b->space_found);
+		str += len;
 	}
+	if (joined != NULL)
+		add_to_tail(parsed_list, new_node(NULL, joined));
 }
 
 bool	parse_input_line(void)
@@ -51,7 +106,7 @@ bool	parse_input_line(void)
 
 	parsed_list = NULL;
 	ft_bzero(&bools, sizeof(t_prbools));
-	split_input(&parsed_list, g_mini.input, &dquote, &no_quote);
+	split_input(&parsed_list, g_mini.input, &bools);
 	if (!parsed_list)
 		return (false);
 	g_mini.argv = list_to_argv(parsed_list);
