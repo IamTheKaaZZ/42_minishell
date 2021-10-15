@@ -41,7 +41,7 @@ static void	fill_lists(t_process *proc, char **argv, int *i, int *j)
 		clear_env_list(&proc[*j].command);
 		proc[*j].last_inf = find_tail(proc[*j].infiles);
 		proc[*j].last_outf = find_tail(proc[*j].outfiles);
-		(*j)++;
+		(*j)++; //add a hardcap (j > 99 => ERROR too many processes)
 	}
 	else if (ft_strequal(argv[*i], "<<"))
 		add_to_tail(&proc[*j].infiles, new_node("heredoc", argv[++*i]));

@@ -86,6 +86,7 @@ typedef struct s_exec
 	int			wstatus;
 	char		err[100];
 	t_process	proc[100];
+	int			p_count;
 }	t_exec;
 
 typedef struct s_expand

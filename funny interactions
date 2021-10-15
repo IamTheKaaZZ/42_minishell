@@ -1,0 +1,15 @@
+echo lol > "funny interactions" l l l l
+=> echo lol l l l l > "funny interactions"
+lol l l l l
+
+echo lol > l l l l l | cat << EOF
+=>
+pipe heredoc> lol
+pipe heredoc> EOF
+"lol l l l l" into file 'l'
+"lol" printed
+
+export var=r=2
+=> KEYWORD: var
+=> CONTENT: "r=2"
+-> SPLIT N THE FIRST '='
