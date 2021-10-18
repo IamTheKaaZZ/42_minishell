@@ -38,7 +38,7 @@
 
 // 	ex->pid = 0;
 // 	if (ex->curr_envp)
-// 		ft_str_array_del(&ex->curr_envp);
+		// ft_str_array_del(&ex->curr_envp);
 // 	close_pipe(ex->pipe);
 // 	close(ex->prev_fd);
 // 	ex->wstatus = 0;

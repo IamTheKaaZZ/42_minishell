@@ -33,7 +33,7 @@ void	ft_handler(int sig)
 	}
 	if (sig == SIGQUIT)
 	{
-		//update prompt with cwd ?? 
+		//update prompt with cwd ??
 		// write(1, g_mini.prompt, ft_strlen(g_mini.prompt));
 		rl_on_new_line();
 		rl_redisplay();
@@ -41,29 +41,26 @@ void	ft_handler(int sig)
 	return ;
 }
 
-void	functions(void)
+void	functions(t_process	proc)
 /**
  *  Need iterate between args
  * void * preferably kept in struct to save lines and more easibly manageable
  */
 {
-	if (ft_strequal(*g_mini.argv, "echo"))
-		ft_echo();
-	else if (ft_strequal(*g_mini.argv, "env"))
-		ft_env();
-	else if (ft_strequal(*g_mini.argv, "pwd"))
-		ft_pwd();
-	else if (ft_strequal(*g_mini.argv, "cd"))
-		ft_cd();
-	else if (ft_strequal(*g_mini.argv, "exit"))
-		ft_exit(-1);
-	else if (ft_strequal(*g_mini.argv, "unset"))
-		ft_unset();
-	else if (ft_strequal(*g_mini.argv, "export"))
-		ft_export();
-	
-	// else
-	// 	executor(g_mini.argv);
+	if (ft_strequal(proc.command, "echo"))
+		ft_echo(proc);
+	else if (ft_strequal(proc.command, "env"))
+		ft_env(proc);
+	else if (ft_strequal(proc.command, "pwd"))
+		ft_pwd(proc);
+	else if (ft_strequal(proc.command, "cd"))
+		ft_cd(proc);
+	else if (ft_strequal(proc.command, "exit"))
+		ft_exit(proc, -1);
+	else if (ft_strequal(proc.command, "unset"))
+		ft_unset(proc);
+	else if (ft_strequal(proc.command, "export"))
+		ft_export(proc);
 }
 
 /*

@@ -164,16 +164,15 @@ char	**get_current_envp(t_node *head);
 /**
  * 3.	BUILTINS
 */
-/*bt_ft_env.c*/
-void	ft_env(void);
-void	ft_unset(void);
-void	ft_export(void);
-/*bt_ft_other.c*/
-void	ft_cd(void);
-void	ft_pwd(void);
-void	ft_echo(void);
-void	ft_exit(int i);
-int		executor(char **argv);
+void	functions(t_process	proc);
+void	ft_env(t_process proc);
+void	ft_unset(t_process proc);
+void	ft_export(t_process proc);
+void	ft_cd(t_process proc);
+void	ft_pwd(t_process proc);
+void	ft_echo(t_process proc);
+void	ft_exit(t_process proc, int i);
+// int		executor(char **argv);
 // bool	open_file_as_input(t_file *f, char *filename);
 
 void	ft_handler(int signal);

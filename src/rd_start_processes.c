@@ -20,7 +20,7 @@ static int	init_exec(t_exec *ex, char **argv)
 	ex->pipe[READ_END] = -1;
 	ex->pipe[WRITE_END] = -1;
 	ex->prev_fd = -1;
-	//create processes
+	create_processes(ex.proc);
 	return (EXIT_SUCCESS);
 }
 
@@ -67,9 +67,40 @@ char	*builtin_or_execve(char *command)
 	return (NULL);
 }
 
+static void	ft_exec(t_process proc)
+{
+	// ex.pid = fork();
+	// if (ex.pid == -1)
+	// 	err_handler
+	// if (ex.pid == 0)
+	// {
+	// 	// child process
+
+	// }
+	// else
+	// {
+	// 	// parent process
+	// }
+	/**
+	 * Create child process
+	 * execve (1st process argument)
+	 */
+}
+
 bool	start_processes(void)
 {
 	t_exec	ex;
+	int		i;
 
+	i = -1;
+	init_exec(&ex, g_mini.argv);
+	while (ex.proc[i])
+	{
+		// error state and return value ??
+		if (builtin_or_execve(ex.proc->command))
+			functions(ex.proc);
+		else
+			ft_exec(ex.proc[i]);
+	}
 
 }
