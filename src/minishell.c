@@ -41,25 +41,25 @@ void	ft_handler(int sig)
 	return ;
 }
 
-void	functions(t_process	proc)
+void	functions(t_process	*proc)
 /**
  *  Need iterate between args
  * void * preferably kept in struct to save lines and more easibly manageable
  */
 {
-	if (ft_strequal(proc.command, "echo"))
+	if (ft_strequal(proc->command->content, "echo"))
 		ft_echo(proc);
-	else if (ft_strequal(proc.command, "env"))
+	else if (ft_strequal(proc->command->content, "env"))
 		ft_env(proc);
-	else if (ft_strequal(proc.command, "pwd"))
+	else if (ft_strequal(proc->command->content, "pwd"))
 		ft_pwd(proc);
-	else if (ft_strequal(proc.command, "cd"))
+	else if (ft_strequal(proc->command->content, "cd"))
 		ft_cd(proc);
-	else if (ft_strequal(proc.command, "exit"))
+	else if (ft_strequal(proc->command->content, "exit"))
 		ft_exit(proc, -1);
-	else if (ft_strequal(proc.command, "unset"))
+	else if (ft_strequal(proc->command->content, "unset"))
 		ft_unset(proc);
-	else if (ft_strequal(proc.command, "export"))
+	else if (ft_strequal(proc->command->content, "export"))
 		ft_export(proc);
 }
 
@@ -122,10 +122,12 @@ int	main(int argc, char **argv, char **env)
 		g_mini.input = rl_gnl(&g_mini);
 		if (!parse_input_line())
 			continue ;
-		functions();
+		// functions();
 		// int i = -1;
 		// while (g_mini.argv[++i])
 		// 	printf("[%s]\n", g_mini.argv[i]);
+
+		start_processes();
 		ft_str_array_del(&g_mini.argv);
 	}
 }

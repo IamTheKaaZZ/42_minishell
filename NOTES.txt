@@ -20,6 +20,65 @@ int
 -	closedir(DIR *dirp);
 error handling!!
 
+--------------->[Ben's]<----------------------
+bool	start_processes(void)
+{
+	t_exec	ex;
+	int		i;
+
+	if (!init_exec(&ex))
+		return (false);
+	i = ex.p_count;
+	while (i--)
+	{
+		if (!open_infiles(&ex.proc[i]))
+			return (false);
+		if (!open_outfiles(&ex.proc[i]))
+			return (false);
+		if (!open_pipe(ex.pipe))
+			return (err_handler("pipe"));
+		ex.pid = fork();
+		if (ex.pid < 0)
+			return (err_handler("fork"));
+		if (ex.pid == 0) //CHILD
+		{
+			if (ex.proc[i].last_out > 0)
+			{
+				dup2(ex.proc[i].last_out, STDOUT_FILENO);
+				close(ex.proc[i].last_out);
+			}
+			else
+				dup2(ex.prev_fd, STDOUT_FILENO);
+			if (ex.proc[i].last_in.fd > 0)
+			{
+				dup2(ex.proc[i].last_in.fd, STDIN_FILENO);
+				close(ex.proc[i].last_in.fd);
+			}
+			else
+				dup2(ex.pipe[READ_END], STDIN_FILENO);
+			close_pipe(ex.pipe);
+			//check if it's a builtin
+			ex.curr_envp = get_current_envp();
+			if (execve(get_full_cmd_path(ex.proc[i].cmd_argv[0]), ex.proc[i].cmd_argv, ex.curr_envp) < 0)
+				return (err_handler("execve"));
+		} //PARENT
+		reset_exec(&ex);
+	}
+	close_pipe(ex.pipe);
+	while (wait(&ex.wstatus) > 0)
+	{
+		if (WIFEXITED(ex.wstatus) != true)
+		{
+			if (WEXITSTATUS(ex.wstatus) != EXIT_SUCCESS)
+				err_handler("wait");
+		}
+	}
+	return (true);
+}
+--------------->[Ben's]<----------------------
+
+
+
 -------------->[Tony's stuff]<---------------
 
 .h file:

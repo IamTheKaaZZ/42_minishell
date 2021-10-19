@@ -12,12 +12,12 @@
 
 #include "../extras/includes/minishell.h"
 
-void	ft_env(t_process proc)
+void	ft_env(t_process *proc)
 {
 	t_node	*head;
 
 	head = g_mini.env;
-	if (proc.cmd_argv[1])
+	if (proc->command->next)
 		err_handler("No such file or directory");
 	while (head)
 	{
@@ -29,7 +29,7 @@ void	ft_env(t_process proc)
 	g_mini.exit_code = 0;
 }
 
-void	ft_export(t_process proc)
+void	ft_export(t_process *proc)
 /**
  * Where are we keeping "not exported env vars"?
 */
@@ -37,13 +37,13 @@ void	ft_export(t_process proc)
 	char	**split_param;
 	t_node	*new;
 
-	if (!proc.cmd_argv[1])
+	if (!proc->command->next)
 		return ;
 	/*TMP*/
-	if (!ft_strchr(proc.cmd_argv[1], '='))
+	if (!ft_strchr(proc->command->next->content, '='))
 		return ;
 	/*TMP*/
-	split_param = ft_split(g_mini.argv[1], '=');
+	split_param = ft_split(proc->command->next->content, '=');
 	new = new_env_param(split_param);
 	if (!new)
 	{
@@ -56,12 +56,12 @@ void	ft_export(t_process proc)
 	g_mini.exit_code = 0;
 }
 
-void	ft_unset(t_process proc)
+void	ft_unset(t_process *proc)
 {
 	t_node	*param;
 	t_node	*tmp;
 
-	param = find_param(&g_mini.env, proc.cmd_argv[1]);
+	param = find_param(&g_mini.env, proc->command->next->content);
 	if (!param)
 		return ;
 	tmp = g_mini.env;

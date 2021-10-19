@@ -164,14 +164,14 @@ char	**get_current_envp(t_node *head);
 /**
  * 3.	BUILTINS
 */
-void	functions(t_process	proc);
-void	ft_env(t_process proc);
-void	ft_unset(t_process proc);
-void	ft_export(t_process proc);
-void	ft_cd(t_process proc);
-void	ft_pwd(t_process proc);
-void	ft_echo(t_process proc);
-void	ft_exit(t_process proc, int i);
+void	functions(t_process	*proc);
+void	ft_env(t_process *proc);
+void	ft_unset(t_process *proc);
+void	ft_export(t_process *proc);
+void	ft_cd(t_process *proc);
+void	ft_pwd(t_process *proc);
+void	ft_echo(t_process *proc);
+void	ft_exit(t_process *proc, int i);
 // int		executor(char **argv);
 // bool	open_file_as_input(t_file *f, char *filename);
 
@@ -182,6 +182,9 @@ char	*get_full_cmd_path(char *command);
 /**
  * 4.	PROCESSES
 */
+
+bool	start_processes(void);
+
 
 int		create_processes(t_process *proc);
 bool	here_doc_as_input(t_file *tmp, char *limiter);

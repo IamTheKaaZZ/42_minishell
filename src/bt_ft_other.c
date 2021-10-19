@@ -12,7 +12,7 @@
 
 #include "../extras/includes/minishell.h"
 
-void	ft_echo(t_process proc)
+void	ft_echo(t_process *proc)
 /*	Rought-cut
 
 	expanding variables ??
@@ -21,31 +21,50 @@ void	ft_echo(t_process proc)
 {
 	int		i;
 	bool	nl;
+	t_node	*tmp;
 
 	nl = 1;
 	i = 1;
-	if (proc.cmd_argv[i])
+	tmp = proc->command->next;
+	if (tmp)
 	{
-		if (*proc.cmd_argv[i] && !ft_strcmp(proc.cmd_argv[i], "-n"))
+		if (!ft_strcmp(tmp->content, "-n"))
 		{
 			nl = 0;
-			i++;
+			tmp = tmp->next;
 		}
-		while (proc.cmd_argv[i])
+		while (tmp)
 		{
-			if ((nl && i > 1) || (!nl && i > 2)) // terrible
+			ft_putstr_fd(tmp->content, 1);
+			if (tmp->next)
 				ft_putchar_fd(' ', 1);
-			if (str_contains_chars(proc.cmd_argv[i], "|<>&")) // for now
-				return ;
-			ft_putstr_fd(proc.cmd_argv[i++], 1);
+			tmp = tmp->next;
 		}
 	}
+
+	// if (g_mini.argv[i]) // if followup  to command
+	// {
+	// 	if (*g_mini.argv[i] && !ft_strcmp(g_mini.argv[i], "-n")) // if -n flag
+	// 	{
+	// 		nl = 0;
+	// 		i++;
+	// 	}
+	// 	while (proc.cmd_argv[i])
+	// 	{
+	// 		if ((nl && i > 1) || (!nl && i > 2)) // terrible
+	// 			ft_putchar_fd(' ', 1);
+	// 		if (str_contains_chars(proc.cmd_argv[i], "|<>&")) // for now
+	// 			return ;
+	// 		ft_putstr_fd(proc.cmd_argv[i++], 1);
+	// 	}
+	// }
+	
 	if (nl)
 		write(1, "\n", 1);
 	g_mini.exit_code = 0;
 }
 
-void	ft_cd(t_process proc)
+void	ft_cd(t_process *proc)
 /** WAITING FOR ~ TO BE DEALT WITH
  * if starting with '~' look for $HOME
 	change $PWD*/
@@ -55,43 +74,32 @@ void	ft_cd(t_process proc)
 	char	**env_var;
 
 	env_var = NULL;
-	path = proc.cmd_argv[1];
+	path = proc->command->next->content;
 	if (!path)
 		return ;
 	ft_bzero(err, 100);
-	/*PROTO*/
-	if (*path == '~')
-	{
-		if (chdir(find_param(&g_mini.env, "HOME")->content))
-		{
-			err_handler("chdir find_param err!!!!!!!!");
-			return ;
-		}
-		path++;
-	}
-	/*PROTO*/
 	if (path && chdir(path) == -1)
 	{
 		ft_strlcat(err, "cd: ", 5);
-		ft_strlcat(err, proc.cmd_argv[1], ft_strlen(proc.cmd_argv[1]));
+		ft_strlcat(err, proc->cmd_argv[1], ft_strlen(proc->cmd_argv[1]));
 		err_handler(err);
 		return ;
 	}
 	path = getcwd(NULL, 0);
 	env_var = &find_param(&g_mini.env, "PWD")->content;
-	if (!path || !env_var)
+	if (!path || !env_var) // ...
 	{
 		ft_strlcat(err, "cd: ", 5);
-		ft_strlcat(err, proc.cmd_argv[1], ft_strlen(proc.cmd_argv[1]));
+		ft_strlcat(err, proc->cmd_argv[1], ft_strlen(proc->cmd_argv[1]));
 		err_handler(err);
 		return ;
 	}
 	free(*env_var);
 	*env_var = path;
-	g_mini.exit_code = 0;
+	g_mini.exit_code = 0; // ...
 }
 
-void	ft_pwd(t_process proc)
+void	ft_pwd(t_process *proc)
 /*char *
   getcwd(char *buf, size_t size);
 */
@@ -99,7 +107,7 @@ void	ft_pwd(t_process proc)
 	char	*buf;
 
 	buf = NULL;
-	if (proc.cmd_argv[1] && !ft_strchr("<>|", *proc.cmd_argv[1])) //<--[!?]
+	if (proc->command->next)
 	{
 		g_mini.exit_code = 2;
 		err_handler("pwd: too many arguments");
@@ -119,29 +127,29 @@ void	ft_pwd(t_process proc)
 	g_mini.exit_code = 0;
 }
 
-void	ft_exit(t_process proc, int i)
+void	ft_exit(t_process *proc, int i)
 {
 	g_mini.exit_code = i;
-	if (proc.cmd_argv[1])
+	if (proc->command->next)
 	{
-		if (proc.cmd_argv[2])
+		if (proc->command->next->next)
 		{
 			g_mini.exit_code = 2;
 			err_handler("exit: too many arguments");
 			return ;
 		}
-		while (proc.cmd_argv[1][++i])
+		while (proc->command->next->content[++i])
 		{
-			if (proc.cmd_argv[1][i] == '+')
+			if (proc->command->next->content[i] == '+')
 				continue ;
-			if (!ft_isdigit(proc.cmd_argv[1][i]))
+			if (!ft_isdigit(proc->command->next->content[i]))
 			{
 				err_handler("exit: numeric argument required");
 				g_mini.exit_code = 255;
 			}
 		}
 		if (!g_mini.exit_code)
-			g_mini.exit_code = ft_atoi(proc.cmd_argv[1]);
+			g_mini.exit_code = ft_atoi(proc->command->next->content);
 	}
 	ft_putstr_fd("exit\n", 1);
 	exit(g_mini.exit_code + ft_clear_data());
