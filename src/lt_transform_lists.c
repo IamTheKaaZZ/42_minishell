@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:01:22 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 17:18:32 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/20 10:59:56 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	**get_current_envp(void)
 	int		i;
 	t_node	*temp;
 
-	n_param = count_params(g_mini.env) + 1;
+	n_param = count_params(g_mini.env);
 	curr_envp = (char **)ft_calloc(n_param, sizeof(char *));
 	if (!curr_envp)
 		return (NULL);

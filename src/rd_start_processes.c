@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 17:46:54 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/20 12:17:57 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ static void	reset_exec(t_exec *ex)
 		close(ex->prev_fd);
 	ex->prev_fd = ex->pipe[WRITE_END];
 	close(ex->pipe[READ_END]);
+	// if (ex->proc[i].last_in.fd > 0)
+	// 	close(ex->proc[i].last_in.fd);
+	// if (ex->proc[i].last_out > 0)
+	// 	close(ex->proc[i].last_out);
 }
 
 /**
@@ -88,10 +92,6 @@ bool	start_processes(void)
 	i = ex.p_count;
 	while (i--)
 	{
-		if (!open_infiles(&ex.proc[i]))
-			return (false);
-		if (!open_outfiles(&ex.proc[i]))
-			return (false);
 		if (!open_pipe(ex.pipe))
 			return (err_handler("pipe"));
 		ex.pid = fork();
@@ -99,20 +99,33 @@ bool	start_processes(void)
 			return (err_handler("fork"));
 		if (ex.pid == 0) //CHILD
 		{
+			if (!open_infiles(&ex.proc[i]))
+				return (false);
+			if (!open_outfiles(&ex.proc[i]))
+				return (false);
 			if (ex.proc[i].last_out > 0)
 			{
+				// printf("redirected stdout to output file: %d\n", ex.proc[i].last_out);
 				dup2(ex.proc[i].last_out, STDOUT_FILENO);
 				close(ex.proc[i].last_out);
 			}
-			else
+			else if (ex.prev_fd != STDOUT_FILENO)
+			{
+				// printf("redirected stdout to pipe\n");
 				dup2(ex.prev_fd, STDOUT_FILENO);
+				close(ex.prev_fd);
+			}
 			if (ex.proc[i].last_in.fd > 0)
 			{
+				printf("redirected stdin to input file: %d\n", ex.proc[i].last_in.fd);
 				dup2(ex.proc[i].last_in.fd, STDIN_FILENO);
 				close(ex.proc[i].last_in.fd);
 			}
-			else
+			else if (i != 0)
+			{
+				// printf("redirected stdin to pipe\n");
 				dup2(ex.pipe[READ_END], STDIN_FILENO);
+			}
 			close_pipe(ex.pipe);
 			//check if it's a builtin
 			ex.curr_envp = get_current_envp();
@@ -121,7 +134,7 @@ bool	start_processes(void)
 		} //PARENT
 		reset_exec(&ex);
 	}
-	close_pipe(ex.pipe);
+	close(ex.pipe[WRITE_END]);
 	while (wait(&ex.wstatus) > 0)
 	{
 		if (WIFEXITED(ex.wstatus) != true)

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 10:05:43 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 15:24:42 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/20 11:39:38 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ static bool	open_file_as_input(t_file *f, char *filename)
 	return (true);
 }
 
-static bool	close_or_delete(t_node *temp, t_file tmp)
+static bool	close_or_delete(t_node *temp, t_node *lastin, t_file tmp)
 {
+	if (temp == lastin)
+		return (true);
 	if (temp->keyword != NULL && !unlink_tmp(NULL))
 		return (false);
 	else if (close(tmp.fd) < 0)
@@ -74,7 +76,7 @@ bool	open_infiles(t_process *proc)
 		}
 		else if (!open_file_as_input(&tmp, temp->content))
 			return (false);
-		if (temp != proc->last_inf && !close_or_delete(temp, tmp))
+		if (!close_or_delete(temp, proc->last_inf, tmp))
 			return (false);
 		else
 			proc->last_in = tmp;
@@ -98,6 +100,7 @@ bool	open_outfiles(t_process *proc)
 	int		tmpfd;
 
 	temp = proc->outfiles;
+	tmpfd = -1;
 	while (temp != NULL)
 	{
 		if (ft_strequal(temp->keyword, "trunc"))
