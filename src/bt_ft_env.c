@@ -29,16 +29,80 @@ void	ft_env(t_process *proc)
 	g_mini.exit_code = 0;
 }
 
+static void	print_list(t_node **list)
+{
+	int	i;
+
+	i = -1;
+	while (list[++i])
+	{
+		ft_putstr("declare -x ");
+		ft_putstr(list[i]->keyword);
+		ft_putstr("=\"");
+		ft_putstr(list[i]->content);
+		ft_putendl("\"");
+	}
+}
+
+// static void	print_line(t_node line)
+// {
+// 	ft_putstr("declare -x ");
+// 	ft_putstr(line.keyword);
+// 	ft_putstr("=\"");
+// 	ft_putstr(line.content);
+// 	ft_putendl("\"");
+// }
+
+static int	list_export(void)
+{
+	t_node	*tmp;
+	t_node	*tmp2;
+	static t_node	*listed[100];
+	static int		i;
+	int		j;
+
+	ft_memset(listed, 0, sizeof(t_node *) * 100);
+	j = 0;
+	while (i++ < count_params(g_mini.env))
+	{
+		tmp2 = g_mini.env;
+		tmp = g_mini.env->next;
+		while (tmp2)
+		{
+			if (ft_strcmp(tmp->keyword, tmp2->keyword) > 0)
+			{
+				j = 0;
+				while (listed[j] && ft_strcmp(tmp2->keyword, listed[j]->))
+				if (!j || j == i)
+					tmp = tmp2;
+			}
+			tmp2 = tmp2->next;
+		}
+		tmp = tmp->next;
+	}
+	print_list(listed);
+		// print_line(*tmp);
+	return (0);
+}
+
 void	ft_export(t_process *proc)
 /**
+ * if $
  * Where are we keeping "not exported env vars"?
+ * if no var given:
+ * 	declare -x FOO="baz" --> in ascii order
+ * 
+ * 
 */
 {
 	char	**split_param;
 	t_node	*new;
 
 	if (!proc->command->next)
+	{
+		g_mini.exit_code = list_export();
 		return ;
+	}
 	/*TMP*/
 	if (!ft_strchr(proc->command->next->content, '='))
 		return ;

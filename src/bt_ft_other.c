@@ -129,7 +129,6 @@ void	ft_pwd(t_process *proc)
 
 void	ft_exit(t_process *proc, int i)
 {
-	g_mini.exit_code = i;
 	if (proc->command->next)
 	{
 		if (proc->command->next->next)

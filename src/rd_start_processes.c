@@ -103,8 +103,8 @@ bool	start_processes(void)
 		// error state and return value ??
 		if (builtin_or_execve(ex.proc->command->content))
 			functions(&ex.proc[0]);
-		else
-			ft_exec(ex.proc[i]);
+		// else
+			// ft_exec(ex.proc[i]);
 	// 		break ;
 	// }
 	return(1);
