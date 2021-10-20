@@ -57,29 +57,19 @@ static int	list_export(void)
 {
 	t_node	*tmp;
 	t_node	*tmp2;
-	static t_node	*listed[100];
-	static int		i;
+	t_node	*listed[100];
+	int		i;
 	int		j;
 
 	ft_memset(listed, 0, sizeof(t_node *) * 100);
-	j = 0;
-	while (i++ < count_params(g_mini.env))
+	i = 0;
+	while (tmp)
 	{
-		tmp2 = g_mini.env;
-		tmp = g_mini.env->next;
-		while (tmp2)
-		{
-			if (ft_strcmp(tmp->keyword, tmp2->keyword) > 0)
-			{
-				j = 0;
-				while (listed[j] && ft_strcmp(tmp2->keyword, listed[j]->))
-				if (!j || j == i)
-					tmp = tmp2;
-			}
-			tmp2 = tmp2->next;
-		}
+		listed[i++] = tmp;
 		tmp = tmp->next;
 	}
+	listed[i] = '\0';
+	
 	print_list(listed);
 		// print_line(*tmp);
 	return (0);
