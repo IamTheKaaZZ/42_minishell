@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 17:18:45 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/20 17:04:52 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_exec
 {
 	pid_t		pid;
 	char		**curr_envp;
+	char		*full_command;
 	int			pipe[2];
 	int			prev_fd;
 	int			wstatus;

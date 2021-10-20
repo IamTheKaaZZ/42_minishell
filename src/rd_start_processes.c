@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/20 12:17:57 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/20 17:09:17 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,7 @@ static bool	init_exec(t_exec *ex)
 	ex->p_count = create_processes(ex->proc);
 	if (ex->p_count == -1)
 		return (false);
-	//DEBUG
-	// int k = -1;
-	// int j;
-	// while (++k < ex->p_count)
-	// {
-	// 	if (!open_infiles(&ex->proc[k]))
-	// 		return (false);
-	// 	if (!open_outfiles(&ex->proc[k]))
-	// 		return (false);
-	// 	printf("Last input: `fd = [%d], path = [%s]`, Last output: fd = [%d]\n", ex->proc[k].last_in.fd, ex->proc[k].last_in.file_path, ex->proc[k].last_out);
-	// 	printf("CMD ARGS: ");
-	// 	j = -1;
-	// 	while (ex->proc[k].cmd_argv[++j])
-	// 		printf("[%s], ", ex->proc[k].cmd_argv[j]);
-	// 	printf("\n");
-	// }
+	unlink(TEMPFILE);
 	return (true);
 }
 
@@ -54,10 +39,6 @@ static void	reset_exec(t_exec *ex)
 		close(ex->prev_fd);
 	ex->prev_fd = ex->pipe[WRITE_END];
 	close(ex->pipe[READ_END]);
-	// if (ex->proc[i].last_in.fd > 0)
-	// 	close(ex->proc[i].last_in.fd);
-	// if (ex->proc[i].last_out > 0)
-	// 	close(ex->proc[i].last_out);
 }
 
 /**
@@ -82,6 +63,49 @@ char	*builtin_or_execve(char *command)
 	return (NULL);
 }
 
+static void	child_redirections(t_exec *ex, t_process *proc, int i)
+{
+	if (proc->last_out > 0)
+	{
+		dup2(proc->last_out, STDOUT_FILENO);
+		close(proc->last_out);
+	}
+	else if (ex->prev_fd != STDOUT_FILENO)
+	{
+		dup2(ex->prev_fd, STDOUT_FILENO);
+		close(ex->prev_fd);
+	}
+	if (proc->last_in.fd > 0)
+	{
+		dup2(proc->last_in.fd, STDIN_FILENO);
+		close(proc->last_in.fd);
+	}
+	else if (i != 0)
+	{
+		dup2(ex->pipe[READ_END], STDIN_FILENO);
+	}
+	close_pipe(ex->pipe);
+}
+
+static bool	check_command(t_exec *ex, t_process *proc)
+{
+	ex->curr_envp = get_current_envp();
+	if (builtin_or_execve(proc->cmd_argv[0]) == NULL)
+	{
+		ex->full_command = get_full_cmd_path(proc->cmd_argv[0]);
+		if (ex->full_command)
+		{
+			if (execve(ex->full_command, proc->cmd_argv, ex->curr_envp) < 0)
+				return (err_handler("execve"));
+		}
+	}
+	else
+	{
+		//call the builtins
+	}
+	return (true);
+}
+
 bool	start_processes(void)
 {
 	t_exec	ex;
@@ -92,6 +116,8 @@ bool	start_processes(void)
 	i = ex.p_count;
 	while (i--)
 	{
+		unlink(TEMPFILE);
+		ft_strdel(&ex.full_command);
 		if (!open_pipe(ex.pipe))
 			return (err_handler("pipe"));
 		ex.pid = fork();
@@ -103,34 +129,9 @@ bool	start_processes(void)
 				return (false);
 			if (!open_outfiles(&ex.proc[i]))
 				return (false);
-			if (ex.proc[i].last_out > 0)
-			{
-				// printf("redirected stdout to output file: %d\n", ex.proc[i].last_out);
-				dup2(ex.proc[i].last_out, STDOUT_FILENO);
-				close(ex.proc[i].last_out);
-			}
-			else if (ex.prev_fd != STDOUT_FILENO)
-			{
-				// printf("redirected stdout to pipe\n");
-				dup2(ex.prev_fd, STDOUT_FILENO);
-				close(ex.prev_fd);
-			}
-			if (ex.proc[i].last_in.fd > 0)
-			{
-				printf("redirected stdin to input file: %d\n", ex.proc[i].last_in.fd);
-				dup2(ex.proc[i].last_in.fd, STDIN_FILENO);
-				close(ex.proc[i].last_in.fd);
-			}
-			else if (i != 0)
-			{
-				// printf("redirected stdin to pipe\n");
-				dup2(ex.pipe[READ_END], STDIN_FILENO);
-			}
-			close_pipe(ex.pipe);
-			//check if it's a builtin
-			ex.curr_envp = get_current_envp();
-			if (execve(get_full_cmd_path(ex.proc[i].cmd_argv[0]), ex.proc[i].cmd_argv, ex.curr_envp) < 0)
-				return (err_handler("execve"));
+			child_redirections(&ex, &ex.proc[i], i);
+			if (!check_command(&ex, &ex.proc[i]))
+				return (false);
 		} //PARENT
 		reset_exec(&ex);
 	}

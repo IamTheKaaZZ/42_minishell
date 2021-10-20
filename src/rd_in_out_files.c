@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 10:05:43 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/20 12:24:14 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/20 16:19:02 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,20 @@ static bool	open_file_as_input(t_file *f, char *filename)
 	return (true);
 }
 
-static bool	close_or_delete(t_node *temp, t_node *lastin, t_file tmp)
+static bool	close_or_delete(t_node *temp, t_node *last, t_file *t, t_file *f)
 {
-	if (temp == lastin)
+	if (ft_strequal(temp->content, last->content))
+	{
+		close(t->fd);
+		*f = *t;
 		return (true);
+	}
 	if (temp->keyword != NULL)
 	{
 		if (!unlink_tmp(NULL))
 			return (false);
 	}
-	else if (close(tmp.fd) < 0)
+	else if (close(t->fd) < 0)
 		return (err_handler(temp->content));
 	return (true);
 }
@@ -67,9 +71,11 @@ bool	open_infiles(t_process *proc)
 {
 	t_node	*temp;
 	t_file	tmp;
+	t_file	final;
 
 	temp = proc->infiles;
 	tmp.fd = -1;
+	final.file_path = NULL;
 	while (temp != NULL)
 	{
 		if (ft_strequal(temp->keyword, "heredoc"))
@@ -79,12 +85,12 @@ bool	open_infiles(t_process *proc)
 		}
 		else if (!open_file_as_input(&tmp, temp->content))
 			return (false);
-		if (!close_or_delete(temp, proc->last_inf, tmp))
+		if (!close_or_delete(temp, proc->last_inf, &tmp, &final))
 			return (false);
-		else
-			proc->last_in = tmp;
 		temp = temp->next;
 	}
+	if (final.file_path != NULL)
+		open_file_as_input(&proc->last_in, final.file_path);
 	clear_list(&proc->infiles, false);
 	return (true);
 }

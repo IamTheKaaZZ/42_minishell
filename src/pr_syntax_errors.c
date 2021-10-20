@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 11:07:45 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 10:29:11 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/20 16:36:30 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,22 @@ static char	*concat_err(char *err, int flag, char *to_add)
 	return (err);
 }
 
+static bool	check_special(char **argv, char *err, int i)
+{
+	int			k;
+	static char	sp_chars[20][5] = {"<", "<<", ">", ">>", "|", "&", "\\", "#",
+		"=", "[", "]", "!", "{", "}", "(", ")", "*", ";"};
+
+	k = -1;
+	while (++k < 6)
+		if (ft_strequal(argv[i + 1], sp_chars[k]) && argv[i + 2] == NULL)
+			return (err_handler(concat_err(err, 1, sp_chars[k])));
+	return (true);
+}
+
 bool	syntax_error_check(char **argv, char *err, int i)
 {
 	int			j;
-	int			k;
 	static char	sp_chars[20][5] = {"<", "<<", ">", ">>", "|", "&", "\\", "#",
 		"=", "[", "]", "!", "{", "}", "(", ")", "*", ";"};
 
@@ -42,11 +54,9 @@ bool	syntax_error_check(char **argv, char *err, int i)
 			{
 				if (argv[i + 1] == NULL)
 					return (err_handler(concat_err(err, 1, "newline")));
-				k = -1;
-				while (++k < 6)
-					if (ft_strequal(argv[i + 1], sp_chars[k]))
-						return (err_handler(concat_err(err, 1, sp_chars[k])));
 			}
+			if (!check_special(argv, err, i))
+				return (false);
 		}
 		else
 			if (ft_strequal(argv[i], sp_chars[j]))
