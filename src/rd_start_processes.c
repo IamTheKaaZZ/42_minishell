@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/20 17:09:17 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/21 09:40:30 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,69 +41,19 @@ static void	reset_exec(t_exec *ex)
 	close(ex->pipe[READ_END]);
 }
 
-/**
- * Function that checks if the command is a builtin or not
- * RETURNS:
- * 		=>	Name of builtin if matched
- * 		=>	NULL if not matched
-*/
-
-char	*builtin_or_execve(char *command)
+static void	clean_and_wait(t_exec *ex)
 {
-	static char	builtins[7][7] = {"echo", "cd", "pwd",
-		"export", "unset", "env", "exit"};
-	int			i;
-
-	i = -1;
-	while (++i < 7)
+	close(ex->pipe[WRITE_END]);
+	while (wait(&ex->wstatus) > 0)
 	{
-		if (ft_strequal(command, builtins[i]))
-			return (builtins[i]);
-	}
-	return (NULL);
-}
-
-static void	child_redirections(t_exec *ex, t_process *proc, int i)
-{
-	if (proc->last_out > 0)
-	{
-		dup2(proc->last_out, STDOUT_FILENO);
-		close(proc->last_out);
-	}
-	else if (ex->prev_fd != STDOUT_FILENO)
-	{
-		dup2(ex->prev_fd, STDOUT_FILENO);
-		close(ex->prev_fd);
-	}
-	if (proc->last_in.fd > 0)
-	{
-		dup2(proc->last_in.fd, STDIN_FILENO);
-		close(proc->last_in.fd);
-	}
-	else if (i != 0)
-	{
-		dup2(ex->pipe[READ_END], STDIN_FILENO);
-	}
-	close_pipe(ex->pipe);
-}
-
-static bool	check_command(t_exec *ex, t_process *proc)
-{
-	ex->curr_envp = get_current_envp();
-	if (builtin_or_execve(proc->cmd_argv[0]) == NULL)
-	{
-		ex->full_command = get_full_cmd_path(proc->cmd_argv[0]);
-		if (ex->full_command)
+		if (WIFEXITED(ex->wstatus) != true)
 		{
-			if (execve(ex->full_command, proc->cmd_argv, ex->curr_envp) < 0)
-				return (err_handler("execve"));
+			if (WEXITSTATUS(ex->wstatus) != EXIT_SUCCESS)
+				err_handler("wait");
 		}
 	}
-	else
-	{
-		//call the builtins
-	}
-	return (true);
+	ft_str_array_del(&ex->curr_envp);
+	ft_strdel(&ex->full_command);
 }
 
 bool	start_processes(void)
@@ -125,24 +75,11 @@ bool	start_processes(void)
 			return (err_handler("fork"));
 		if (ex.pid == 0) //CHILD
 		{
-			if (!open_infiles(&ex.proc[i]))
-				return (false);
-			if (!open_outfiles(&ex.proc[i]))
-				return (false);
-			child_redirections(&ex, &ex.proc[i], i);
-			if (!check_command(&ex, &ex.proc[i]))
+			if (!child_process(&ex, i))
 				return (false);
 		} //PARENT
 		reset_exec(&ex);
 	}
-	close(ex.pipe[WRITE_END]);
-	while (wait(&ex.wstatus) > 0)
-	{
-		if (WIFEXITED(ex.wstatus) != true)
-		{
-			if (WEXITSTATUS(ex.wstatus) != EXIT_SUCCESS)
-				err_handler("wait");
-		}
-	}
+	clean_and_wait(&ex);
 	return (true);
 }
