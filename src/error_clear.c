@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:27:30 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 15:42:23 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/22 13:01:12 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,14 +124,12 @@ void	ft_error_exit(const char *errmessage)
 
 bool	err_handler(const char *errmessage)
 {
-	if (g_mini.exit_code == 0)
-	{
-		if (errno == ENOENT || errno == ENOTDIR || errno == EBADF
-			|| errno == EACCES || errno == EFAULT)
-			g_mini.exit_code = 127;
-		else
-			g_mini.exit_code = 1;
-	}
+	if (errno == ENOENT || errno == ENOTDIR || errno == EBADF
+		|| errno == EACCES || errno == EFAULT)
+		g_mini.exit_code = 127;
+	else
+		g_mini.exit_code = 1;
+	// printf("current exit code: %hu\n", *g_mini.exit_code);
 	write(2, "minishell: ", 12);
 	if (errno == 0 || errno == EFAULT)
 		ft_putendl_fd((char *)errmessage, 2);

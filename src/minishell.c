@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/20 16:40:36 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/22 13:27:05 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,11 @@ void	functions(void)
 
 void	ft_init(char **argv, char **env)
 {
-	char	*temp_prompt;
-
+	(void)argv;
 	ft_memset(&g_mini, 0, sizeof(t_minishell));
-	temp_prompt = ft_strtrim(argv[0], "./");
-	g_mini.prompt = ft_strjoin(temp_prompt, "\033[0;32;1m42\033[0m: ");
+	g_mini.prompt = ft_strjoin("minishell", "\033[0;32;1m42\033[0m: ");
 	if (!g_mini.prompt)
 		ft_error_exit("malloc");
-	ft_strdel(&temp_prompt);
 	ft_env_list(env);
 	if (!g_mini.env)
 		ft_error_exit("env list creation");
@@ -108,7 +105,7 @@ char	*rl_gnl(t_minishell *mini)
 	line = readline(mini->prompt);
 	if (!line)
 	{
-		err_handler("exit");
+		ft_putstr_fd("exit\n", 1);
 		exit(ft_clear_data());
 	}
 	if (line != NULL && line[0] != 0)
@@ -126,11 +123,11 @@ int	main(int argc, char **argv, char **env)
 		g_mini.input = rl_gnl(&g_mini);
 		if (!parse_input_line())
 			continue ;
-		// functions();
-		// int i = -1;
-		// while (g_mini.argv[++i])
-		// 	printf("[%s]\n", g_mini.argv[i]);
-		start_processes();
+		bool error = start_processes();
+		printf("error? [%s]\n", (error == false) ? "true" : "false");
+		if (error == true)
+			g_mini.exit_code = 0;
+		printf("exit code : %hu\n", g_mini.exit_code);
 		ft_str_array_del(&g_mini.argv);
 		unlink(TEMPFILE);
 	}

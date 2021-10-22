@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/21 09:40:30 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/22 13:26:02 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,28 @@ static void	reset_exec(t_exec *ex)
 	close(ex->pipe[READ_END]);
 }
 
-static void	clean_and_wait(t_exec *ex)
+static bool	clean_and_wait(t_exec *ex)
 {
 	close(ex->pipe[WRITE_END]);
 	while (wait(&ex->wstatus) > 0)
 	{
-		if (WIFEXITED(ex->wstatus) != true)
+		printf("child exit status: %s\n", (WEXITSTATUS(ex->wstatus) ? "fail" : "true"));
+		if (WEXITSTATUS(ex->wstatus) != EXIT_SUCCESS)
 		{
-			if (WEXITSTATUS(ex->wstatus) != EXIT_SUCCESS)
-				err_handler("wait");
+			g_mini.exit_code = WEXITSTATUS(ex->wstatus);
+			return (false);
+		}
+		if (WIFSIGNALED(ex->wstatus))
+		{
+			if (WTERMSIG(ex->wstatus) == SIGQUIT)
+				ft_putendl_fd("\nQuit.", 2);
+			else if (WTERMSIG(ex->wstatus) == SIGINT)
+				ft_putendl_fd("\nInterrupted.", 2);
 		}
 	}
-	ft_str_array_del(&ex->curr_envp);
-	ft_strdel(&ex->full_command);
+	if (ex->full_command)
+		ft_strdel(&ex->full_command);
+	return (true);
 }
 
 bool	start_processes(void)
@@ -75,11 +84,13 @@ bool	start_processes(void)
 			return (err_handler("fork"));
 		if (ex.pid == 0) //CHILD
 		{
-			if (!child_process(&ex, i))
-				return (false);
+			t_uc error = child_process(&ex, i);
+			printf("error? [%hu]\n", error);
+			if (error > 0)
+				exit(error);
+			exit(EXIT_SUCCESS);
 		} //PARENT
 		reset_exec(&ex);
 	}
-	clean_and_wait(&ex);
-	return (true);
+	return (clean_and_wait(&ex));
 }

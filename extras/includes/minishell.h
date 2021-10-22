@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/21 09:40:17 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/22 13:20:41 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ void	close_pipe(int *pipe);
 bool	open_pipe(int *fd);
 char	*builtin_or_execve(char *command);
 bool	start_processes(void);
-bool	child_process(t_exec *ex, int i);
+t_uc	child_process(t_exec *ex, int i);
 
 /**
  * 5.	ERROR HANDLING + DATA CLEAN
