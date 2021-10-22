@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 15:26:03 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/22 17:44:27 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,30 +41,6 @@ void	ft_handler(int sig)
 	return ;
 }
 
-void	functions(void)
-{
-	// if (mini->argv[0][0] == '$')
-	// 	ft_dollar_sign(mini, 0); // working for argv[1];
-	// if (!(ft_strncmp(g_mini.input, "echo -n", 7)))
-	// 	ft_echon(&g_mini);
-	// else if (!(ft_strncmp(g_mini.input, "echo", 4)))
-	// 	ft_echo();
-	// else if (!(ft_strncmp(mini->input, "cd", 2)))
-	// 	ft_cd(mini);
-	// else if (!(ft_strncmp(mini->input, "pwd", 3)))
-	// 	ft_pwd(mini);
-	// else if (!(ft_strncmp(mini->input, "export", 6)))
-	// 	ft_export(mini);
-	/*else if (!(ft_strncmp(mini->input, "unset", 5)))
-		ft_unset(mini);*/
-	// else if (!(ft_strncmp(mini->input, "env", 3)))
-	// 	ft_env(mini);
-	// else if (!(ft_strncmp(mini->input, "exit", 4)))
-	// 	ft_exit(mini);
-	// else
-		// executor(g_mini.argv);
-}
-
 /*
 *	Initialize the struct
 	-> ft_memset => sets all the variables of the struct to 0
@@ -74,9 +50,6 @@ void	ft_init(char **argv, char **env)
 {
 	(void)argv;
 	ft_memset(&g_mini, 0, sizeof(t_minishell));
-	// g_mini.prompt = ft_strjoin("minishell", "\033[0;32;1m42\033[0m: ");
-	// if (!g_mini.prompt)
-	// 	ft_error_exit("malloc");
 	ft_env_list(env);
 	if (!g_mini.env)
 		ft_error_exit("env list creation");
@@ -118,24 +91,15 @@ int	main(int argc, char **argv, char **env)
 	ft_init(argv, env);
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, ft_handler);
+	intro_message();
 	while (argc)
 	{
-		if (g_mini.prompt)
-			ft_strdel(&g_mini.prompt);
-		if (g_mini.exit_code == 0)
-			g_mini.prompt = ft_strjoin("minishell", "\033[0;32;1m42\033[0m: ");
-		else
-			g_mini.prompt = ft_strjoin("minishell", "\033[0;31;1m42\033[0m: ");
-		if (!g_mini.prompt)
-			ft_error_exit("malloc");
+		pretty_prompt();
 		g_mini.input = rl_gnl(&g_mini);
 		if (!parse_input_line())
 			continue ;
-		// bool error = start_processes();
-		// printf("error? [%s]\n", (error == false) ? "true" : "false");
 		if (start_processes() == true)
 			g_mini.exit_code = 0;
-		// printf("exit code : %hu\n", g_mini.exit_code);
 		ft_str_array_del(&g_mini.argv);
 		unlink(TEMPFILE);
 	}

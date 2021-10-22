@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 15:10:24 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/22 17:44:12 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,5 +202,12 @@ void	ft_error_exit(const char *errmessage);
 bool	err_handler(const char *errmessage);
 bool	syntax_error_check(char **argv, char *err, int i);
 bool	unlink_tmp(char *error);
+
+/**
+ * 6. #RANDOM
+*/
+
+void	pretty_prompt(void);
+void	intro_message(void);
 
 #endif
