@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 13:27:05 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/22 15:26:03 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ void	ft_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_mini.exit_code = 130;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_mini.exit_code = 130;
 	}
 	if (sig == SIGQUIT)
 	{
@@ -74,9 +74,9 @@ void	ft_init(char **argv, char **env)
 {
 	(void)argv;
 	ft_memset(&g_mini, 0, sizeof(t_minishell));
-	g_mini.prompt = ft_strjoin("minishell", "\033[0;32;1m42\033[0m: ");
-	if (!g_mini.prompt)
-		ft_error_exit("malloc");
+	// g_mini.prompt = ft_strjoin("minishell", "\033[0;32;1m42\033[0m: ");
+	// if (!g_mini.prompt)
+	// 	ft_error_exit("malloc");
 	ft_env_list(env);
 	if (!g_mini.env)
 		ft_error_exit("env list creation");
@@ -120,14 +120,22 @@ int	main(int argc, char **argv, char **env)
 	signal(SIGQUIT, ft_handler);
 	while (argc)
 	{
+		if (g_mini.prompt)
+			ft_strdel(&g_mini.prompt);
+		if (g_mini.exit_code == 0)
+			g_mini.prompt = ft_strjoin("minishell", "\033[0;32;1m42\033[0m: ");
+		else
+			g_mini.prompt = ft_strjoin("minishell", "\033[0;31;1m42\033[0m: ");
+		if (!g_mini.prompt)
+			ft_error_exit("malloc");
 		g_mini.input = rl_gnl(&g_mini);
 		if (!parse_input_line())
 			continue ;
-		bool error = start_processes();
-		printf("error? [%s]\n", (error == false) ? "true" : "false");
-		if (error == true)
+		// bool error = start_processes();
+		// printf("error? [%s]\n", (error == false) ? "true" : "false");
+		if (start_processes() == true)
 			g_mini.exit_code = 0;
-		printf("exit code : %hu\n", g_mini.exit_code);
+		// printf("exit code : %hu\n", g_mini.exit_code);
 		ft_str_array_del(&g_mini.argv);
 		unlink(TEMPFILE);
 	}

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 09:39:25 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 13:21:30 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/22 15:04:36 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ static bool	check_command(t_exec *ex, t_process *proc)
 	return (true);
 }
 
-t_uc	child_process(t_exec *ex, int i)
+void	child_process(t_exec *ex, int i)
 {
 	if (!open_infiles(&ex->proc[i]))
-		return (g_mini.exit_code);
+		exit(g_mini.exit_code);
 	if (!open_outfiles(&ex->proc[i]))
-		return (g_mini.exit_code);
+		exit(g_mini.exit_code);
 	child_redirections(ex, &ex->proc[i], i);
 	if (!check_command(ex, &ex->proc[i]))
-		return (g_mini.exit_code);
-	return (EXIT_SUCCESS);
+		exit(g_mini.exit_code);
+	exit(EXIT_SUCCESS);
 }

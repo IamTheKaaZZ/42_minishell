@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 13:26:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/22 15:05:11 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static bool	clean_and_wait(t_exec *ex)
 	close(ex->pipe[WRITE_END]);
 	while (wait(&ex->wstatus) > 0)
 	{
-		printf("child exit status: %s\n", (WEXITSTATUS(ex->wstatus) ? "fail" : "true"));
+		// printf("child exit status: %s\n", (WEXITSTATUS(ex->wstatus) ? "fail" : "true"));
 		if (WEXITSTATUS(ex->wstatus) != EXIT_SUCCESS)
 		{
 			g_mini.exit_code = WEXITSTATUS(ex->wstatus);
@@ -83,14 +83,8 @@ bool	start_processes(void)
 		if (ex.pid < 0)
 			return (err_handler("fork"));
 		if (ex.pid == 0) //CHILD
-		{
-			t_uc error = child_process(&ex, i);
-			printf("error? [%hu]\n", error);
-			if (error > 0)
-				exit(error);
-			exit(EXIT_SUCCESS);
-		} //PARENT
-		reset_exec(&ex);
+			child_process(&ex, i);
+		reset_exec(&ex); //PARENT
 	}
 	return (clean_and_wait(&ex));
 }

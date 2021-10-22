@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 14:21:36 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 13:22:48 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/22 15:08:14 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ static void	find_expanded(t_expand *exp)
 	param = find_param(&g_mini.env, exp->to_expand);
 	if (ft_strequal(exp->to_expand, "?"))
 	{
-		printf("exit code to convert: %hu\n", g_mini.exit_code);
 		exp->exit_code = ft_itoa((int)g_mini.exit_code);
-		printf("Converted string: %s\n", exp->exit_code);
 		exp->expanded = exp->exit_code;
 	}
 	else if (!param)
