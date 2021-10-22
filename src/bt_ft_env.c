@@ -29,68 +29,60 @@ void	ft_env(t_process *proc)
 	g_mini.exit_code = 0;
 }
 
-static void	print_list(t_node **list)
+static void	print_and_free(t_node **line)
 {
-	int	i;
-
-	i = -1;
-	while (list[++i])
-	{
-		ft_putstr("declare -x ");
-		ft_putstr(list[i]->keyword);
-		ft_putstr("=\"");
-		ft_putstr(list[i]->content);
-		ft_putendl("\"");
-	}
+	ft_putstr("declare -x ");
+	ft_putstr((*line)->keyword);
+	ft_putstr("=\"");
+	ft_putstr((*line)->content);
+	ft_putendl("\"");
+	free(*line);
+	*line = NULL;
 }
 
-// static void	print_line(t_node line)
-// {
-// 	ft_putstr("declare -x ");
-// 	ft_putstr(line.keyword);
-// 	ft_putstr("=\"");
-// 	ft_putstr(line.content);
-// 	ft_putendl("\"");
-// }
-
-static int	list_export(void)
+static void	list_export(t_node *original)
 {
-	t_node	*tmp;
-	t_node	*tmp2;
-	t_node	*listed[100];
-	int		i;
-	int		j;
+	t_node	*listed;
+	t_node	*scan;
 
-	ft_memset(listed, 0, sizeof(t_node *) * 100);
-	i = 0;
-	while (tmp)
+	while (original)
 	{
-		listed[i++] = tmp;
-		tmp = tmp->next;
+		add_to_tail(&listed, new_node(original->keyword, original->content));
+		original = original->next;
 	}
-	listed[i] = '\0';
-	
-	print_list(listed);
-		// print_line(*tmp);
-	return (0);
+	while (listed->next)
+	{
+		original = listed;
+		scan = original->next;
+		while (scan && original)
+		{
+			if (ft_strcmp(original->keyword, scan->keyword) > 0)
+				original = scan;
+			scan = scan->next;
+		}
+		if (original == listed)
+			listed = listed->next;
+		else
+		{
+			scan = listed;
+			while (scan->next != original && scan->next)
+				scan = scan->next;
+			scan->next = original->next;
+		}
+		print_and_free(&original);
+	}
+	print_and_free(&listed);
 }
 
 void	ft_export(t_process *proc)
-/**
- * if $
- * Where are we keeping "not exported env vars"?
- * if no var given:
- * 	declare -x FOO="baz" --> in ascii order
- * 
- * 
-*/
+/*Exporting empty vars*/
 {
 	char	**split_param;
 	t_node	*new;
 
 	if (!proc->command->next)
 	{
-		g_mini.exit_code = list_export();
+		list_export(g_mini.env);
 		return ;
 	}
 	/*TMP*/
