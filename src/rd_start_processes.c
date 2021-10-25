@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 15:05:11 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/25 11:35:32 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,11 @@ static void	reset_exec(t_exec *ex)
 
 static bool	clean_and_wait(t_exec *ex)
 {
+	int	i;
+
 	close(ex->pipe[WRITE_END]);
 	while (wait(&ex->wstatus) > 0)
 	{
-		// printf("child exit status: %s\n", (WEXITSTATUS(ex->wstatus) ? "fail" : "true"));
 		if (WEXITSTATUS(ex->wstatus) != EXIT_SUCCESS)
 		{
 			g_mini.exit_code = WEXITSTATUS(ex->wstatus);
@@ -62,6 +63,10 @@ static bool	clean_and_wait(t_exec *ex)
 	}
 	if (ex->full_command)
 		ft_strdel(&ex->full_command);
+	i = -1;
+	while (++i < ex->p_count)
+		if (ex->proc[++i].cmd_argv)
+			ft_str_array_del(&ex->proc->cmd_argv);
 	return (true);
 }
 

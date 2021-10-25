@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:27:30 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 13:01:12 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/25 11:28:02 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int	ft_clear_data(void)
 	ft_strdel(&g_mini.prompt);
 	ft_strdel(&g_mini.cwd);
 	rl_clear_history();
+	check_leaks();
 	return (EXIT_SUCCESS);
 }
 
@@ -129,7 +130,6 @@ bool	err_handler(const char *errmessage)
 		g_mini.exit_code = 127;
 	else
 		g_mini.exit_code = 1;
-	// printf("current exit code: %hu\n", *g_mini.exit_code);
 	write(2, "minishell: ", 12);
 	if (errno == 0 || errno == EFAULT)
 		ft_putendl_fd((char *)errmessage, 2);
