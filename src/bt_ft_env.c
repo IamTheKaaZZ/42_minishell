@@ -12,12 +12,12 @@
 
 #include "../extras/includes/minishell.h"
 
-void	ft_env(t_process *proc)
+void	ft_env(char **argv)
 {
 	t_node	*head;
 
 	head = g_mini.env;
-	if (proc->command->next)
+	if (argv[1])
 		err_handler("No such file or directory");
 	while (head)
 	{
@@ -45,6 +45,7 @@ static void	list_export(t_node *original)
 	t_node	*listed;
 	t_node	*scan;
 
+	listed = NULL;
 	while (original)
 	{
 		add_to_tail(&listed, new_node(original->keyword, original->content));
@@ -74,22 +75,24 @@ static void	list_export(t_node *original)
 	print_and_free(&listed);
 }
 
-void	ft_export(t_process *proc)
+void	ft_export(char **argv)
 /*Exporting empty vars*/
 {
 	char	**split_param;
 	t_node	*new;
 
-	if (!proc->command->next)
+	if (!argv[1])
 	{
 		list_export(g_mini.env);
 		return ;
 	}
+	
 	/*TMP*/
-	if (!ft_strchr(proc->command->next->content, '='))
+	if (!ft_strchr(argv[1], '='))
 		return ;
 	/*TMP*/
-	split_param = ft_split(proc->command->next->content, '=');
+
+	split_param = ft_split(argv[1], '=');
 	new = new_env_param(split_param);
 	if (!new)
 	{
@@ -102,12 +105,12 @@ void	ft_export(t_process *proc)
 	g_mini.exit_code = 0;
 }
 
-void	ft_unset(t_process *proc)
+void	ft_unset(char **argv)
 {
 	t_node	*param;
 	t_node	*tmp;
 
-	param = find_param(&g_mini.env, proc->command->next->content);
+	param = find_param(&g_mini.env, argv[1]);
 	if (!param)
 		return ;
 	tmp = g_mini.env;

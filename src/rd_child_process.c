@@ -39,8 +39,8 @@ static void	child_redirections(t_exec *ex, t_process *proc, int i)
 static bool	check_command(t_exec *ex, t_process *proc)
 {
 	ex->curr_envp = get_current_envp();
-	// if (builtin_or_execve(proc->cmd_argv[0]) == NULL)
-	// {
+	if (builtin_or_execve(proc->cmd_argv[0]) == NULL)
+	{
 		ex->full_command = get_full_cmd_path(proc->cmd_argv[0]);
 		if (ex->full_command)
 		{
@@ -49,11 +49,16 @@ static bool	check_command(t_exec *ex, t_process *proc)
 		}
 		else
 			return (false);
-	// }
-	// else
-	// {
-	// 	//call the builtins
-	// }
+	}
+	else
+	{
+		if (ft_strequal(proc->cmd_argv[0], "exit")
+			|| ft_strequal(proc->cmd_argv[0], "cd")
+			|| ft_strequal(proc->cmd_argv[0], "export")
+			|| ft_strequal(proc->cmd_argv[0], "unset"))
+			exit(EXIT_SUCCESS);
+		functions(proc->cmd_argv);
+	}
 	return (true);
 }
 

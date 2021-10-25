@@ -14,8 +14,8 @@
 
 static bool	init_exec(t_exec *ex)
 {
-	// int	i;
-	(void)argv;
+	int	i;
+	// (void)argv;
 
 	ft_memset(ex, 0, sizeof(t_exec));
 	ex->pipe[READ_END] = -1;
@@ -40,6 +40,14 @@ static void	reset_exec(t_exec *ex, char **cmdargv)
 		close(ex->prev_fd);
 	ex->prev_fd = ex->pipe[WRITE_END];
 	close(ex->pipe[READ_END]);
+	if (ft_strequal(cmdargv[0], "exit"))
+		ft_exit(cmdargv, -1);
+	else if (ft_strequal(cmdargv[0], "cd"))
+		ft_cd(cmdargv);
+	else if (ft_strequal(cmdargv[0], "export"))
+		ft_export(cmdargv);
+	else if (ft_strequal(cmdargv[0], "unset"))
+		ft_unset(cmdargv);
 	if (cmdargv)
 		ft_str_array_del(&cmdargv);
 }

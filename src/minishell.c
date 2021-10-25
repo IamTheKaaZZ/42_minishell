@@ -41,26 +41,26 @@ void	ft_handler(int sig)
 	return ;
 }
 
-void	functions(t_process	*proc)
+void	functions(char **argv)
 /**
  *  Need iterate between args
  * void * preferably kept in struct to save lines and more easibly manageable
  */
 {
-	if (ft_strequal(proc->command->content, "echo"))
-		ft_echo(proc);
-	else if (ft_strequal(proc->command->content, "env"))
-		ft_env(proc);
-	else if (ft_strequal(proc->command->content, "pwd"))
-		ft_pwd(proc);
-	else if (ft_strequal(proc->command->content, "cd"))
-		ft_cd(proc);
-	else if (ft_strequal(proc->command->content, "exit"))
-		ft_exit(proc, -1);
-	else if (ft_strequal(proc->command->content, "unset"))
-		ft_unset(proc);
-	else if (ft_strequal(proc->command->content, "export"))
-		ft_export(proc);
+	if (ft_strequal(argv[0], "echo"))
+		ft_echo(argv);
+	else if (ft_strequal(argv[0], "env"))
+		ft_env(argv);
+	else if (ft_strequal(argv[0], "pwd"))
+		ft_pwd(argv);
+	else if (ft_strequal(argv[0], "cd"))
+		ft_cd(argv);
+	else if (ft_strequal(argv[0], "exit"))
+		ft_exit(argv, -1);
+	else if (ft_strequal(argv[0], "unset"))
+		ft_unset(argv);
+	else if (ft_strequal(argv[0], "export"))
+		ft_export(argv);
 }
 
 /*
@@ -115,6 +115,7 @@ int	main(int argc, char **argv, char **env)
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, ft_handler);
 	intro_message();
+	// g_mini.prompt = ft_strdup("minishell> ");
 	while (argc)
 	{
 		pretty_prompt();

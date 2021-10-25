@@ -6,11 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/10/13 14:23:13 by bcosters         ###   ########.fr       */
-=======
 /*   Updated: 2021/10/25 11:26:00 by bcosters         ###   ########.fr       */
->>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,29 +166,17 @@ char	**get_current_envp(void);
 /**
  * 3.	BUILTINS
 */
-<<<<<<< HEAD
-void	functions(t_process	*proc);
-void	ft_env(t_process *proc);
-void	ft_unset(t_process *proc);
-void	ft_export(t_process *proc);
-void	ft_cd(t_process *proc);
-void	ft_pwd(t_process *proc);
-void	ft_echo(t_process *proc);
-void	ft_exit(t_process *proc, int i);
-// int		executor(char **argv);
-// bool	open_file_as_input(t_file *f, char *filename);
-=======
 
-void	ft_echon(t_minishell *mini);
-void	ft_echo(void);
-void	ft_cd(t_minishell *mini);
-void	ft_pwd(t_minishell *mini);
-void	ft_export(t_minishell *mini);
-void	ft_unset(t_minishell *mini);
-void	ft_env(t_minishell *mini);
-void	ft_exit(t_minishell *mini);
+void	functions(char **argv);
+void	ft_echon(char **argv);
+void	ft_echo(char **argv);
+void	ft_cd(char **argv);
+void	ft_pwd(char **argv);
+void	ft_export(char **argv);
+void	ft_unset(char **argv);
+void	ft_env(char **argv);
+void	ft_exit(char **argv, int i);
 int		executor(char **argv);
->>>>>>> master
 
 void	ft_handler(int signal);
 char	**ft_get_path(void);
