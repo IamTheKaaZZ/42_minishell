@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 15:16:20 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/25 13:35:28 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ void	ft_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_mini.exit_code = 130;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_mini.exit_code = 130;
 	}
 	if (sig == SIGQUIT)
 	{
@@ -71,9 +71,6 @@ void	functions(t_process	*proc)
 void	ft_init(char **env)
 {
 	ft_memset(&g_mini, 0, sizeof(t_minishell));
-	g_mini.prompt = ft_strdup("minishell\033[0;32;1m42\033[0m: ");
-	if (!g_mini.prompt)
-		ft_error_exit("malloc");
 	ft_env_list(env);
 	if (!g_mini.env)
 		ft_error_exit("env list creation");
@@ -102,7 +99,7 @@ char	*rl_gnl(t_minishell *mini)
 	line = readline(mini->prompt);
 	if (!line)
 	{
-		err_handler("exit");
+		ft_putstr_fd("exit\n", 1);
 		exit(ft_clear_data());
 	}
 	if (line != NULL && line[0] != 0)
@@ -117,17 +114,17 @@ int	main(int argc, char **argv, char **env)
 	ft_init(env);
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, ft_handler);
+	intro_message();
 	while (argc)
 	{
+		pretty_prompt();
 		g_mini.input = rl_gnl(&g_mini);
 		if (!parse_input_line())
 			continue ;
-		// functions();
-		// int i = -1;
-		// while (g_mini.argv[++i])
-		// 	printf("[%s]\n", g_mini.argv[i]);
-
-		start_processes();
+		if (start_processes() == true)
+			g_mini.exit_code = 0;
 		ft_str_array_del(&g_mini.argv);
+		unlink(TEMPFILE);
+		// check_leaks();
 	}
 }

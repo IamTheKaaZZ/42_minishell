@@ -6,7 +6,11 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/10/13 14:23:13 by bcosters         ###   ########.fr       */
+=======
+/*   Updated: 2021/10/25 11:26:00 by bcosters         ###   ########.fr       */
+>>>>>>> master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +18,7 @@
 # define MINISHELL_H
 
 # include "../libft/libft_bonus.h"
+# include "../42_memleak_check/malloc_leak_checker.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <signal.h>
@@ -81,10 +86,10 @@ typedef struct s_exec
 {
 	pid_t		pid;
 	char		**curr_envp;
+	char		*full_command;
 	int			pipe[2];
 	int			prev_fd;
 	int			wstatus;
-	char		err[100];
 	t_process	proc[100];
 	int			p_count;
 }	t_exec;
@@ -158,12 +163,14 @@ int		count_params(t_node *env);
 t_node	*new_node(char *keyword, char *content);
 t_node	*find_tail(t_node *head);
 void	add_to_tail(t_node **env, t_node *new);
+void	add_new_to_tail(t_node **head, char *keyword, char *content);
 void	ft_env_list(char **env);
-char	**get_current_envp(t_node *head);
+char	**get_current_envp(void);
 
 /**
  * 3.	BUILTINS
 */
+<<<<<<< HEAD
 void	functions(t_process	*proc);
 void	ft_env(t_process *proc);
 void	ft_unset(t_process *proc);
@@ -174,6 +181,18 @@ void	ft_echo(t_process *proc);
 void	ft_exit(t_process *proc, int i);
 // int		executor(char **argv);
 // bool	open_file_as_input(t_file *f, char *filename);
+=======
+
+void	ft_echon(t_minishell *mini);
+void	ft_echo(void);
+void	ft_cd(t_minishell *mini);
+void	ft_pwd(t_minishell *mini);
+void	ft_export(t_minishell *mini);
+void	ft_unset(t_minishell *mini);
+void	ft_env(t_minishell *mini);
+void	ft_exit(t_minishell *mini);
+int		executor(char **argv);
+>>>>>>> master
 
 void	ft_handler(int signal);
 char	**ft_get_path(void);
@@ -190,16 +209,28 @@ int		create_processes(t_process *proc);
 bool	here_doc_as_input(t_file *tmp, char *limiter);
 bool	open_infiles(t_process *proc);
 bool	open_outfiles(t_process *proc);
+void	close_pipe(int *pipe);
+bool	open_pipe(int *fd);
+char	*builtin_or_execve(char *command);
+bool	start_processes(void);
+void	child_process(t_exec *ex, int i);
 
 /**
  * 5.	ERROR HANDLING + DATA CLEAN
 */
 
-void	clear_env_list(t_node **env);
+void	clear_list(t_node **head, bool clear);
 int		ft_clear_data(void);
 void	ft_error_exit(const char *errmessage);
 bool	err_handler(const char *errmessage);
 bool	syntax_error_check(char **argv, char *err, int i);
 bool	unlink_tmp(char *error);
+
+/**
+ * 6. #RANDOM
+*/
+
+void	pretty_prompt(void);
+void	intro_message(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 11:04:58 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 14:37:06 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/20 15:39:12 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static bool	init_here_doc(t_file *tmp, char **line)
 	*line = NULL;
 	tmp->fd = open(TEMPFILE, O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (tmp->fd == -1)
-		return (err_handler("creation temporary file"));
+		return (err_handler("creation of temporary file"));
 	tmp->file_path = TEMPFILE;
 	return (true);
 }
@@ -126,17 +126,17 @@ bool	here_doc_as_input(t_file *tmp, char *limiter)
 	if (!retval_or_limiter(limiter, &line, retval))
 		return (unlink_tmp(NULL));
 	if (!line)
-		return (EXIT_SUCCESS);
+		return (true);
 	while (retval > 0)
 	{
 		if (!write_to_tmp(tmp->fd, &line))
-			return (EXIT_FAILURE);
+			return (false);
 		write(STDOUT_FILENO, "> ", 2);
 		retval = get_next_line(STDIN_FILENO, &line);
 		if (!retval_or_limiter(limiter, &line, retval))
 			return (unlink_tmp(NULL));
 		if (!line)
-			return (EXIT_SUCCESS);
+			return (true);
 	}
-	return (EXIT_SUCCESS);
+	return (true);
 }

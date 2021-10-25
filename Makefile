@@ -15,11 +15,12 @@ DIR_O	=	obj/
 OBJS	=	$(SRCS:src/%.c=obj/%.o)
 DOTH	=	extras/includes
 LIBFT	=	extras/libft
-LFT_EXE	=	extras/libft
+INCL	=	extras/includes/minishell.h
+DBINCL	=	extras/42_memleak_check/malloc_leak_checker.h
 CC		=	gcc
 #UPDATE READLINE via brew because the Mac one is too old
 CFLAGS	=	-Wall -Wextra -Werror `pkg-config readline --cflags`
-LDFLAGS = 	-g `pkg-config readline --libs` -fsanitize=address
+DBFLAGS =	-g -fsanitize=address -rdynamic -lmlc -Lextras/42_memleak_check
 INCLUDE	=	-I./$(DOTH) -I./$(LIBFT) `pkg-config readline --cflags`
 LINKS	=	-L./$(LIBFT) -lft `pkg-config readline --libs`
 
@@ -27,9 +28,9 @@ LINKS	=	-L./$(LIBFT) -lft `pkg-config readline --libs`
 
 all:	$(NAME)
 
-$(NAME): libcheck libft $(DIR_O) $(OBJS)
+$(NAME): libcheck libft $(INCL) $(DIR_O) $(OBJS)
 	@printf "$(GREEN)]$(QUIT)"
-	@$(CC) $(CFLAGS) $(LDFLAGS) $(wildcard src/*.c) $(wildcard extras/libft/src/*c) -o $(NAME) $(LINKS)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LINKS)
 	@echo "\n$(GREEN)\n"
 	@echo "$(NAME) executable CREATED"
 	@echo "\n$(QUIT)\n"
@@ -46,6 +47,13 @@ $(DIR_O):
 libcheck:
 	@bash scripts/lib_setup.sh
 	@echo
+
+debug:	libcheck libft $(INCL) $(DIR_O) $(OBJS)
+	@printf "$(GREEN)]$(QUIT)"
+	@$(CC) $(CFLAGS) $(DBFLAGS) $(wildcard src/*.c) $(wildcard extras/libft/src/*c) $(wildcard extras/42_memleak_check/*.c) -o $(NAME) $(LINKS)
+	@echo "\n$(GREEN)\n"
+	@echo "$(NAME) debug executable CREATED"
+	@echo "\n$(QUIT)\n"
 
 libft:
 	@echo "$(WHITE) [ .. ] Creating LIBFT [ .. ]$(GREEN)"
