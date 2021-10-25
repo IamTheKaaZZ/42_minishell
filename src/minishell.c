@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/25 11:28:08 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/25 13:35:28 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,6 @@ int	main(int argc, char **argv, char **env)
 			g_mini.exit_code = 0;
 		ft_str_array_del(&g_mini.argv);
 		unlink(TEMPFILE);
-		check_leaks();
+		// check_leaks();
 	}
 }

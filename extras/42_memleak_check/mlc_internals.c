@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 10:56:35 by bcosters          #+#    #+#             */
-/*   Updated: 2021/09/20 10:56:37 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/25 13:07:30 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ void	remove_call(long address)
 	fprintf(stderr, "Trying to free memory that have already freed or "
 		"haven't ever allocated\n"
 		"Address 0x%lx not found in `g_allocs_array`\n", address);
-	exit(2);
+	// exit(2);
 }

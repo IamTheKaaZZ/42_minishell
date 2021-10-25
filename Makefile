@@ -20,7 +20,7 @@ DBINCL	=	extras/42_memleak_check/malloc_leak_checker.h
 CC		=	gcc
 #UPDATE READLINE via brew because the Mac one is too old
 CFLAGS	=	-Wall -Wextra -Werror `pkg-config readline --cflags`
-DBFLAGS =	-g -fsanitize=address -lmlc -Lextras/42_memleak_check
+DBFLAGS =	-g -fsanitize=address -rdynamic -lmlc -Lextras/42_memleak_check
 INCLUDE	=	-I./$(DOTH) -I./$(LIBFT) `pkg-config readline --cflags`
 LINKS	=	-L./$(LIBFT) -lft `pkg-config readline --libs`
 
@@ -50,7 +50,7 @@ libcheck:
 
 debug:	libcheck libft $(INCL) $(DIR_O) $(OBJS)
 	@printf "$(GREEN)]$(QUIT)"
-	@$(CC) $(CFLAGS) $(DBFLAGS) $(wildcard src/*.c) $(wildcard extras/libft/src/*c) -o $(NAME) $(LINKS)
+	@$(CC) $(CFLAGS) $(DBFLAGS) $(wildcard src/*.c) $(wildcard extras/libft/src/*c) $(wildcard extras/42_memleak_check/*.c) -o $(NAME) $(LINKS)
 	@echo "\n$(GREEN)\n"
 	@echo "$(NAME) debug executable CREATED"
 	@echo "\n$(QUIT)\n"

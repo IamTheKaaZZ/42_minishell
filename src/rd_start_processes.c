@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/25 11:35:32 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/25 13:26:24 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,18 @@ static bool	init_exec(t_exec *ex)
 	return (true);
 }
 
-static void	reset_exec(t_exec *ex)
+static void	reset_exec(t_exec *ex, char **cmdargv)
 {
 	if (ex->prev_fd != STDOUT_FILENO)
 		close(ex->prev_fd);
 	ex->prev_fd = ex->pipe[WRITE_END];
 	close(ex->pipe[READ_END]);
+	if (cmdargv)
+		ft_str_array_del(&cmdargv);
 }
 
 static bool	clean_and_wait(t_exec *ex)
 {
-	int	i;
-
 	close(ex->pipe[WRITE_END]);
 	while (wait(&ex->wstatus) > 0)
 	{
@@ -63,10 +63,6 @@ static bool	clean_and_wait(t_exec *ex)
 	}
 	if (ex->full_command)
 		ft_strdel(&ex->full_command);
-	i = -1;
-	while (++i < ex->p_count)
-		if (ex->proc[++i].cmd_argv)
-			ft_str_array_del(&ex->proc->cmd_argv);
 	return (true);
 }
 
@@ -89,7 +85,7 @@ bool	start_processes(void)
 			return (err_handler("fork"));
 		if (ex.pid == 0) //CHILD
 			child_process(&ex, i);
-		reset_exec(&ex); //PARENT
+		reset_exec(&ex, ex.proc[i].cmd_argv); //PARENT
 	}
 	return (clean_and_wait(&ex));
 }

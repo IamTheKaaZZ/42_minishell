@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:27:30 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/25 11:28:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/25 13:35:44 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	ft_clear_data(void)
 	ft_strdel(&g_mini.prompt);
 	ft_strdel(&g_mini.cwd);
 	rl_clear_history();
-	check_leaks();
+	// check_leaks();
 	return (EXIT_SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 09:39:25 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 15:04:36 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/25 13:13:43 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,7 @@ void	child_process(t_exec *ex, int i)
 	child_redirections(ex, &ex->proc[i], i);
 	if (!check_command(ex, &ex->proc[i]))
 		exit(g_mini.exit_code);
+	if (ex->proc[i].cmd_argv)
+		ft_str_array_del(&ex->proc[i].cmd_argv);
 	exit(EXIT_SUCCESS);
 }
