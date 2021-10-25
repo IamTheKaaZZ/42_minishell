@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 10:05:43 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 12:46:12 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/20 16:19:02 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,24 @@ static bool	open_file_as_input(t_file *f, char *filename)
 	return (true);
 }
 
+static bool	close_or_delete(t_node *temp, t_node *last, t_file *t, t_file *f)
+{
+	if (ft_strequal(temp->content, last->content))
+	{
+		close(t->fd);
+		*f = *t;
+		return (true);
+	}
+	if (temp->keyword != NULL)
+	{
+		if (!unlink_tmp(NULL))
+			return (false);
+	}
+	else if (close(t->fd) < 0)
+		return (err_handler(temp->content));
+	return (true);
+}
+
 /**
  * Open all possible input files but only save the last one in last_in
  * =>	here documents have the keyword "heredoc"
@@ -53,28 +71,27 @@ bool	open_infiles(t_process *proc)
 {
 	t_node	*temp;
 	t_file	tmp;
+	t_file	final;
 
 	temp = proc->infiles;
 	tmp.fd = -1;
+	final.file_path = NULL;
 	while (temp != NULL)
 	{
-		if (ft_strequal(temp->keyword, "heredoc")
-			&& !here_doc_as_input(&tmp, temp->content))
-			return (err_handler("here_doc"));
+		if (ft_strequal(temp->keyword, "heredoc"))
+		{
+			if (!here_doc_as_input(&tmp, temp->content))
+				return (err_handler("here_doc"));
+		}
 		else if (!open_file_as_input(&tmp, temp->content))
 			return (false);
-		if (temp != proc->last_inf)
-		{
-			if (temp->keyword != NULL && !unlink_tmp(NULL))
-				return (false);
-			else if (close(tmp.fd) < 0)
-				return (err_handler(temp->content));
-		}
-		else
-			proc->last_in = tmp;
+		if (!close_or_delete(temp, proc->last_inf, &tmp, &final))
+			return (false);
 		temp = temp->next;
 	}
-	clear_env_list(&proc->infiles);
+	if (final.file_path != NULL)
+		open_file_as_input(&proc->last_in, final.file_path);
+	clear_list(&proc->infiles, false);
 	return (true);
 }
 
@@ -92,6 +109,7 @@ bool	open_outfiles(t_process *proc)
 	int		tmpfd;
 
 	temp = proc->outfiles;
+	tmpfd = -1;
 	while (temp != NULL)
 	{
 		if (ft_strequal(temp->keyword, "trunc"))
@@ -108,6 +126,6 @@ bool	open_outfiles(t_process *proc)
 		temp = temp->next;
 	}
 	proc->last_out = tmpfd;
-	clear_env_list(&proc->outfiles);
+	clear_list(&proc->outfiles, false);
 	return (true);
 }

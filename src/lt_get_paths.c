@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:20:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 17:17:18 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/25 11:41:07 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,11 @@ void	ft_env_list(char **env)
 		new = new_env_param(split_param);
 		if (!new)
 		{
-			clear_env_list(&g_mini.env);
+			clear_list(&g_mini.env, true);
 			return ;
 		}
 		add_to_tail(&g_mini.env, new);
+		free(split_param);
+		split_param = NULL;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/28 11:27:30 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 15:02:41 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/25 13:35:44 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,24 @@ void	remove_param(t_node **env, char	*keyword)
  * Modified lst_clear for the project
 */
 
-void	clear_env_list(t_node **env)
+void	clear_list(t_node **head, bool clear)
 {
 	t_node	*temp;
 
-	if (!env)
+	if (!head)
 		return ;
-	temp = *env;
-	while (*env != NULL)
+	temp = *head;
+	while (*head != NULL)
 	{
-		ft_strdel(&temp->keyword);
-		ft_strdel(&temp->content);
-		*env = (*env)->next;
+		if (clear == true)
+		{
+			ft_strdel(&temp->keyword);
+			ft_strdel(&temp->content);
+		}
+		*head = (*head)->next;
 		free(temp);
 		temp = NULL;
-		temp = *env;
+		temp = *head;
 	}
 }
 /*
@@ -82,7 +85,7 @@ int	ft_clear_data(void)
 {
 	int	i;
 
-	clear_env_list(&g_mini.env);
+	clear_list(&g_mini.env, true);
 	i = -1;
 	if (g_mini.path_var)
 		ft_str_array_del(&g_mini.path_var);
@@ -92,6 +95,7 @@ int	ft_clear_data(void)
 	ft_strdel(&g_mini.prompt);
 	ft_strdel(&g_mini.cwd);
 	rl_clear_history();
+	// check_leaks();
 	return (EXIT_SUCCESS);
 }
 
@@ -121,14 +125,11 @@ void	ft_error_exit(const char *errmessage)
 
 bool	err_handler(const char *errmessage)
 {
-	if (g_mini.exit_code == 0)
-	{
-		if (errno == ENOENT || errno == ENOTDIR || errno == EBADF
-			|| errno == EACCES || errno == EFAULT)
-			g_mini.exit_code = 127;
-		else
-			g_mini.exit_code = 1;
-	}
+	if (errno == ENOENT || errno == ENOTDIR || errno == EBADF
+		|| errno == EACCES || errno == EFAULT)
+		g_mini.exit_code = 127;
+	else
+		g_mini.exit_code = 1;
 	write(2, "minishell: ", 12);
 	if (errno == 0 || errno == EFAULT)
 		ft_putendl_fd((char *)errmessage, 2);
