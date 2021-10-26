@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/26 16:54:53 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 17:18:32 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,9 @@ bool	start_processes(void)
 		ex.pid = fork();
 		if (ex.pid < 0)
 			return (err_handler("fork", 1));
-		if (ex.pid == 0) //CHILD
+		if (ex.pid == 0)
 			child_process(&ex, i);
-		reset_exec(&ex, ex.proc[i].cmd_argv); //PARENT
+		reset_exec(&ex, ex.proc[i].cmd_argv);
 	}
 	return (clean_and_wait(&ex));
 }
