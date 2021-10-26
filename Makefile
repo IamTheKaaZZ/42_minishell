@@ -30,7 +30,7 @@ all:	$(NAME)
 
 $(NAME): libcheck libft $(INCL) $(DIR_O) $(OBJS)
 	@printf "$(GREEN)]$(QUIT)"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LINKS)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LINKS)
 	@echo "\n$(GREEN)\n"
 	@echo "$(NAME) executable CREATED"
 	@echo "\n$(QUIT)\n"
