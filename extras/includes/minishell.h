@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/25 11:26:00 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 13:11:32 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,14 @@ typedef struct s_parse
 	const char	**str;
 	t_prbools	*bools;
 }	t_parse;
+
+typedef struct s_prompt
+{
+	char	*cwd;
+	char	*home;
+	char	*path;
+	char	*full;
+}	t_prompt;
 
 /*
 *	GLOBAL VAR

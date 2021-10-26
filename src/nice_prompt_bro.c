@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 17:27:15 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 17:45:34 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 13:13:01 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,30 @@
 static char	*get_full_prefix(void)
 {
 	static char	prefix[100] = "\033[33m𝓶 𝓲𝓷𝓲𝓼𝓱𝓮𝓵𝓵 \033[37;1m➫ ＠〈 ";
-	char		cwd[100];
 	static char	closebracket[100] = " 〉➫ \033[0m";
-	char		*home;
-	char		path[100];
+	t_prompt	p;
 
-	ft_bzero(cwd, 100);
-	ft_bzero(path, 100);
-	getcwd(cwd, 100);
-	home = find_param(&g_mini.env, "HOME")->content;
-	if (ft_strncmp(home, cwd, ft_strlen(home)) == 0)
+	p.cwd = find_param(&g_mini.env, "PWD")->content;
+	printf("cwd: %s\n", p.cwd);
+	p.home = find_param(&g_mini.env, "HOME")->content;
+	printf("home: %s\n", p.home);
+	if (ft_strncmp(p.home, p.cwd, ft_strlen(p.home)) == 0)
 	{
-		ft_strlcpy(path, "~/", 2);
-		ft_strlcat(path, cwd + ft_strlen(home), 100);
-		ft_strlcat(prefix, path, 100);
-		ft_strlcat(prefix, closebracket, 100);
-		return (prefix);
+		p.path = ft_strjoin("~", p.cwd + ft_strlen(p.home));
+		printf("path: %s\n", p.path);
+		p.full = p.path;
+		p.path = ft_strjoin(p.full, closebracket);
+		ft_strdel(&p.full);
+		printf("path: %s\n", p.path);
+		p.full = ft_strjoin(prefix, p.path);
+		ft_strdel(&p.path);
+		printf("prefix: %s\n", p.full);
+		return (p.full);
 	}
-	ft_strlcat(prefix, cwd, 100);
-	ft_strlcat(prefix, closebracket, 100);
-	return (prefix);
+	p.path = ft_strjoin(prefix, p.cwd);
+	p.full = ft_strjoin(p.path, closebracket);
+	ft_strdel(&p.path);
+	return (p.full);
 }
 
 void	pretty_prompt(void)
@@ -52,6 +56,7 @@ void	pretty_prompt(void)
 		g_mini.prompt = ft_strjoin(prefix, bad);
 	if (!g_mini.prompt)
 		ft_error_exit("malloc");
+	ft_strdel(&prefix);
 }
 
 void	intro_message(void)
