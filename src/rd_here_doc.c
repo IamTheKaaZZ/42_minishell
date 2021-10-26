@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 11:04:58 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/20 15:39:12 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:44:12 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static bool	retval_or_limiter(char *limiter, char **line, int retval)
 	if (retval == -1)
 	{
 		ft_strdel(line);
-		return (err_handler("get next line"));
+		return (err_handler("get next line", 1));
 	}
 	if (ft_strequal(*line, limiter))
 	{
@@ -47,9 +47,9 @@ static bool	retval_or_limiter(char *limiter, char **line, int retval)
 bool	unlink_tmp(char *error)
 {
 	if (unlink(TEMPFILE) < 0)
-		return (err_handler("unlink"));
+		return (err_handler("unlink", 1));
 	else if (error != NULL)
-		return (err_handler(error));
+		return (err_handler(error, 1));
 	else
 		return (true);
 }
@@ -97,7 +97,7 @@ static bool	init_here_doc(t_file *tmp, char **line)
 	*line = NULL;
 	tmp->fd = open(TEMPFILE, O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (tmp->fd == -1)
-		return (err_handler("creation of temporary file"));
+		return (err_handler("creation of temporary file", 1));
 	tmp->file_path = TEMPFILE;
 	return (true);
 }

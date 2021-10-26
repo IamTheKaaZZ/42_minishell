@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/25 13:35:28 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 16:22:44 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,26 @@
 
 void	ft_handler(int sig)
 {
+	if (sig == SIGCHLD)
+		g_mini.child_dead = true;
 	if (sig == SIGINT)
 	{
 		g_mini.exit_code = 130;
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (g_mini.child_dead)
+		{
+			write(1, "\n", 1);
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
 	}
 	if (sig == SIGQUIT)
 	{
-		//update prompt with cwd
-		// write(1, g_mini.prompt, ft_strlen(g_mini.prompt));
-		rl_on_new_line();
-		rl_redisplay();
+		if (g_mini.child_dead)
+		{
+			rl_on_new_line();
+			rl_redisplay();
+		}
 	}
 	return ;
 }
@@ -50,6 +56,7 @@ void	ft_init(char **argv, char **env)
 {
 	(void)argv;
 	ft_memset(&g_mini, 0, sizeof(t_minishell));
+	g_mini.child_dead = true;
 	ft_env_list(env);
 	if (!g_mini.env)
 		ft_error_exit("env list creation");
@@ -91,6 +98,7 @@ int	main(int argc, char **argv, char **env)
 	ft_init(argv, env);
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, ft_handler);
+	signal(SIGCHLD, ft_handler);
 	intro_message();
 	while (argc)
 	{
@@ -98,8 +106,7 @@ int	main(int argc, char **argv, char **env)
 		g_mini.input = rl_gnl(&g_mini);
 		if (!parse_input_line())
 			continue ;
-		if (start_processes() == true)
-			g_mini.exit_code = 0;
+		start_processes();
 		ft_str_array_del(&g_mini.argv);
 		unlink(TEMPFILE);
 		// check_leaks();

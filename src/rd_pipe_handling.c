@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 10:10:45 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/21 09:38:49 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:44:52 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	close_pipe(int *pipe)
 bool	open_pipe(int *fd)
 {
 	if (pipe(fd) < 0)
-		return (err_handler("pipe"));
+		return (err_handler("pipe", 1));
 	return (true);
 }
 /**

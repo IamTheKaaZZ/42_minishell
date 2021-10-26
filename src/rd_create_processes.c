@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 09:51:34 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/25 13:27:37 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:43:38 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static bool	fill_lists(t_process *proc, char **argv, int *i, int *j)
 		proc[*j].last_outf = find_tail(proc[*j].outfiles);
 		(*j)++;
 		if (*j > 99)
-			return (err_handler("too many processes [Max 100]"));
+			return (err_handler("too many processes [Max 100]", 42));
 	}
 	else if (ft_strequal(argv[*i], "<<"))
 		add_new_to_tail(&proc[*j].infiles, "heredoc", argv[++*i]);

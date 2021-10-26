@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:20:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/25 11:41:07 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:39:43 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,13 @@ char	*get_full_cmd_path(char *command)
 			return (cmd.file_path);
 		else if (check == 1)
 		{
-			g_mini.exit_code = 126;
-			err_handler(command);
+			err_handler(command, 126);
 			break ;
 		}
 		ft_strdel(&cmd.file_path);
 	}
 	if (g_mini.path_var[i] == NULL)
-		err_handler(command);
+		err_handler(command, 127);
 	ft_strdel(&cmd.file_path);
 	return (NULL);
 }

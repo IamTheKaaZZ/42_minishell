@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 15:32:37 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/11 13:25:47 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:42:19 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ static bool	find_quote_str(t_parse *p, int *sq, int *dq, char quote)
 	(*(p->str))++;
 	p->end = strchr_index(*(p->str), quote);
 	if (p->end == INT_MAX && quote == '\"')
-		return (err_handler("unclosed double quote"));
+		return (err_handler("unclosed double quote", 1));
 	if (p->end == INT_MAX && quote == '\'')
-		return (err_handler("unclosed single quote"));
+		return (err_handler("unclosed single quote", 1));
 	*p->len = p->end - p->start;
 	if (quote == '\"')
 	{

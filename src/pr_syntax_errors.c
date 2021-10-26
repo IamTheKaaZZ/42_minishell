@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 11:07:45 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 16:38:57 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:43:05 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static bool	check_special(char **argv, char *err, int i)
 	k = -1;
 	while (++k < 6)
 		if (ft_strequal(argv[i + 1], sp_chars[k]) && argv[i + 2] == NULL)
-			return (err_handler(concat_err(err, 1, sp_chars[k])));
+			return (err_handler(concat_err(err, 1, sp_chars[k]), 1));
 	return (true);
 }
 
@@ -53,14 +53,14 @@ bool	syntax_error_check(char **argv, char *err, int i)
 			if (ft_strequal(argv[i], sp_chars[j]))
 			{
 				if (argv[i + 1] == NULL)
-					return (err_handler(concat_err(err, 1, "newline")));
+					return (err_handler(concat_err(err, 1, "newline"), 1));
 			}
 			if (!check_special(argv, err, i))
 				return (false);
 		}
 		else
 			if (ft_strequal(argv[i], sp_chars[j]))
-				return (err_handler(concat_err(err, UNSPEC, sp_chars[j])));
+				return (err_handler(concat_err(err, UNSPEC, sp_chars[j]), 1));
 	}
 	return (true);
 }
