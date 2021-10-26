@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 17:27:15 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/26 13:13:01 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:01:03 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,15 @@ static char	*get_full_prefix(void)
 	t_prompt	p;
 
 	p.cwd = find_param(&g_mini.env, "PWD")->content;
-	printf("cwd: %s\n", p.cwd);
 	p.home = find_param(&g_mini.env, "HOME")->content;
-	printf("home: %s\n", p.home);
 	if (ft_strncmp(p.home, p.cwd, ft_strlen(p.home)) == 0)
 	{
 		p.path = ft_strjoin("~", p.cwd + ft_strlen(p.home));
-		printf("path: %s\n", p.path);
 		p.full = p.path;
 		p.path = ft_strjoin(p.full, closebracket);
 		ft_strdel(&p.full);
-		printf("path: %s\n", p.path);
 		p.full = ft_strjoin(prefix, p.path);
 		ft_strdel(&p.path);
-		printf("prefix: %s\n", p.full);
 		return (p.full);
 	}
 	p.path = ft_strjoin(prefix, p.cwd);

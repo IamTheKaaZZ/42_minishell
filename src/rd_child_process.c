@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 09:39:25 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/25 13:13:43 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:13:56 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,13 @@ static bool	check_command(t_exec *ex, t_process *proc)
 		ex->full_command = get_full_cmd_path(proc->cmd_argv[0]);
 		if (ex->full_command)
 		{
+			// int i = -1;
+			// printf("Command: %s\n", ex->full_command);
+			// while (proc->cmd_argv[++i])
+			// 	printf("arg %d = %s\n", i, proc->cmd_argv[i]);
+			// i = -1;
+			// while (ex->curr_envp[++i])
+			// 	printf("env %d, %s\n", i, ex->curr_envp[i]);
 			if (execve(ex->full_command, proc->cmd_argv, ex->curr_envp) < 0)
 				return (err_handler("execve"));
 		}
