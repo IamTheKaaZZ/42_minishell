@@ -35,7 +35,7 @@ char	**get_current_envp(void)
 	t_node	*temp;
 
 	n_param = count_params(g_mini.env);
-	curr_envp = (char **)ft_calloc(n_param, sizeof(char *));
+	curr_envp = (char **)ft_calloc(n_param + 1, sizeof(char *));
 	if (!curr_envp)
 		return (NULL);
 	i = -1;
