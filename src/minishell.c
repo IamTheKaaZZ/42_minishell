@@ -48,10 +48,6 @@ void	ft_handler(int sig)
 }
 
 void	functions(char **argv)
-/**
- *  Need iterate between args
- * void * preferably kept in struct to save lines and more easibly manageable
- */
 {
 	if (ft_strequal(argv[0], "echo"))
 		ft_echo(argv);

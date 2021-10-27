@@ -13,19 +13,12 @@
 #include "../extras/includes/minishell.h"
 
 void	ft_echo(char **argv)
-/*	Rought-cut
-
-	expanding variables ??
-		var search function
-	*/
 {
 	int		i;
 	bool	nl;
-	// t_node	*tmp;
 
 	nl = 1;
 	i = 0;
-	// tmp = argv[1];
 	if (argv[1])
 	{
 		if (!ft_strcmp(argv[1], "-n"))
@@ -40,70 +33,40 @@ void	ft_echo(char **argv)
 				ft_putchar_fd(' ', 1);
 		}
 	}
-
-	// if (g_mini.argv[i]) // if followup  to command
-	// {
-	// 	if (*g_mini.argv[i] && !ft_strcmp(g_mini.argv[i], "-n")) // if -n flag
-	// 	{
-	// 		nl = 0;
-	// 		i++;
-	// 	}
-	// 	while (proc.cmd_argv[i])
-	// 	{
-	// 		if ((nl && i > 1) || (!nl && i > 2)) // terrible
-	// 			ft_putchar_fd(' ', 1);
-	// 		if (str_contains_chars(proc.cmd_argv[i], "|<>&")) // for now
-	// 			return ;
-	// 		ft_putstr_fd(proc.cmd_argv[i++], 1);
-	// 	}
-	// }
-	
 	if (nl)
 		write(1, "\n", 1);
 	g_mini.exit_code = 0;
 }
 
-
-
-void	ft_cd(char **argv)
-/** WAITING FOR ~ TO BE DEALT WITH
- * if starting with '~' look for $HOME
-	change $PWD*/
+bool	ft_cd(char **argv)
 {
 	char	err[100];
 	char	*path;
-	char	**env_var;
 
-	env_var = NULL;
-	path = argv[1];
-	if (!path)
-		return ;
+	if (!argv[1])
+		return (true);
 	ft_bzero(err, 100);
-	if (path && chdir(path) == -1)
+	if (chdir(argv[1]) == -1)
 	{
 		ft_strlcat(err, "cd: ", 5);
-		ft_strlcat(err, argv[1], ft_strlen(argv[1]));
-		err_handler(err, 2, true);
-		return ;
+		ft_strlcat(err, path, ft_strlen(path) + 5);
+		return (err_handler(err, 2, true));
 	}
 	path = getcwd(NULL, 0);
-	env_var = &find_param(&g_mini.env, "PWD")->content;
-	if (!path || !env_var)
+	if (!path)
 	{
 		ft_strlcat(err, "cd: ", 5);
 		ft_strlcat(err, argv[1], ft_strlen(argv[1]));
-		err_handler(err, 2, true);
-		return ;
+		return (err_handler(err, 2, true));
 	}
-	free(find_param(&g_mini.env, "PWD")->content);
+	free(find_param(&g_mini.env, "OLDPWD")->content);
+	find_param(&g_mini.env, "OLDPWD")->content = find_param(&g_mini.env, "PWD")->content;
 	find_param(&g_mini.env, "PWD")->content = path;
-	g_mini.exit_code = 0;
+	free(path);
+	return (true);
 }
 
 void	ft_pwd(char **argv)
-/*char *
-  getcwd(char *buf, size_t size);
-*/
 {
 	char	*buf;
 

@@ -30,14 +30,14 @@ void	ft_env(char **argv)
 	g_mini.exit_code = 0;
 }
 
-void	ft_unset(char **argv)
+bool	ft_unset(char **argv)
 {
 	t_node	*param;
 	t_node	*tmp;
 
 	param = find_param(&g_mini.env, argv[1]);
 	if (!param)
-		return ;
+		return (true);
 	tmp = g_mini.env;
 	if (tmp != param)
 	{
@@ -49,5 +49,5 @@ void	ft_unset(char **argv)
 		g_mini.env = g_mini.env->next;
 	free(param);
 	param = NULL;
-	g_mini.exit_code = 0;
+	return (true);
 }

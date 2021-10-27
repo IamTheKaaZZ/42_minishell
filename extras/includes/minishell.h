@@ -178,12 +178,11 @@ char	**get_current_envp(void);
 */
 
 void	functions(char **argv);
-void	ft_echon(char **argv);
 void	ft_echo(char **argv);
-void	ft_cd(char **argv);
+bool	ft_cd(char **argv);
 void	ft_pwd(char **argv);
 bool	ft_export(char **argv);
-void	ft_unset(char **argv);
+bool	ft_unset(char **argv);
 void	ft_env(char **argv);
 void	ft_exit(char **argv, int i);
 int		executor(char **argv);
