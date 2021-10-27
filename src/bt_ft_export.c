@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 12:57:18 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 15:10:03 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/27 16:55:02 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,28 @@ static bool	list_export(t_node *original)
 	return (true);
 }
 
-static bool	add_to_env(t_node **new, char ***split_param)
+static bool	update_env(t_node **new, char ***split_param, char *arg)
 {
-	*new = new_env_param(*split_param);
-	if (!*new)
+	if (find_param(&g_mini.env, (*split_param)[0]))
 	{
-		ft_str_array_del(split_param);
-		err_handler("malloc", 2, true);
-		return (false);
+		*new = find_param(&g_mini.env, (*split_param)[0]);
+		free((*new)->content);
+		if (ft_strchr(arg, '='))
+			(*new)->content = ft_strdup(ft_strchr(arg, '=') + 1);
+		else
+			(*new)->content = ft_strdup("");
 	}
-	add_to_tail(&g_mini.env, *new);
-	ft_str_array_del(split_param);
+	else
+	{
+		*new = new_env_param(*split_param);
+		if (!*new)
+		{
+			ft_str_array_del(split_param);
+			return (err_handler("malloc", 2, true));
+		}
+		add_to_tail(&g_mini.env, *new);
+		free(*split_param);
+	}
 	return (true);
 }
 
@@ -92,18 +103,15 @@ bool	ft_export(char **argv)
 	while (argv[++i])
 	{
 		if (!check_export_syntax(argv[i]))
-			return ;
+			return (false);
 		split_param = ft_split(argv[i], '=');
 		if (!split_param)
-			return ;
-		else if (find_param(&g_mini.env, split_param[0]))
-		{
-			new = find_param(&g_mini.env, split_param[0]);
-			free(new->content);
-			new->content = ft_strdup(ft_strchr(argv[i], '=') + 1);
-		}
+			return (err_handler("malloc", 2, true));
 		else
-			if (!add_to_env(&new, &split_param))
-				return ;
+		{
+			if (!update_env(&new, &split_param, argv[i]))
+				return (false);
+		}
 	}
+	return (true);
 }

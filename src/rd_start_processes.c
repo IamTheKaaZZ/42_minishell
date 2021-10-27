@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 15:12:40 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/27 16:58:57 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static bool	init_exec(t_exec *ex)
 	ex->p_count = create_processes(ex->proc);
 	if (ex->p_count == -1)
 		return (false);
+	ex->builtin_succes = true;
 	unlink(TEMPFILE);
 	return (true);
 }
@@ -72,7 +73,7 @@ static bool	clean_and_wait(t_exec *ex)
 	}
 	if (ex->full_command)
 		ft_strdel(&ex->full_command);
-	if (!WIFSIGNALED(ex->wstatus))
+	if (!WIFSIGNALED(ex->wstatus) && ex->builtin_succes)
 		g_mini.exit_code = 0;
 	return (true);
 }

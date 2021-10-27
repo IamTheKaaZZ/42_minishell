@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 13:53:12 by fbarros           #+#    #+#             */
-/*   Updated: 2021/10/27 12:58:10 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/27 16:30:32 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_env(char **argv)
 
 	head = g_mini.env;
 	if (argv[1])
-		err_handler("No such file or directory");
+		err_handler("No such file or directory", 2, false);
 	while (head)
 	{
 		ft_putstr_fd(head->keyword, 1);
