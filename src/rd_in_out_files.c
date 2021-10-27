@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 10:05:43 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/20 16:19:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:44:44 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ static bool	open_file_as_input(t_file *f, char *filename)
 	{
 		f->fd = open(filename, O_RDONLY);
 		if (f->fd < 0)
-			return (err_handler(filename));
+			return (err_handler(filename, 1));
 	}
 	else
 	{
 		f->fd = -1;
-		return (err_handler(filename));
+		return (err_handler(filename, 1));
 	}
 	f->file_path = filename;
 	return (true);
@@ -51,7 +51,7 @@ static bool	close_or_delete(t_node *temp, t_node *last, t_file *t, t_file *f)
 			return (false);
 	}
 	else if (close(t->fd) < 0)
-		return (err_handler(temp->content));
+		return (err_handler(temp->content, 1));
 	return (true);
 }
 
@@ -81,7 +81,7 @@ bool	open_infiles(t_process *proc)
 		if (ft_strequal(temp->keyword, "heredoc"))
 		{
 			if (!here_doc_as_input(&tmp, temp->content))
-				return (err_handler("here_doc"));
+				return (err_handler("here_doc", 1));
 		}
 		else if (!open_file_as_input(&tmp, temp->content))
 			return (false);
@@ -117,11 +117,11 @@ bool	open_outfiles(t_process *proc)
 		else if (ft_strequal(temp->keyword, "append"))
 			tmpfd = open(temp->content, O_RDWR | O_CREAT | O_APPEND, 0777);
 		if (tmpfd < 0)
-			return (err_handler(temp->content));
+			return (err_handler(temp->content, 1));
 		if (temp != proc->last_outf)
 		{
 			if (close(tmpfd) < 0)
-				return (err_handler(temp->content));
+				return (err_handler(temp->content, 1));
 		}
 		temp = temp->next;
 	}

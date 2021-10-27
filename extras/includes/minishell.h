@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/26 13:11:32 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:54:03 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_minishell
 	char			*prompt;
 	char			*cwd;
 	unsigned char	exit_code;
+	bool			child_dead;
 }				t_minishell;
 
 typedef struct s_file
@@ -214,7 +215,7 @@ void	child_process(t_exec *ex, int i);
 void	clear_list(t_node **head, bool clear);
 int		ft_clear_data(void);
 void	ft_error_exit(const char *errmessage);
-bool	err_handler(const char *errmessage);
+bool	err_handler(const char *errmessage, t_uc e_code);
 bool	syntax_error_check(char **argv, char *err, int i);
 bool	unlink_tmp(char *error);
 

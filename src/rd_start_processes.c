@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/25 13:26:24 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 17:18:32 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,13 @@ static bool	clean_and_wait(t_exec *ex)
 				ft_putendl_fd("\nQuit.", 2);
 			else if (WTERMSIG(ex->wstatus) == SIGINT)
 				ft_putendl_fd("\nInterrupted.", 2);
+			g_mini.exit_code = 128 + WTERMSIG(ex->wstatus);
 		}
 	}
 	if (ex->full_command)
 		ft_strdel(&ex->full_command);
+	if (!WIFSIGNALED(ex->wstatus))
+		g_mini.exit_code = 0;
 	return (true);
 }
 
@@ -111,13 +114,14 @@ bool	start_processes(void)
 		unlink(TEMPFILE);
 		ft_strdel(&ex.full_command);
 		if (!open_pipe(ex.pipe))
-			return (err_handler("pipe"));
+			return (err_handler("pipe", 1));
+		g_mini.child_dead = false;
 		ex.pid = fork();
 		if (ex.pid < 0)
-			return (err_handler("fork"));
-		if (ex.pid == 0) //CHILD
+			return (err_handler("fork", 1));
+		if (ex.pid == 0)
 			child_process(&ex, i);
-		reset_exec(&ex, ex.proc[i].cmd_argv); //PARENT
+		reset_exec(&ex, ex.proc[i].cmd_argv);
 	}
 	return (clean_and_wait(&ex));
 }

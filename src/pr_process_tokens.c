@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 10:55:57 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/14 11:58:05 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/26 15:42:04 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	tilde_path(t_expand *exp, char **token)
 	if (!exp->expanded)
 	{
 		exp->expanded = ft_strdup("");
-		err_handler("HOME not set");
+		err_handler("HOME not set", 1);
 	}
 	exp->suffix = ft_strdup(*token + 1);
 	ft_strdel(token);
@@ -75,7 +75,7 @@ static char	*expand_tilde(t_expand *exp, char **token)
 		if (!*token)
 		{
 			*token = ft_strdup("");
-			err_handler("HOME not set");
+			err_handler("HOME not set", 1);
 		}
 		ft_strdel(&exp->to_expand);
 	}
