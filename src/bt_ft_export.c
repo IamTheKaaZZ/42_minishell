@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 12:57:18 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 14:07:22 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/27 15:10:03 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	compare_ascii(t_node **original, t_node **listed)
 	print_and_free(original);
 }
 
-static void	list_export(t_node *original)
+static bool	list_export(t_node *original)
 {
 	t_node	*listed;
 
@@ -62,69 +62,48 @@ static void	list_export(t_node *original)
 		compare_ascii(&original, &listed);
 	}
 	print_and_free(&listed);
-}
-
-static bool	check_syntax(char *arg)
-{
-	static char	suffix[100] = "': not a valid identifier";
-	char		error[300];
-	size_t		eq_index;
-
-	ft_bzero(error, 300);
-	ft_strlcpy(error, "`", 2);
-	if (str_contains_chars(arg, " "))
-	{
-		eq_index = strchr_index(arg, '=');
-		if (char_before_others(arg, ' ', "="))
-		{
-			ft_strlcat(error, arg + eq_index, 300);
-			ft_strlcat(error, suffix, 300);
-			printf("error = %s\n", error);
-		}
-		else if (eq_index + 1 == ' ')
-		{
-			arg += eq_index + 1;
-			while (*arg && ft_isspace(*arg))
-				arg++;
-			ft_strlcat(error, arg, 300);
-			ft_strlcat(error, suffix, 300);
-			printf("error = %s\n", error);
-		}
-		return (err_handler(error));
-	}
 	return (true);
 }
 
-void	ft_export(char **argv)
+static bool	add_to_env(t_node **new, char ***split_param)
+{
+	*new = new_env_param(*split_param);
+	if (!*new)
+	{
+		ft_str_array_del(split_param);
+		err_handler("malloc", 2, true);
+		return (false);
+	}
+	add_to_tail(&g_mini.env, *new);
+	ft_str_array_del(split_param);
+	return (true);
+}
+
+bool	ft_export(char **argv)
 {
 	char	**split_param;
 	t_node	*new;
+	int		i;
 
-	if (!check_syntax(argv[1]))
+	if (argv[1] == NULL)
+		return (list_export(g_mini.env));
+	new = NULL;
+	i = 0;
+	while (argv[++i])
 	{
-		g_mini.exit_code = 2;
-		return ;
-	}
-	split_param = ft_split(argv[1], '=');
-	if (!split_param)
-		list_export(g_mini.env);
-	else if (find_param(&g_mini.env, split_param[0]))
-	{
-		new = find_param(&g_mini.env, split_param[0]);
-		free(new->content);
-		new->content = ft_strdup(ft_strchr(argv[1], '=') + 1);
-	}
-	else
-	{
-		new = new_env_param(split_param);
-		if (!new)
-		{
-			ft_str_array_del(&split_param);
-			err_handler("malloc");
-			g_mini.exit_code = 2;
+		if (!check_export_syntax(argv[i]))
 			return ;
+		split_param = ft_split(argv[i], '=');
+		if (!split_param)
+			return ;
+		else if (find_param(&g_mini.env, split_param[0]))
+		{
+			new = find_param(&g_mini.env, split_param[0]);
+			free(new->content);
+			new->content = ft_strdup(ft_strchr(argv[i], '=') + 1);
 		}
-		add_to_tail(&g_mini.env, new);
+		else
+			if (!add_to_env(&new, &split_param))
+				return ;
 	}
-	g_mini.exit_code = 0;
 }

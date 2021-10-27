@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/26 15:54:03 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/27 15:12:10 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ typedef struct s_exec
 	int			wstatus;
 	t_process	proc[100];
 	int			p_count;
+	bool		builtin_succes;
 }	t_exec;
 
 typedef struct s_expand
@@ -181,7 +182,7 @@ void	ft_echon(char **argv);
 void	ft_echo(char **argv);
 void	ft_cd(char **argv);
 void	ft_pwd(char **argv);
-void	ft_export(char **argv);
+bool	ft_export(char **argv);
 void	ft_unset(char **argv);
 void	ft_env(char **argv);
 void	ft_exit(char **argv, int i);
@@ -215,8 +216,9 @@ void	child_process(t_exec *ex, int i);
 void	clear_list(t_node **head, bool clear);
 int		ft_clear_data(void);
 void	ft_error_exit(const char *errmessage);
-bool	err_handler(const char *errmessage, t_uc e_code);
+bool	err_handler(const char *errmessage, t_uc e_code, bool print_errno);
 bool	syntax_error_check(char **argv, char *err, int i);
+bool	check_export_syntax(char *arg);
 bool	unlink_tmp(char *error);
 
 /**

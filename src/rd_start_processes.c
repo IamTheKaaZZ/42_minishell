@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/26 17:18:32 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/27 15:12:40 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static bool	init_exec(t_exec *ex)
 {
 	int	i;
-	// (void)argv;
 
 	ft_memset(ex, 0, sizeof(t_exec));
 	ex->pipe[READ_END] = -1;
@@ -45,7 +44,7 @@ static void	reset_exec(t_exec *ex, char **cmdargv)
 	else if (ft_strequal(cmdargv[0], "cd"))
 		ft_cd(cmdargv);
 	else if (ft_strequal(cmdargv[0], "export"))
-		ft_export(cmdargv);
+		ex->builtin_succes = ft_export(cmdargv);
 	else if (ft_strequal(cmdargv[0], "unset"))
 		ft_unset(cmdargv);
 	if (cmdargv)
@@ -114,11 +113,11 @@ bool	start_processes(void)
 		unlink(TEMPFILE);
 		ft_strdel(&ex.full_command);
 		if (!open_pipe(ex.pipe))
-			return (err_handler("pipe", 1));
+			return (err_handler("pipe", 1, true));
 		g_mini.child_dead = false;
 		ex.pid = fork();
 		if (ex.pid < 0)
-			return (err_handler("fork", 1));
+			return (err_handler("fork", 1, true));
 		if (ex.pid == 0)
 			child_process(&ex, i);
 		reset_exec(&ex, ex.proc[i].cmd_argv);

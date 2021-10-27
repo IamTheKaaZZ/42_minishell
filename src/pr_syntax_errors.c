@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 11:07:45 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/26 15:43:05 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/27 14:40:05 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ static bool	check_special(char **argv, char *err, int i)
 	k = -1;
 	while (++k < 6)
 		if (ft_strequal(argv[i + 1], sp_chars[k]) && argv[i + 2] == NULL)
-			return (err_handler(concat_err(err, 1, sp_chars[k]), 1));
+			return (err_handler(concat_err(err, 1, sp_chars[k]), 1, 0));
 	return (true);
 }
 
 bool	syntax_error_check(char **argv, char *err, int i)
 {
 	int			j;
-	static char	sp_chars[20][5] = {"<", "<<", ">", ">>", "|", "&", "\\", "#",
+	static char	sp[20][5] = {"<", "<<", ">", ">>", "|", "&", "\\", "#",
 		"=", "[", "]", "!", "{", "}", "(", ")", "*", ";"};
 
 	j = -1;
@@ -50,17 +50,33 @@ bool	syntax_error_check(char **argv, char *err, int i)
 	{
 		if (j < 6)
 		{
-			if (ft_strequal(argv[i], sp_chars[j]))
+			if (ft_strequal(argv[i], sp[j]))
 			{
 				if (argv[i + 1] == NULL)
-					return (err_handler(concat_err(err, 1, "newline"), 1));
+					return (err_handler(concat_err(err, 1, "newline"), 1, 0));
 			}
 			if (!check_special(argv, err, i))
 				return (false);
 		}
 		else
-			if (ft_strequal(argv[i], sp_chars[j]))
-				return (err_handler(concat_err(err, UNSPEC, sp_chars[j]), 1));
+			if (ft_strequal(argv[i], sp[j]))
+				return (err_handler(concat_err(err, UNSPEC, sp[j]), 1, 0));
+	}
+	return (true);
+}
+
+bool	check_export_syntax(char *arg)
+{
+	static char	suffix[100] = "': not a valid identifier";
+	char		error[300];
+
+	ft_bzero(error, 300);
+	ft_strlcpy(error, "`", 2);
+	if (str_contains_chars(arg, " ") || arg[0] == '=')
+	{
+		ft_strlcat(error, arg, 300);
+		ft_strlcat(error, suffix, 300);
+		return (err_handler(error, 2, false));
 	}
 	return (true);
 }

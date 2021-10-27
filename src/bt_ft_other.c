@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_builtins.c                               :+:      :+:    :+:   */
+/*   bt_ft_other.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/07 11:05:51 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/27 14:46:13 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	ft_cd(char **argv)
 	{
 		ft_strlcat(err, "cd: ", 5);
 		ft_strlcat(err, argv[1], ft_strlen(argv[1]));
-		err_handler(err);
+		err_handler(err, 2, true);
 		return ;
 	}
 	path = getcwd(NULL, 0);
@@ -92,7 +92,7 @@ void	ft_cd(char **argv)
 	{
 		ft_strlcat(err, "cd: ", 5);
 		ft_strlcat(err, argv[1], ft_strlen(argv[1]));
-		err_handler(err);
+		err_handler(err, 2, true);
 		return ;
 	}
 	free(find_param(&g_mini.env, "PWD")->content);
@@ -110,8 +110,7 @@ void	ft_pwd(char **argv)
 	buf = NULL;
 	if (argv[1])
 	{
-		g_mini.exit_code = 2;
-		err_handler("pwd: too many arguments");
+		err_handler("pwd: too many arguments", 2, false);
 		return ;
 	}
 	ft_putendl_fd(find_param(&g_mini.env, "PWD")->content, 1);
@@ -125,8 +124,7 @@ void	ft_exit(char **argv, int i)
 	{
 		if (argv[2])
 		{
-			g_mini.exit_code = 2;
-			err_handler("exit: too many arguments");
+			err_handler("exit: too many arguments", 2, false);
 			return ;
 		}
 		while (argv[1][++i])
@@ -134,10 +132,7 @@ void	ft_exit(char **argv, int i)
 			if (argv[1][i] == '+')
 				continue ;
 			if (!ft_isdigit(argv[1][i]))
-			{
-				err_handler("exit: numeric argument required");
-				g_mini.exit_code = 255;
-			}
+				err_handler("exit: numeric argument required", 255, false);
 		}
 		if (!g_mini.exit_code)
 			g_mini.exit_code = ft_atoi(argv[1]);

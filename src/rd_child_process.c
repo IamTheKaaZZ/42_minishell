@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 09:39:25 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 14:10:46 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/27 14:49:13 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static bool	check_command(t_exec *ex, t_process *proc)
 		if (ex->full_command)
 		{
 			if (execve(ex->full_command, proc->cmd_argv, ex->curr_envp) < 0)
-				return (err_handler("execve", 1));
+				return (err_handler("execve", 1, true));
 		}
 		else
 			return (false);
