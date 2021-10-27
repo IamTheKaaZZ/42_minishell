@@ -23,7 +23,8 @@ void	ft_env(char **argv)
 	{
 		ft_putstr_fd(head->keyword, 1);
 		ft_putchar_fd('=', 1);
-		ft_putendl_fd(head->content, 1);
+		ft_putstr_fd(head->content, 1);
+		ft_putchar_fd('\n', 1);
 		head = head->next;
 	}
 	g_mini.exit_code = 0;
@@ -76,32 +77,30 @@ static void	list_export(t_node *original)
 }
 
 void	ft_export(char **argv)
-/*Exporting empty vars*/
 {
 	char	**split_param;
 	t_node	*new;
 
-	if (!argv[1])
-	{
-		list_export(g_mini.env);
-		return ;
-	}
-	
-	/*TMP*/
-	if (!ft_strchr(argv[1], '='))
-		return ;
-	/*TMP*/
-
 	split_param = ft_split(argv[1], '=');
-	new = new_env_param(split_param);
-	if (!new)
+	if (!split_param)
+		list_export(g_mini.env);
+	else if (find_param(&g_mini.env, split_param[0]))
 	{
-		free(split_param[0]);
-		free(split_param[1]);
-		free(split_param);
-		return ;
+		new = find_param(&g_mini.env, split_param[0]);
+		free(new->content);
+		new->content = ft_strdup(ft_strchr(argv[1], '=') + 1);
 	}
-	add_to_tail(&g_mini.env, new);
+	else
+	{
+		new = new_env_param(split_param);
+		if (!new)
+		{
+			ft_str_array_del(&split_param);
+			err_handler("malloc");
+			return ;
+		}
+		add_to_tail(&g_mini.env, new);
+	}
 	g_mini.exit_code = 0;
 }
 

@@ -95,11 +95,9 @@ void	ft_cd(char **argv)
 		err_handler(err);
 		return ;
 	}
-	// free(*env_var);
-	// *env_var = path;
 	free(find_param(&g_mini.env, "PWD")->content);
 	find_param(&g_mini.env, "PWD")->content = path;
-	g_mini.exit_code = 0; // ...
+	g_mini.exit_code = 0;
 }
 
 void	ft_pwd(char **argv)
@@ -114,19 +112,10 @@ void	ft_pwd(char **argv)
 	{
 		g_mini.exit_code = 2;
 		err_handler("pwd: too many arguments");
+		return ;
 	}
-	else // get it from $PWD
-	{
-		// buf = getcwd(NULL, 0);
-		// if (!buf)
-		// {
-		// 	free(buf);
-		// 	g_mini.exit_code = 2;
-		// 	err_handler("pwd: Failed to get current working directory.");
-		// }
-		ft_putendl_fd(find_param(&g_mini.env, "PWD")->content, 1);
-		free(buf);
-	}
+	ft_putendl_fd(find_param(&g_mini.env, "PWD")->content, 1);
+	free(buf);
 	g_mini.exit_code = 0;
 }
 
