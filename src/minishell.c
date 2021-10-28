@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 12:48:48 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 16:13:01 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char	*rl_gnl(t_minishell *mini)
 	if (!line)
 	{
 		ft_putstr_fd("exit\n", 1);
-		exit(ft_clear_data());
+		exit(ft_clear_data() + 1);
 	}
 	if (line != NULL && line[0] != 0)
 		add_history(line);

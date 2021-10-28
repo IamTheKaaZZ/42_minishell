@@ -6,11 +6,24 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 17:27:15 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 14:38:22 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 16:25:57 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/includes/minishell.h"
+
+static void	check_env(t_prompt *p)
+{
+	ft_bzero(p, sizeof(t_prompt));
+	if (!find_param(&g_mini.env, "PWD"))
+		p->cwd = getcwd(NULL, 0);
+	else
+		p->cwd = find_param(&g_mini.env, "PWD")->content;
+	if (find_param(&g_mini.env, "HOME"))
+		p->home = find_param(&g_mini.env, "HOME")->content;
+	else
+		p->home = ft_strdup("");
+}
 
 static char	*get_full_prefix(void)
 {
@@ -18,12 +31,8 @@ static char	*get_full_prefix(void)
 	static char	closebracket[100] = " 〉➫ \033[0m";
 	t_prompt	p;
 
-	if (!find_param(&g_mini.env, "PWD"))
-		p.cwd = getcwd(NULL, 0);
-	else
-		p.cwd = find_param(&g_mini.env, "PWD")->content;
-	p.home = find_param(&g_mini.env, "HOME")->content;
-	if (ft_strncmp(p.home, p.cwd, ft_strlen(p.home)) == 0)
+	check_env(&p);
+	if (*p.home && (ft_strncmp(p.home, p.cwd, ft_strlen(p.home)) == 0))
 	{
 		p.path = ft_strjoin("~", p.cwd + ft_strlen(p.home));
 		p.full = p.path;
@@ -38,6 +47,8 @@ static char	*get_full_prefix(void)
 	ft_strdel(&p.path);
 	if (!find_param(&g_mini.env, "PWD"))
 		ft_strdel(&p.cwd);
+	if (!find_param(&g_mini.env, "HOME"))
+		ft_strdel(&p.home);
 	return (p.full);
 }
 

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 15:08:41 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 16:28:01 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ bool	ft_cd(char **argv)
 	if (chdir(argv[1]) == -1)
 	{
 		ft_strlcat(err, "cd: ", 5);
-		ft_strlcat(err, path, ft_strlen(path) + 5);
+		ft_strlcat(err, argv[1], ft_strlen(argv[1]) + 5);
 		return (err_handler(err, 2, true));
 	}
 	path = getcwd(NULL, 0);

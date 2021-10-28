@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:01:22 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 14:47:10 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 16:47:20 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ char	**list_to_argv(t_node *head)
 	int		i;
 	t_node	*temp;
 
+	if (!head)
+		return (NULL);
 	n_param = count_params(head);
 	argv = (char **)ft_calloc(n_param + 1, sizeof(char *));
 	if (!argv)

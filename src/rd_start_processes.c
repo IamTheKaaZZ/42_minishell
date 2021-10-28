@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 11:04:59 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 16:48:53 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static void	reset_exec(t_exec *ex, char **cmdargv)
 		close(ex->prev_fd);
 	ex->prev_fd = ex->pipe[WRITE_END];
 	close(ex->pipe[READ_END]);
+	if (!cmdargv)
+		return ;
 	if (ft_strequal(cmdargv[0], "exit"))
 		ex->builtin_succes = ft_exit(cmdargv);
 	else if (ft_strequal(cmdargv[0], "cd"))
@@ -78,30 +80,7 @@ static bool	clean_and_wait(t_exec *ex)
 	return (true);
 }
 
-// static void	ft_exec(t_process proc)
-// {
-// 	// ex.pid = fork();
-// 	// if (ex.pid == -1)
-// 	// 	err_handler
-// 	// if (ex.pid == 0)
-// 	// {
-// 	// 	// child process
-
-// 	// }
-// 	// else
-// 	// {
-// 	// 	// parent process
-// 	// }
-// 	/**
-// 	 * Create child process
-// 	 * execve (1st process argument)
-// 	 */
-// }
-
 bool	start_processes(void)
-/**Need further work on "functions", specially exit
- * 
-*/
 {
 	t_exec	ex;
 	int		i;

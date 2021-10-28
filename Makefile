@@ -73,7 +73,7 @@ clean:
 
 fclean:	clean
 	@echo "$(RED) [ .. ] Deleting '$(NAME)' executable  [ .. ]"
-	@rm -fr $(NAME)
+	@rm -fr $(NAME) *.dSYM
 	@echo "\n'$(NAME)' executable DELETED"
 	@echo "$(QUIT)"
 

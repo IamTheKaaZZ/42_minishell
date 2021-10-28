@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:20:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 14:46:57 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 16:35:02 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ char	*get_full_cmd_path(char *command)
 	int		check;
 
 	g_mini.path_var = ft_get_path();
+	if (!g_mini.path_var)
+		return (command);
 	i = -1;
 	while (g_mini.path_var[++i])
 	{
@@ -103,6 +105,8 @@ char	**ft_get_path(void)
 	if (g_mini.path_var)
 		ft_str_array_del(&g_mini.path_var);
 	path = find_param(&g_mini.env, "PATH");
+	if (!path)
+		return (NULL);
 	return (ft_split(path->content, ':'));
 }
 

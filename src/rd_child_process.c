@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 09:39:25 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 11:10:26 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 16:43:49 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static void	child_redirections(t_exec *ex, t_process *proc, int i)
 static bool	check_command(t_exec *ex, t_process *proc)
 {
 	ex->curr_envp = get_current_envp();
+	if (!proc->cmd_argv)
+		return (true);
 	if (builtin_or_execve(proc->cmd_argv[0]) == NULL)
 	{
 		ex->full_command = get_full_cmd_path(proc->cmd_argv[0]);
