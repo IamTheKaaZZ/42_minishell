@@ -28,8 +28,12 @@ LINKS	=	-L./$(LIBFT) -lft `pkg-config readline --libs`
 
 all:	$(NAME)
 
-$(NAME): libcheck libft $(INCL) $(DIR_O) $(OBJS)
-	@printf "$(GREEN)]$(QUIT)"
+$(NAME):	$(INCL) $(OBJS)
+	@printf "\n\n$(GREEN)'$(NAME)' objects compiled.$(QUIT)\n\n"
+	@bash scripts/lib_setup.sh
+	@echo
+	@make -C $(LIBFT)
+	@printf "$(WHITE)\n\n [ .. ] Creating '$(NAME)' [ .. ]$(QUIT)\n\n"
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LINKS)
 	@echo "\n$(GREEN)\n"
 	@echo "$(NAME) executable CREATED"
@@ -56,11 +60,7 @@ debug:	libcheck libft $(INCL) $(DIR_O) $(OBJS)
 	@echo "\n$(QUIT)\n"
 
 libft:
-	@echo "$(WHITE) [ .. ] Creating LIBFT [ .. ]$(GREEN)"
 	@make -C $(LIBFT)
-	@echo "\n$(GREEN)\n"
-	@echo "LIBFT library CREATED"
-	@printf "$(WHITE) \n\n[ .. ] Creating '$(NAME)' [ .. ]$(QUIT)\n\n$(GREEN)["
 
 clean:
 	@echo "$(RED) [ .. ] Deleting LIBFT [ .. ]"

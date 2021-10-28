@@ -6,7 +6,7 @@
 #    By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/08 10:32:48 by bcosters          #+#    #+#              #
-#    Updated: 2021/09/27 15:40:05 by bcosters         ###   ########.fr        #
+#    Updated: 2021/10/28 16:06:10 by bcosters         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,15 @@ HEADERS_OWN = libft.h libft_bonus.h
 
 OBJDIR = obj/
 
+# COLORS
+
+GREEN	= \033[0;32m
+RED		= \033[0;31m
+BLUE	= \033[0;34m
+GREY	= \033[38;5;240m
+WHITE	= \033[0;37m
+QUIT	= \033[0m
+
 # -*- Rules -*-
 #target: dependencies
 #	action
@@ -49,7 +58,7 @@ OBJDIR = obj/
 #	Implicit rules
 
 ${OBJDIR}%.o : src/%.c
-			@printf "#"
+			@printf "$(GREEN)#$(QUIT)"
 			@$(CC) -c $(CFLAGS) $< -o $@
 
 #	Normal rules
@@ -66,9 +75,13 @@ bonus:		fclean $(OBJDIR) $(OBJS_BONUS) $(HEADER)
 			@ar rcs $(NAME) $(OBJS_BONUS)
 			@echo FINISHED: Compiling MANDATORY AND BONUS LIBFT
 
-$(NAME):	progress $(OBJDIR) ${OBJS_OWN} ${HEADERS_OWN}
+$(NAME):	$(OBJDIR) ${OBJS_OWN} ${HEADERS_OWN}
+			@printf "\n\n$(GREEN)LIBFT objects compiled.$(QUIT)\n"
+			@printf "\n\n$(WHITE) [ .. ] Creating LIBFT library [ .. ]$(GREEN)\n"
 			@ar rcs ${NAME} ${OBJS_OWN}
-			@echo "]\n"
+			@echo "\n$(GREEN)\n"
+			@echo "LIBFT library CREATED"
+
 
 $(OBJS):		| $(OBJDIR)
 $(OBJS_BONUS):	| $(OBJDIR)
@@ -76,10 +89,6 @@ $(OBJS_OWN):	| $(OBJDIR)
 
 $(OBJDIR):
 			@mkdir -p $(OBJDIR)
-
-progress:
-			@printf "\n["
-
 
 .PHONY:		clean
 

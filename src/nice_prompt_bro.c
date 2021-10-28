@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 17:27:15 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 12:46:03 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 14:38:22 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ static char	*get_full_prefix(void)
 	static char	closebracket[100] = " 〉➫ \033[0m";
 	t_prompt	p;
 
-	p.cwd = find_param(&g_mini.env, "PWD")->content;
+	if (!find_param(&g_mini.env, "PWD"))
+		p.cwd = getcwd(NULL, 0);
+	else
+		p.cwd = find_param(&g_mini.env, "PWD")->content;
 	p.home = find_param(&g_mini.env, "HOME")->content;
 	if (ft_strncmp(p.home, p.cwd, ft_strlen(p.home)) == 0)
 	{
@@ -33,6 +36,8 @@ static char	*get_full_prefix(void)
 	p.path = ft_strjoin(prefix, p.cwd);
 	p.full = ft_strjoin(p.path, closebracket);
 	ft_strdel(&p.path);
+	if (!find_param(&g_mini.env, "PWD"))
+		ft_strdel(&p.cwd);
 	return (p.full);
 }
 

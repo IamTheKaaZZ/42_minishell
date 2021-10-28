@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 13:00:28 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 15:08:41 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,28 @@ static void	update_env(char *path)
 	char	*oldpwd;
 	char	*pwd;
 
-	oldpwd = find_param(&g_mini.env, "OLDPWD")->content;
-	pwd = find_param(&g_mini.env, "PWD")->content;
-	ft_strdel(&oldpwd);
-	find_param(&g_mini.env, "OLDPWD")->content = pwd;
-	find_param(&g_mini.env, "PWD")->content = path;
+	pwd = NULL;
+	oldpwd = NULL;
+	if (find_param(&g_mini.env, "PWD"))
+		pwd = find_param(&g_mini.env, "PWD")->content;
+	if (pwd)
+	{
+		if (find_param(&g_mini.env, "OLDPWD"))
+			oldpwd = find_param(&g_mini.env, "OLDPWD")->content;
+		if (pwd && oldpwd)
+		{
+			ft_strdel(&oldpwd);
+			find_param(&g_mini.env, "OLDPWD")->content = pwd;
+		}
+		find_param(&g_mini.env, "PWD")->content = path;
+	}
+	else
+	{
+		ft_strdel(&path);
+		if (find_param(&g_mini.env, "OLDPWD"))
+			ft_bzero(find_param(&g_mini.env, "OLDPWD")->content,
+				ft_strlen(find_param(&g_mini.env, "OLDPWD")->content));
+	}
 }
 
 bool	ft_cd(char **argv)
@@ -77,9 +94,17 @@ bool	ft_cd(char **argv)
 
 bool	ft_pwd(char **argv)
 {
+	char	*pwd;
+
 	if (argv[1])
 		return (err_handler("pwd: too many arguments", 2, false));
-	ft_putendl_fd(find_param(&g_mini.env, "PWD")->content, 1);
+	if (!find_param(&g_mini.env, "PWD"))
+		pwd = getcwd(NULL, 0);
+	else
+		pwd = find_param(&g_mini.env, "PWD")->content;
+	ft_putendl_fd(pwd, 1);
+	if (!find_param(&g_mini.env, "PWD"))
+		ft_strdel(&pwd);
 	return (true);
 }
 
