@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 10:35:48 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 12:50:21 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,6 @@ t_minishell	g_mini;
 *	FUNCTION PROTOTYPES
 */
 
-
-
 /**
  * 1.	PARSING
 */
@@ -196,8 +194,6 @@ char	*get_full_cmd_path(char *command);
 */
 
 bool	start_processes(void);
-
-
 int		create_processes(t_process *proc);
 bool	here_doc_as_input(t_file *tmp, char *limiter);
 bool	open_infiles(t_process *proc);

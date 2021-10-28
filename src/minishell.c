@@ -6,13 +6,11 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 11:44:46 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 12:48:48 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/includes/minishell.h"
-
-// t_minishell	g_mini;
 
 /*
 **	Signal handler
@@ -105,13 +103,11 @@ char	*rl_gnl(t_minishell *mini)
 int	main(int argc, char **argv, char **env)
 {
 	(void)argv;
-
 	ft_init(env);
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, ft_handler);
 	signal(SIGCHLD, ft_handler);
 	intro_message();
-	// g_mini.prompt = ft_strdup("minishell> ");
 	while (argc)
 	{
 		pretty_prompt();

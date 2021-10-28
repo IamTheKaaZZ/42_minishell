@@ -26,7 +26,7 @@ LINKS	=	-L./$(LIBFT) -lft `pkg-config readline --libs`
 
 # RULES
 
-all:	$(NAME) | $(shell bash spinner.sh)
+all:	$(NAME)
 
 $(NAME): libcheck libft $(INCL) $(DIR_O) $(OBJS)
 	@printf "$(GREEN)]$(QUIT)"

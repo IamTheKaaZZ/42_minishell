@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 11:56:48 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 13:00:28 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,18 @@ bool	ft_echo(char **argv)
 	return (true);
 }
 
+static void	update_env(char *path)
+{
+	char	*oldpwd;
+	char	*pwd;
+
+	oldpwd = find_param(&g_mini.env, "OLDPWD")->content;
+	pwd = find_param(&g_mini.env, "PWD")->content;
+	ft_strdel(&oldpwd);
+	find_param(&g_mini.env, "OLDPWD")->content = pwd;
+	find_param(&g_mini.env, "PWD")->content = path;
+}
+
 bool	ft_cd(char **argv)
 {
 	char	err[100];
@@ -59,9 +71,7 @@ bool	ft_cd(char **argv)
 		ft_strlcat(err, argv[1], ft_strlen(argv[1]));
 		return (err_handler(err, 2, true));
 	}
-	ft_strdel(&find_param(&g_mini.env, "OLDPWD")->content);
-	find_param(&g_mini.env, "OLDPWD")->content = find_param(&g_mini.env, "PWD")->content;
-	find_param(&g_mini.env, "PWD")->content = path;
+	update_env(path);
 	return (true);
 }
 
