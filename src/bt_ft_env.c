@@ -6,19 +6,19 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 13:53:12 by fbarros           #+#    #+#             */
-/*   Updated: 2021/10/27 16:30:32 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 11:06:59 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/includes/minishell.h"
 
-void	ft_env(char **argv)
+bool	ft_env(char **argv)
 {
 	t_node	*head;
 
 	head = g_mini.env;
 	if (argv[1])
-		err_handler("No such file or directory", 2, false);
+		return (err_handler("No such file or directory", 2, false));
 	while (head)
 	{
 		ft_putstr_fd(head->keyword, 1);
@@ -27,7 +27,7 @@ void	ft_env(char **argv)
 		ft_putchar_fd('\n', 1);
 		head = head->next;
 	}
-	g_mini.exit_code = 0;
+	return (true);
 }
 
 bool	ft_unset(char **argv)

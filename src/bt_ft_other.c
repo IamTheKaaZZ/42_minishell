@@ -6,13 +6,13 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 14:46:13 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 11:56:48 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../extras/includes/minishell.h"
 
-void	ft_echo(char **argv)
+bool	ft_echo(char **argv)
 {
 	int		i;
 	bool	nl;
@@ -35,7 +35,7 @@ void	ft_echo(char **argv)
 	}
 	if (nl)
 		write(1, "\n", 1);
-	g_mini.exit_code = 0;
+	return (true);
 }
 
 bool	ft_cd(char **argv)
@@ -59,47 +59,39 @@ bool	ft_cd(char **argv)
 		ft_strlcat(err, argv[1], ft_strlen(argv[1]));
 		return (err_handler(err, 2, true));
 	}
-	free(find_param(&g_mini.env, "OLDPWD")->content);
+	ft_strdel(&find_param(&g_mini.env, "OLDPWD")->content);
 	find_param(&g_mini.env, "OLDPWD")->content = find_param(&g_mini.env, "PWD")->content;
 	find_param(&g_mini.env, "PWD")->content = path;
-	free(path);
 	return (true);
 }
 
-void	ft_pwd(char **argv)
+bool	ft_pwd(char **argv)
 {
-	char	*buf;
-
-	buf = NULL;
 	if (argv[1])
-	{
-		err_handler("pwd: too many arguments", 2, false);
-		return ;
-	}
+		return (err_handler("pwd: too many arguments", 2, false));
 	ft_putendl_fd(find_param(&g_mini.env, "PWD")->content, 1);
-	free(buf);
-	g_mini.exit_code = 0;
+	return (true);
 }
 
-void	ft_exit(char **argv, int i)
+bool	ft_exit(char **argv)
 {
+	int	i;
+
+	i = -1;
 	if (argv[1])
 	{
 		if (argv[2])
-		{
-			err_handler("exit: too many arguments", 2, false);
-			return ;
-		}
+			return (err_handler("exit: too many arguments", 2, false));
 		while (argv[1][++i])
 		{
-			if (argv[1][i] == '+')
+			if (argv[1][0] == '+' || argv[1][0] == '-')
 				continue ;
 			if (!ft_isdigit(argv[1][i]))
 				err_handler("exit: numeric argument required", 255, false);
 		}
-		if (!g_mini.exit_code)
+		if (g_mini.exit_code != 255)
 			g_mini.exit_code = ft_atoi(argv[1]);
 	}
 	ft_putstr_fd("exit\n", 1);
-	exit(g_mini.exit_code + ft_clear_data());
+	exit(ft_clear_data() + g_mini.exit_code);
 }

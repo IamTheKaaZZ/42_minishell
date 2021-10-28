@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 12:36:19 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 16:58:57 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 11:04:59 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ static void	reset_exec(t_exec *ex, char **cmdargv)
 	ex->prev_fd = ex->pipe[WRITE_END];
 	close(ex->pipe[READ_END]);
 	if (ft_strequal(cmdargv[0], "exit"))
-		ft_exit(cmdargv, -1);
+		ex->builtin_succes = ft_exit(cmdargv);
 	else if (ft_strequal(cmdargv[0], "cd"))
-		ft_cd(cmdargv);
+		ex->builtin_succes = ft_cd(cmdargv);
 	else if (ft_strequal(cmdargv[0], "export"))
 		ex->builtin_succes = ft_export(cmdargv);
 	else if (ft_strequal(cmdargv[0], "unset"))
-		ft_unset(cmdargv);
+		ex->builtin_succes = ft_unset(cmdargv);
 	if (cmdargv)
 		ft_str_array_del(&cmdargv);
 }

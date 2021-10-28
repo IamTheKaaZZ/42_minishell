@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 15:12:10 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 10:35:48 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,13 +178,13 @@ char	**get_current_envp(void);
 */
 
 void	functions(char **argv);
-void	ft_echo(char **argv);
+bool	ft_echo(char **argv);
 bool	ft_cd(char **argv);
-void	ft_pwd(char **argv);
+bool	ft_pwd(char **argv);
 bool	ft_export(char **argv);
 bool	ft_unset(char **argv);
-void	ft_env(char **argv);
-void	ft_exit(char **argv, int i);
+bool	ft_env(char **argv);
+bool	ft_exit(char **argv);
 int		executor(char **argv);
 
 void	ft_handler(int signal);

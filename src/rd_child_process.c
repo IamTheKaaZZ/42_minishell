@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 09:39:25 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 14:49:13 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 11:10:26 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static bool	check_command(t_exec *ex, t_process *proc)
 
 void	child_process(t_exec *ex, int i)
 {
+	g_mini.exit_code = 0;
 	if (!open_infiles(&ex->proc[i]))
 		exit(g_mini.exit_code);
 	if (!open_outfiles(&ex->proc[i]))
@@ -73,5 +74,5 @@ void	child_process(t_exec *ex, int i)
 		exit(g_mini.exit_code);
 	if (ex->proc[i].cmd_argv)
 		ft_str_array_del(&ex->proc[i].cmd_argv);
-	exit(EXIT_SUCCESS);
+	exit(g_mini.exit_code);
 }

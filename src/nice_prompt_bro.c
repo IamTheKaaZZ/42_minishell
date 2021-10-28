@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 17:27:15 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 14:10:20 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 12:46:03 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,16 @@ void	pretty_prompt(void)
 void	intro_message(void)
 {
 	static char	intro[200] = "The default shell is now ";
+	int			shlvl;
 
 	ft_strlcat(intro, "\033[33m𝓶 𝓲𝓷𝓲𝓼𝓱𝓮𝓵𝓵\033[0m\n", 200);
 	ft_strlcat(intro, "Powered by the brain cells of ", 200);
 	ft_strlcat(intro, "\033[35m@bcosters\033[0m ", 200);
 	ft_strlcat(intro, "and \033[35m@fbarros\033[0m.\n", 200);
 	ft_strlcat(intro, "For more details, please RTFM.\n\n", 200);
+	shlvl = ft_atoi(find_param(&g_mini.env, "SHLVL")->content);
+	shlvl++;
+	ft_strdel(&find_param(&g_mini.env, "SHLVL")->content);
+	find_param(&g_mini.env, "SHLVL")->content = ft_itoa(shlvl);
 	ft_putstr(intro);
 }

@@ -6,6 +6,16 @@
 		"iterator": "c",
 		"memory": "c",
 		"sstream": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"__config": "c",
+		"algorithm": "c",
+		"chrono": "c",
+		"exception": "c",
+		"new": "c",
+		"streambuf": "c",
+		"string_view": "c",
+		"system_error": "c",
+		"vector": "c",
+		"complex": "c"
 	}
 }

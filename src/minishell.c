@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 14:09:58 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/28 11:44:46 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,6 @@ void	functions(char **argv)
 		ft_env(argv);
 	else if (ft_strequal(argv[0], "pwd"))
 		ft_pwd(argv);
-	else if (ft_strequal(argv[0], "cd"))
-		ft_cd(argv);
-	else if (ft_strequal(argv[0], "exit"))
-		ft_exit(argv, -1);
-	else if (ft_strequal(argv[0], "unset"))
-		ft_unset(argv);
-	else if (ft_strequal(argv[0], "export"))
-		ft_export(argv);
 }
 
 /*
