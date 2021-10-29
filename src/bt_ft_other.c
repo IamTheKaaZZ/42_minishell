@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 16:28:01 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 11:32:14 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,25 @@ static void	update_env(char *path)
 
 	pwd = NULL;
 	oldpwd = NULL;
-	if (find_param(&g_mini.env, "PWD"))
-		pwd = find_param(&g_mini.env, "PWD")->content;
+	if (find_param("PWD"))
+		pwd = find_param("PWD")->content;
 	if (pwd)
 	{
-		if (find_param(&g_mini.env, "OLDPWD"))
-			oldpwd = find_param(&g_mini.env, "OLDPWD")->content;
+		if (find_param("OLDPWD"))
+			oldpwd = find_param("OLDPWD")->content;
 		if (pwd && oldpwd)
 		{
 			ft_strdel(&oldpwd);
-			find_param(&g_mini.env, "OLDPWD")->content = pwd;
+			find_param("OLDPWD")->content = pwd;
 		}
-		find_param(&g_mini.env, "PWD")->content = path;
+		find_param("PWD")->content = path;
 	}
 	else
 	{
 		ft_strdel(&path);
-		if (find_param(&g_mini.env, "OLDPWD"))
-			ft_bzero(find_param(&g_mini.env, "OLDPWD")->content,
-				ft_strlen(find_param(&g_mini.env, "OLDPWD")->content));
+		if (find_param("OLDPWD"))
+			ft_bzero(find_param("OLDPWD")->content,
+				ft_strlen(find_param("OLDPWD")->content));
 	}
 }
 
@@ -73,21 +73,19 @@ bool	ft_cd(char **argv)
 	char	*path;
 
 	if (!argv[1])
-		return (true);
+		path = getenv("HOME");
+	else
+		path = argv[1];
 	ft_bzero(err, 100);
-	if (chdir(argv[1]) == -1)
+	if (chdir(path) == -1)
 	{
 		ft_strlcat(err, "cd: ", 5);
-		ft_strlcat(err, argv[1], ft_strlen(argv[1]) + 5);
+		ft_strlcat(err, path, ft_strlen(path) + 5);
 		return (err_handler(err, 2, true));
 	}
 	path = getcwd(NULL, 0);
 	if (!path)
-	{
-		ft_strlcat(err, "cd: ", 5);
-		ft_strlcat(err, argv[1], ft_strlen(argv[1]));
-		return (err_handler(err, 2, true));
-	}
+		return (err_handler("cd: malloc", 2, true));
 	update_env(path);
 	return (true);
 }
@@ -98,12 +96,12 @@ bool	ft_pwd(char **argv)
 
 	if (argv[1])
 		return (err_handler("pwd: too many arguments", 2, false));
-	if (!find_param(&g_mini.env, "PWD"))
+	if (!find_param("PWD"))
 		pwd = getcwd(NULL, 0);
 	else
-		pwd = find_param(&g_mini.env, "PWD")->content;
+		pwd = find_param("PWD")->content;
 	ft_putendl_fd(pwd, 1);
-	if (!find_param(&g_mini.env, "PWD"))
+	if (!find_param("PWD"))
 		ft_strdel(&pwd);
 	return (true);
 }

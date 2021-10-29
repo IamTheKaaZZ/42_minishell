@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:20:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 16:35:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 10:43:44 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	**ft_get_path(void)
 
 	if (g_mini.path_var)
 		ft_str_array_del(&g_mini.path_var);
-	path = find_param(&g_mini.env, "PATH");
+	path = find_param("PATH");
 	if (!path)
 		return (NULL);
 	return (ft_split(path->content, ':'));

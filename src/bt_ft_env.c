@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/11 13:53:12 by fbarros           #+#    #+#             */
-/*   Updated: 2021/10/28 14:31:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 10:43:11 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	ft_unset(char **argv)
 	t_node	*param;
 	t_node	*tmp;
 
-	param = find_param(&g_mini.env, argv[1]);
+	param = find_param( argv[1]);
 	if (!param)
 		return (true);
 	tmp = g_mini.env;

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/29 10:17:28 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 11:07:01 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	main(int argc, char **argv, char **env)
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, ft_handler);
 	signal(SIGCHLD, ft_handler);
-	intro_message(*argv);
+	intro_message(argv[0]);
 	while (argc)
 	{
 		pretty_prompt();

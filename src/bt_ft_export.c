@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 12:57:18 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 16:55:02 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 10:43:11 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ static bool	list_export(t_node *original)
 
 static bool	update_env(t_node **new, char ***split_param, char *arg)
 {
-	if (find_param(&g_mini.env, (*split_param)[0]))
+	if (find_param( (*split_param)[0]))
 	{
-		*new = find_param(&g_mini.env, (*split_param)[0]);
+		*new = find_param( (*split_param)[0]);
 		free((*new)->content);
 		if (ft_strchr(arg, '='))
 			(*new)->content = ft_strdup(ft_strchr(arg, '=') + 1);

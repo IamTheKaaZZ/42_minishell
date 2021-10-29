@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 14:21:36 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/22 15:08:14 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 11:11:10 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	find_expanded(t_expand *exp)
 {
 	t_node	*param;
 
-	param = find_param(&g_mini.env, exp->to_expand);
+	param = find_param(exp->to_expand);
 	if (ft_strequal(exp->to_expand, "?"))
 	{
 		exp->exit_code = ft_itoa((int)g_mini.exit_code);

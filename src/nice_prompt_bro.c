@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 17:27:15 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/29 10:20:22 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 11:22:35 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 static void	check_env(t_prompt *p)
 {
 	ft_bzero(p, sizeof(t_prompt));
-	if (!find_param(&g_mini.env, "PWD"))
+	if (!find_param("PWD"))
 		p->cwd = getcwd(NULL, 0);
 	else
-		p->cwd = find_param(&g_mini.env, "PWD")->content;
-	if (find_param(&g_mini.env, "HOME"))
-		p->home = find_param(&g_mini.env, "HOME")->content;
+		p->cwd = find_param("PWD")->content;
+	if (find_param("HOME"))
+		p->home = find_param("HOME")->content;
 	else
-		p->home = ft_strdup("");
+		p->home = ft_strdup(getenv("HOME"));
 }
 
 static char	*get_full_prefix(void)
@@ -45,9 +45,9 @@ static char	*get_full_prefix(void)
 	p.path = ft_strjoin(prefix, p.cwd);
 	p.full = ft_strjoin(p.path, closebracket);
 	ft_strdel(&p.path);
-	if (!find_param(&g_mini.env, "PWD"))
+	if (!find_param("PWD"))
 		ft_strdel(&p.cwd);
-	if (!find_param(&g_mini.env, "HOME"))
+	if (!find_param("HOME"))
 		ft_strdel(&p.home);
 	return (p.full);
 }
@@ -80,11 +80,11 @@ void	intro_message(char *execpath)
 	ft_strlcat(intro, "\033[35m@bcosters\033[0m ", 200);
 	ft_strlcat(intro, "and \033[35m@fbarros\033[0m.\n", 200);
 	ft_strlcat(intro, "For more details, please RTFM.\n\n", 200);
-	shlvl = ft_atoi(find_param(&g_mini.env, "SHLVL")->content);
+	shlvl = ft_atoi(find_param("SHLVL")->content);
 	shlvl++;
-	ft_strdel(&find_param(&g_mini.env, "SHLVL")->content);
-	find_param(&g_mini.env, "SHLVL")->content = ft_itoa(shlvl);
-	ft_strdel(&find_param(&g_mini.env, "SHELL")->content);
-	find_param(&g_mini.env, "SHLVL")->content = ft_strdup(execpath);
+	ft_strdel(&find_param("SHLVL")->content);
+	find_param("SHLVL")->content = ft_itoa(shlvl);
+	ft_strdel(&find_param("SHELL")->content);
+	find_param("SHELL")->content = ft_strdup(execpath);
 	ft_putstr(intro);
 }
