@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 17:27:15 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 16:25:57 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 10:20:22 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	pretty_prompt(void)
 	ft_strdel(&prefix);
 }
 
-void	intro_message(void)
+void	intro_message(char *execpath)
 {
 	static char	intro[200] = "The default shell is now ";
 	int			shlvl;
@@ -84,5 +84,7 @@ void	intro_message(void)
 	shlvl++;
 	ft_strdel(&find_param(&g_mini.env, "SHLVL")->content);
 	find_param(&g_mini.env, "SHLVL")->content = ft_itoa(shlvl);
+	ft_strdel(&find_param(&g_mini.env, "SHELL")->content);
+	find_param(&g_mini.env, "SHLVL")->content = ft_strdup(execpath);
 	ft_putstr(intro);
 }

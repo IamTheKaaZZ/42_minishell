@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 12:50:21 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 10:36:30 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ void	split_redirections(t_parse *p);
 */
 
 t_node	*new_env_param(char **param);
-t_node	*find_param(t_node **env, char *keyword);
+t_node	*find_param(char *keyword);
 void	remove_param(t_node **env, char	*keyword);
 int		count_params(t_node *env);
 t_node	*new_node(char *keyword, char *content);
@@ -221,6 +221,6 @@ bool	unlink_tmp(char *error);
 */
 
 void	pretty_prompt(void);
-void	intro_message(void);
+void	intro_message(char *execpath);
 
 #endif

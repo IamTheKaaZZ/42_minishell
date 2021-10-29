@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:56:12 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/28 17:04:35 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 10:17:28 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,11 @@ char	*rl_gnl(t_minishell *mini)
 
 int	main(int argc, char **argv, char **env)
 {
-	(void)argv;
 	ft_init(env);
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, ft_handler);
 	signal(SIGCHLD, ft_handler);
-	intro_message();
+	intro_message(*argv);
 	while (argc)
 	{
 		pretty_prompt();

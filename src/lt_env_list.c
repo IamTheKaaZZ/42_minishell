@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 16:01:41 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/13 09:46:09 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 10:36:13 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ void	add_to_tail(t_node **env, t_node *new)
  * Find any param in the env list
 */
 
-t_node	*find_param(t_node **env, char *keyword)
+t_node	*find_param(char *keyword)
 {
 	t_node	*temp;
 
-	temp = *env;
+	temp = g_mini.env;
 	if (temp != NULL && ft_strequal(temp->keyword, keyword))
 		return (temp);
 	while (temp != NULL && !ft_strequal(temp->keyword, keyword))

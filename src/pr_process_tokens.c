@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 10:55:57 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/27 14:47:59 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 10:42:38 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,18 @@ static bool	start_len_expansion(t_expand *exp, char *str)
 
 static void	tilde_path(t_expand *exp, char **token)
 {
-	exp->expanded = ft_strdup(find_param(&g_mini.env, "HOME")->content);
-	if (!exp->expanded)
+	if (!find_param(&g_mini.env, "HOME") || (*token)[1] != '/')
 	{
-		exp->expanded = ft_strdup("");
-		err_handler("HOME not set", 1, false);
+		if ((*token)[1] == '/')
+		{
+			exp->expanded = ft_strjoin("/Users/",
+					find_param(&g_mini.env, "LOGNAME")->content);
+		}
+		else
+			exp->expanded = ft_strjoin("/Users/", *token + 1);
 	}
+	else
+		exp->expanded = ft_strdup(find_param(&g_mini.env, "HOME")->content);
 	exp->suffix = ft_strdup(*token + 1);
 	ft_strdel(token);
 	*token = ft_strjoin(exp->expanded, exp->suffix);
@@ -71,13 +77,18 @@ static char	*expand_tilde(t_expand *exp, char **token)
 	if (ft_strequal(*token, "~"))
 	{
 		exp->to_expand = *token;
-		*token = ft_strdup(find_param(&g_mini.env, "HOME")->content);
-		if (!*token)
+		if (!find_param(&g_mini.env, "HOME"))
 		{
-			*token = ft_strdup("");
-			err_handler("HOME not set", 1, false);
+			*token = ft_strjoin("/Users/",
+					find_param(&g_mini.env, "LOGNAME")->content);
 		}
+		else
+			*token = ft_strdup(find_param(&g_mini.env, "HOME")->content);
 		ft_strdel(&exp->to_expand);
+	}
+	else if (ft_strequal(*token, "~+") || ft_strequal(*token, "~-"))
+	{
+		if (*token + 1 = '+' && find_param)
 	}
 	else
 		tilde_path(exp, token);
