@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 12:57:18 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/29 11:53:48 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 12:23:16 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ static bool	update_env(t_node **new, char ***split_param, char *arg)
 			(*new)->content = ft_strdup(ft_strchr(arg, '=') + 1);
 		else
 			(*new)->content = ft_strdup("");
+		ft_str_array_del(split_param);
 	}
 	else
 	{

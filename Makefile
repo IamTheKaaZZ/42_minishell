@@ -53,7 +53,7 @@ libcheck:
 	@echo
 
 debug:	libcheck libft $(INCL) $(DIR_O) $(OBJS)
-	@printf "$(GREEN)]$(QUIT)"
+	@printf "\n$(GREEN)]$(QUIT)"
 	@$(CC) $(CFLAGS) $(DBFLAGS) $(wildcard src/*.c) $(wildcard extras/libft/src/*c)  -o $(NAME) $(LINKS)
 	@echo "\n$(GREEN)\n"
 	@echo "$(NAME) debug executable CREATED"

@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 15:14:50 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/29 11:32:14 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 12:03:41 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,6 @@ bool	ft_exit(char **argv)
 			g_mini.exit_code = ft_atoi(argv[1]);
 	}
 	ft_putstr_fd("exit\n", 1);
+	ft_str_array_del(&argv);
 	exit(ft_clear_data() + g_mini.exit_code);
 }
