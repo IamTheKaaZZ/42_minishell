@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 14:52:05 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/29 10:36:30 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/10/29 12:57:54 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 # include "../libft/libft_bonus.h"
-# include "../42_memleak_check/malloc_leak_checker.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <signal.h>
