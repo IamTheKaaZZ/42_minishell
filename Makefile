@@ -1,3 +1,42 @@
+# PLACE AT THE TOP OF YOUR MAKEFILE
+#---------------------------------
+# Progress bar defs
+#--------------------------------
+#  words = count the number of words
+ifneq ($(words $(MAKECMDGOALS)),1) # if no argument was given to make...
+.DEFAULT_GOAL = all # set the default goal to all
+#  http://www.gnu.org/software/make/manual/make.html
+#  $@ = target name
+#  %: = last resort recipe
+#  --no-print-directory = don't print enter/leave messages for each output grouping
+#  MAKEFILE_LIST = has a list of all the parsed Makefiles that can be found *.mk, Makefile, etc
+#  -n = dry run, just print the recipes
+#  -r = no builtin rules, disables implicit rules
+#  -R = no builtin variables, disables implicit variables
+#  -f = specify the name of the Makefile
+%:                   # define a last resort default rule
+		@$(MAKE) $@ --no-print-directory -rRf $(firstword $(MAKEFILE_LIST)) # recursive make call, 
+else
+ifndef ECHO
+#  execute a dry run of make, defining echo beforehand, and count all the instances of "COUNTTHIS"
+T := $(shell $(MAKE) $(MAKECMDGOALS) --no-print-directory \
+		-nrRf $(firstword $(MAKEFILE_LIST)) \
+		ECHO="COUNTTHIS" | grep -c "COUNTTHIS")
+#  eval = evaluate the text and read the results as makefile commands
+N := x
+#  Recursively expand C for each instance of ECHO to count more x's
+C = $(words $N)$(eval N := x $N)
+#  Multipy the count of x's by 100, and divide by the count of "COUNTTHIS"
+#  Followed by a percent sign
+#  And wrap it all in square brackets
+ECHO = echo -ne "$(QUIT)\r [`expr $C '*' 100 / $T`%]"
+endif
+#------------------
+# end progress bar
+#------------------
+
+# REST OF YOUR MAKEFILE HERE
+
 # COLORS
 
 GREEN	= \033[0;32m
@@ -29,19 +68,19 @@ LINKS	=	-L./$(LIBFT) -lft `pkg-config readline --libs`
 all:	$(NAME)
 
 $(NAME):	$(INCL) $(OBJS)
-	@printf "\n\n$(GREEN)'$(NAME)' objects compiled.$(QUIT)\n\n"
+	@$(ECHO) "\n\n$(GREEN)'$(NAME)' objects compiled.$(QUIT)\n\n"
 	@bash scripts/lib_setup.sh
-	@echo
+	@$(ECHO)
 	@make -C $(LIBFT)
-	@printf "$(WHITE)\n\n [ .. ] Creating '$(NAME)' [ .. ]$(QUIT)\n\n"
+	@$(ECHO) "$(WHITE)\n\n [ .. ] Creating '$(NAME)' [ .. ]$(QUIT)\n\n"
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LINKS)
-	@echo "\n$(GREEN)\n"
-	@echo "$(NAME) executable CREATED"
-	@echo "\n$(QUIT)\n"
+	@$(ECHO) "\n$(GREEN)\n"
+	@$(ECHO) "$(NAME) executable CREATED"
+	@$(ECHO) "\n$(QUIT)\n"
 
 $(DIR_O)%.o: src/%.c
 	@$(CC) -c $(CFLAGS) $(INCLUDE) $< -o $@
-	@printf "$(GREEN)#$(QUIT)"
+	@$(ECHO) "$(GREEN)$@$(QUIT)"
 
 $(OBJS):	| $(DIR_O)
 
@@ -50,33 +89,36 @@ $(DIR_O):
 
 libcheck:
 	@bash scripts/lib_setup.sh
-	@echo
+	@$(ECHO)
 
 debug:	libcheck libft $(INCL) $(DIR_O) $(OBJS)
 	@printf "\n$(GREEN)]$(QUIT)"
 	@$(CC) $(CFLAGS) $(DBFLAGS) $(wildcard src/*.c) $(wildcard extras/libft/src/*c)  -o $(NAME) $(LINKS)
-	@echo "\n$(GREEN)\n"
-	@echo "$(NAME) debug executable CREATED"
-	@echo "\n$(QUIT)\n"
+	@$(ECHO) "\n$(GREEN)\n"
+	@$(ECHO) "$(NAME) debug executable CREATED"
+	@$(ECHO) "\n$(QUIT)\n"
 
 libft:
 	@make -C $(LIBFT)
 
 clean:
-	@echo "$(RED) [ .. ] Deleting LIBFT [ .. ]"
-	@echo "$(RED)"
+	@$(ECHO) "$(RED) [ .. ] Deleting LIBFT [ .. ]"
+	@$(ECHO) "$(RED)"
 	@make -C $(LIBFT) fclean
-	@echo "LIBFT DELETED"
-	@echo "$(QUIT)"
-	@echo "$(RED) [ .. ] Deleting .o files [ .. ]$(QUIT)"
+	@$(ECHO) "LIBFT DELETED"
+	@$(ECHO) "$(QUIT)"
+	@$(ECHO) "$(RED) [ .. ] Deleting .o files [ .. ]$(QUIT)"
 	@rm -fr $(DIR_O)
 
 fclean:	clean
-	@echo "$(RED) [ .. ] Deleting '$(NAME)' executable  [ .. ]"
+	@$(ECHO) "$(RED) [ .. ] Deleting '$(NAME)' executable  [ .. ]"
 	@rm -fr $(NAME) *.dSYM
-	@echo "\n'$(NAME)' executable DELETED"
-	@echo "$(QUIT)"
+	@$(ECHO) "'$(NAME)' executable DELETED"
+	@$(ECHO) "$(QUIT)"
 
 re:		fclean all
 
 .PHONY	=	all clean fclean re
+
+#----- Progressbar endif at end Makefile
+endif

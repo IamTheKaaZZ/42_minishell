@@ -1,4 +1,5 @@
 # Minishell (42 Project)
+> <span style="color:green">***Final score 101/100***</span>
 ## As beautiful as a shell
 Summary:
 - The objective of this project is for you to create a simple shell.

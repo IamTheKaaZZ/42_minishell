@@ -6,7 +6,7 @@
 /*   By: bcosters <bcosters@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 10:55:57 by bcosters          #+#    #+#             */
-/*   Updated: 2021/10/29 11:13:10 by bcosters         ###   ########.fr       */
+/*   Updated: 2021/11/08 11:54:29 by bcosters         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,22 @@ static bool	start_len_expansion(t_expand *exp, char *str)
 		exp->i = strchr_index(str + exp->i + 1, '$');
 	if (exp->i == INT_MAX || !ft_ischrinset(str + exp->i, '$'))
 		return (false);
-	if (!str_contains_chars(str + exp->i, " \\\'\"$"))
+	if (!str_contains_chars(str + exp->i, " \\\'\"$="))
 		exp->len = ft_strlen(str + exp->i + 1);
 	else
 	{
-		if (char_before_others(str + exp->i + 1, ' ', "\\\'\"$"))
+		if (char_before_others(str + exp->i + 1, ' ', "\\\'\"$="))
 			exp->len = strchr_index(str + exp->i + 1, ' ');
-		else if (char_before_others(str + exp->i + 1, '\\', "\'\"$"))
+		else if (char_before_others(str + exp->i + 1, '\\', "\'\"$="))
 			exp->len = strchr_index(str + exp->i + 1, '\\');
-		else if (char_before_others(str + exp->i + 1, '\'', "\"$"))
+		else if (char_before_others(str + exp->i + 1, '\'', "\"$="))
 			exp->len = strchr_index(str + exp->i + 1, '\'');
-		else if (char_before_others(str + exp->i + 1, '\"', "$"))
+		else if (char_before_others(str + exp->i + 1, '\"', "$="))
 			exp->len = strchr_index(str + exp->i + 1, '\"');
-		else
+		else if (char_before_others(str + exp->i + 1, '$', "="))
 			exp->len = strchr_index(str + exp->i + 1, '$');
+		else
+			exp->len = strchr_index(str + exp->i + 1, '=');
 	}
 	return (true);
 }
