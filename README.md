@@ -6,6 +6,8 @@ Summary:
 - Yes, your little bash or zsh.
 - You will learn a lot about processes and file descriptors.
 
+## Final result
+![prompt](commandline.png)
 ## Introduction
 The existence of shells is linked to the very existence of IT.<br> At the time, all coders agreed that communicating with a computer using aligned 1/0 switches was seriously irritating.<br> It was only logical that they came up with the ideato communicate witha computer using interactive lines of commands in a language somewhat close to english.<br>With Minishell, you’ll be able to travel through time and come back to problems people faced when Windows didn’t exist.
 

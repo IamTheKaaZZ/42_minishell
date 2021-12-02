@@ -15,7 +15,7 @@ ifneq ($(words $(MAKECMDGOALS)),1) # if no argument was given to make...
 #  -R = no builtin variables, disables implicit variables
 #  -f = specify the name of the Makefile
 %:                   # define a last resort default rule
-		@$(MAKE) $@ --no-print-directory -rRf $(firstword $(MAKEFILE_LIST)) # recursive make call, 
+		@$(MAKE) $@ --no-print-directory -rRf $(firstword $(MAKEFILE_LIST)) # recursive make call,
 else
 ifndef ECHO
 #  execute a dry run of make, defining echo beforehand, and count all the instances of "COUNTTHIS"
